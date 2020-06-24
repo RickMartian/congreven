@@ -10,8 +10,7 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final loginPageController = Provider.of<LoginPageController>(context);
     return Container(
-      child: Center(
-          child: Column(
+      child: Column(
         children: <Widget>[
           Flexible(
             flex: 1,
@@ -31,7 +30,7 @@ class LoginPage extends StatelessWidget {
             child: Container(
               margin: EdgeInsets.symmetric(horizontal: 20.0),
               // color: Colors.yellow,
-              child: Column(
+              child: ListView(
                 children: <Widget>[
                   Observer(
                     builder: (_) {
@@ -45,24 +44,26 @@ class LoginPage extends StatelessWidget {
                   SizedBox(
                     height: 15.0,
                   ),
-                  Flexible(
-                    child: Observer(
-                      builder: (_) {
-                        return renderTextField(
-                          labelText: "Senha",
-                          errorText: loginPageController.validatePassword,
-                          isSecret: true,
-                          onChanged: loginPageController.changePassword,
-                        );
-                      },
-                    ),
+                  Observer(
+                    builder: (_) {
+                      return renderTextField(
+                        labelText: "Senha",
+                        errorText: loginPageController.validatePassword,
+                        isSecret: true,
+                        onChanged: loginPageController.changePassword,
+                      );
+                    },
                   ),
                 ],
               ),
             ),
           ),
+          Flexible(
+            flex: 1,
+            child: Container(),
+          ),
         ],
-      )),
+      ),
     );
   }
 }

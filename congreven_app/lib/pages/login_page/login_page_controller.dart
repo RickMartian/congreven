@@ -33,4 +33,13 @@ abstract class _LoginPageControllerBase with Store {
     }
     return null;
   }
+
+  @action
+  void clean() {
+    email = null;
+    password = null;
+  }
+
+  @computed
+  get userToLogin => {"email": email, "password": password};
 }

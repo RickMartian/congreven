@@ -1,4 +1,6 @@
+import 'package:congreven_app/models/user.dart';
 import 'package:congreven_app/pages/enter_page/enter_page.dart';
+import 'package:congreven_app/pages/enter_page/enter_page_controller.dart';
 import 'package:congreven_app/pages/login_page/login_page_controller.dart';
 import 'package:congreven_app/pages/register_page/register_page_controller.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +20,12 @@ class MyApp extends StatelessWidget {
         ),
         Provider(
           create: (_) => RegisterPageController(),
+        ),
+        Provider(
+          create: (_) => EnterPageController(),
+        ),
+        Provider(
+          create: (_) => User(),
         ),
       ],
       child: MaterialApp(

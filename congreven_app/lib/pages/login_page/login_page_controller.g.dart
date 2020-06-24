@@ -9,6 +9,14 @@ part of 'login_page_controller.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$LoginPageController on _LoginPageControllerBase, Store {
+  Computed<dynamic> _$userToLoginComputed;
+
+  @override
+  dynamic get userToLogin =>
+      (_$userToLoginComputed ??= Computed<dynamic>(() => super.userToLogin,
+              name: '_LoginPageControllerBase.userToLogin'))
+          .value;
+
   final _$emailAtom = Atom(name: '_LoginPageControllerBase.email');
 
   @override
@@ -65,10 +73,22 @@ mixin _$LoginPageController on _LoginPageControllerBase, Store {
   }
 
   @override
+  void clean() {
+    final _$actionInfo = _$_LoginPageControllerBaseActionController.startAction(
+        name: '_LoginPageControllerBase.clean');
+    try {
+      return super.clean();
+    } finally {
+      _$_LoginPageControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 email: ${email},
-password: ${password}
+password: ${password},
+userToLogin: ${userToLogin}
     ''';
   }
 }
