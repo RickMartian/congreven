@@ -29,6 +29,7 @@ dependencies:
   provider: ^4.1.2
   flushbar: ^1.10.4
   shared_preferences: ^0.5.7+3
+  flutter_masked_text: ^0.8.0
 
 
 

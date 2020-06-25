@@ -2,13 +2,16 @@ import 'package:congreven_app/components/text_field.dart';
 import 'package:congreven_app/pages/register_page/register_page_controller.dart';
 import 'package:congreven_app/utils/enter_title.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 
 class RegisterPage extends StatelessWidget {
+  final cpfController = MaskedTextController(mask: '000.000.000-00');
   @override
   Widget build(BuildContext context) {
     final registerPageController = Provider.of<RegisterPageController>(context);
+    cpfController.text = registerPageController.cpf;
     return Container(
       child: Column(
         children: <Widget>[
@@ -47,6 +50,7 @@ class RegisterPage extends StatelessWidget {
                     builder: (_) {
                       return renderTextField(
                           labelText: "Cpf",
+                          controller: cpfController,
                           errorText: registerPageController.validateCpf,
                           onChanged: registerPageController.changeCpf);
                     },

@@ -171,9 +171,12 @@ class _EnterPageState extends State<EnterPage> {
                 floatingActionButton: Observer(builder: (_) {
                   print("enterPageController -> $enterPageController");
                   final isLoading = enterPageController.isLoadingEnterButton;
+                  final isValid = _selectedPage == EnterPages.register
+                      ? registerPageController.isValid
+                      : loginPageController.isValid;
                   return FloatingActionButton(
                     onPressed: () {
-                      if (!isLoading) {
+                      if (!isLoading && isValid) {
                         enterPageController.changeIsLoadingEnterButton(true);
                         _handleSubmittedData();
                       }
@@ -198,7 +201,11 @@ class _EnterPageState extends State<EnterPage> {
             : Scaffold(
                 body: Container(
                   child: Center(
-                    child: CircularProgressIndicator(),
+                    child: CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        Theme.of(context).primaryColorLight,
+                      ),
+                    ),
                   ),
                   color: Theme.of(context).backgroundColor,
                 ),

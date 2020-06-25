@@ -23,4 +23,12 @@ abstract class _UserBase with Store {
     email = userData["user"]["email"];
     cpf = userData["user"]["cpf"];
   }
+
+  @action
+  void clean() {
+    name = null;
+    token = null;
+    email = null;
+    cpf = null;
+  }
 }

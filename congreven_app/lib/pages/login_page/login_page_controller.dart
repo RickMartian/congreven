@@ -42,4 +42,7 @@ abstract class _LoginPageControllerBase with Store {
 
   @computed
   get userToLogin => {"email": email, "password": password};
+
+  @computed
+  get isValid => validateEmail() == null && validatePassword() == null;
 }

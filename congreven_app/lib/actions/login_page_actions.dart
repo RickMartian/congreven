@@ -17,21 +17,17 @@ verifyIsLogged(userData, BuildContext context) {
   final userModel = Provider.of<User>(context, listen: false);
   final enterPageController =
       Provider.of<EnterPageController>(context, listen: false);
-  Duration duration = Duration(milliseconds: 2500);
   if (userData != null) {
     final userDataDecoded = convert.jsonDecode(userData);
     userModel.loggedUser(userDataDecoded);
-    delayThings(
-        duration: duration,
-        func: () {
-          routeTo(context, HomePage());
-        });
+    delayThings(func: () {
+      routeTo(context, HomePage());
+    });
+  } else {
+    delayThings(func: () {
+      enterPageController.changeIsLoadingApp(false);
+    });
   }
-  delayThings(
-      duration: duration,
-      func: () {
-        enterPageController.changeIsLoadingApp(false);
-      });
 }
 
 // setNewLoadingAppStatus(bool status, BuildContext context) {
@@ -40,7 +36,6 @@ verifyIsLogged(userData, BuildContext context) {
 // }
 
 loginUser(context) async {
-  print("caiu no login!!!");
   final ILocalStorage storage = SharedLocalStorageService();
   final loginPageController =
       Provider.of<LoginPageController>(context, listen: false);
@@ -48,36 +43,43 @@ loginUser(context) async {
       Provider.of<EnterPageController>(context, listen: false);
   final userModel = Provider.of<User>(context, listen: false);
   final user = loginPageController.userToLogin;
-  print("SERVER -> ${Config.server_url}:${Config.server_port}/api/user/login");
-  print("user -> $user");
-  print("enterPageController -> $enterPageController");
-  final response = await http.post(
-      "${Config.server_url}:${Config.server_port}/user/login",
-      body: user,
-      headers: {"Accept": "application/json"});
-  print("response status -> ${response.statusCode}");
-  if (response.statusCode == 401) {
-    toast(
-      title: "Erro",
-      message: "Email ou senha inválidos.",
-      context: context,
-    );
-  } else if (response.statusCode == 200) {
-    final data = convert.jsonDecode(response.body);
-    print("DATA -> $data");
-    final token = data["token"];
-    final user = data["user"];
-    final userData = convert.jsonEncode({"token": token, "user": user});
-    storage.put("userData", userData);
-    userModel.loggedUser(userData);
-    toast(
-      title: "Sucesso!",
-      message: "Usuário logado com sucesso!",
-      duration: Duration(milliseconds: 1500),
-      context: context,
-    );
-    routeTo(context, HomePage());
-  } else {
+  try {
+    final response = await http.post(
+        "${Config.server_url}:${Config.server_port}/user/login",
+        body: user,
+        headers: {"Accept": "application/json"});
+    if (response.statusCode == 401) {
+      toast(
+        title: "Erro",
+        message: "Email ou senha inválidos.",
+        context: context,
+      );
+    } else if (response.statusCode == 200) {
+      final data = convert.jsonDecode(response.body);
+      final token = data["token"];
+      final user = data["user"];
+      String userData = convert.jsonEncode({"token": token, "user": user});
+      print(userData);
+      storage.put("userData", userData);
+      userModel.loggedUser(convert.jsonDecode(userData));
+      toast(
+        title: "Sucesso!",
+        message: "Usuário logado com sucesso!",
+        duration: Duration(milliseconds: 1500),
+        context: context,
+      );
+      routeTo(context, HomePage());
+    } else {
+      toast(
+        title: "Erro",
+        message:
+            "Ocorreu um erro inesperado. Por favor, reinicie a aplicação e tente novamente.",
+        duration: Duration(milliseconds: 2000),
+        context: context,
+      );
+    }
+  } catch (error) {
+    print('error -> $error');
     toast(
       title: "Erro",
       message:

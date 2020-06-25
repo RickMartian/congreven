@@ -81,4 +81,20 @@ abstract class _RegisterPageControllerBase with Store {
     password = null;
     confirmPassword = null;
   }
+
+  @computed
+  get userToRegister => {
+        "name": name,
+        "cpf": cpf.replaceAll(RegExp(r"[^\s\w]"), ''),
+        "email": email,
+        "password": password
+      };
+
+  @computed
+  get isValid =>
+      validateName() == null &&
+      validateCpf() == null &&
+      validatePassword() == null &&
+      validateConfirmPassword() == null &&
+      validateEmail() == null;
 }

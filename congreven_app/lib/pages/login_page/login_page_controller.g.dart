@@ -16,6 +16,13 @@ mixin _$LoginPageController on _LoginPageControllerBase, Store {
       (_$userToLoginComputed ??= Computed<dynamic>(() => super.userToLogin,
               name: '_LoginPageControllerBase.userToLogin'))
           .value;
+  Computed<dynamic> _$isValidComputed;
+
+  @override
+  dynamic get isValid =>
+      (_$isValidComputed ??= Computed<dynamic>(() => super.isValid,
+              name: '_LoginPageControllerBase.isValid'))
+          .value;
 
   final _$emailAtom = Atom(name: '_LoginPageControllerBase.email');
 
@@ -88,7 +95,8 @@ mixin _$LoginPageController on _LoginPageControllerBase, Store {
     return '''
 email: ${email},
 password: ${password},
-userToLogin: ${userToLogin}
+userToLogin: ${userToLogin},
+isValid: ${isValid}
     ''';
   }
 }

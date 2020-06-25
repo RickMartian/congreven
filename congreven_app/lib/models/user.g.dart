@@ -83,6 +83,17 @@ mixin _$User on _UserBase, Store {
   }
 
   @override
+  void clean() {
+    final _$actionInfo =
+        _$_UserBaseActionController.startAction(name: '_UserBase.clean');
+    try {
+      return super.clean();
+    } finally {
+      _$_UserBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 name: ${name},

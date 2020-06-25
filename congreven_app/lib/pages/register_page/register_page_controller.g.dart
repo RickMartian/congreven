@@ -9,6 +9,21 @@ part of 'register_page_controller.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$RegisterPageController on _RegisterPageControllerBase, Store {
+  Computed<dynamic> _$userToRegisterComputed;
+
+  @override
+  dynamic get userToRegister => (_$userToRegisterComputed ??= Computed<dynamic>(
+          () => super.userToRegister,
+          name: '_RegisterPageControllerBase.userToRegister'))
+      .value;
+  Computed<dynamic> _$isValidComputed;
+
+  @override
+  dynamic get isValid =>
+      (_$isValidComputed ??= Computed<dynamic>(() => super.isValid,
+              name: '_RegisterPageControllerBase.isValid'))
+          .value;
+
   final _$nameAtom = Atom(name: '_RegisterPageControllerBase.name');
 
   @override
@@ -161,7 +176,9 @@ name: ${name},
 cpf: ${cpf},
 email: ${email},
 password: ${password},
-confirmPassword: ${confirmPassword}
+confirmPassword: ${confirmPassword},
+userToRegister: ${userToRegister},
+isValid: ${isValid}
     ''';
   }
 }
