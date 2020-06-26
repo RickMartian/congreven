@@ -1,9 +1,12 @@
+import 'package:congreven_app/actions/events_page_actions.dart';
 import 'package:congreven_app/actions/home_page_actions.dart';
 import 'package:congreven_app/models/user.dart';
 import 'package:congreven_app/pages/enter_page/enter_page_controller.dart';
 import 'package:congreven_app/pages/events_page/events_page.dart';
 import 'package:congreven_app/pages/home_page/home_page_controller.dart';
+import 'package:congreven_app/pages/new_event_page/new_event_page.dart';
 import 'package:congreven_app/pages/profile_page/profile_page.dart';
+import 'package:congreven_app/utils/routeTo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
@@ -25,12 +28,19 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     changeIsLoadingApp(context, false);
+    if (_selectedPage == Pages.events) {
+      print("CAIU NO INIT STATE PARA BUSCAR EVENTOS!!");
+      fetchEvents(context);
+    }
   }
 
   _handleButtonClicked(int pageSelected) {
     setState(() {
       _selectedPage = pageSelected;
     });
+    if (_selectedPage == Pages.events) {
+      fetchEvents(context);
+    }
   }
 
   _renderSelectedPage({bool isLoading = false}) {
@@ -174,7 +184,6 @@ class _HomePageState extends State<HomePage> {
                 body: Container(
                   color: Theme.of(context).backgroundColor,
                   child: Container(
-                    margin: EdgeInsets.only(top: _deviceHeight / 6),
                     child: _renderSelectedPage(
                         isLoading: homePageController.isLoadingLogout),
                   ),
@@ -194,7 +203,7 @@ class _HomePageState extends State<HomePage> {
                     return FloatingActionButton(
                         onPressed: () {
                           if (!homePageController.isLoadingLogout) {
-                            print("PODE CLICAR!!");
+                            routeTo(context, NewEventPage());
                           }
                         },
                         backgroundColor: Theme.of(context).primaryColorLight,

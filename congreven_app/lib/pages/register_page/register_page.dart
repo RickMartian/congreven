@@ -13,12 +13,12 @@ class RegisterPage extends StatelessWidget {
     final registerPageController = Provider.of<RegisterPageController>(context);
     cpfController.text = registerPageController.cpf;
     return Container(
+      margin: EdgeInsets.symmetric(horizontal: 20.0),
       child: Column(
         children: <Widget>[
           Flexible(
             flex: 1,
             child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 20.0),
               constraints: BoxConstraints.expand(),
               child: renderEnterTitle(
                 firstLine: "Bem vindo ao Congreven!\n",
@@ -31,7 +31,6 @@ class RegisterPage extends StatelessWidget {
           Flexible(
             flex: 2,
             child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 20.0),
               // color: Colors.yellow,
               child: ListView(
                 children: <Widget>[
