@@ -9,7 +9,6 @@ abstract class _LoginPageControllerBase with Store {
 
   @action
   void changeEmail(String newEmail) {
-    print("EMAIL ALTERADO -> $newEmail");
     email = newEmail;
   }
 
@@ -20,7 +19,6 @@ abstract class _LoginPageControllerBase with Store {
   void changePassword(String newPassword) => password = newPassword;
 
   String validateEmail() {
-    print("CAIU NA VALIDAÇÃO DO EMAIL!");
     if (email == null || email.isEmpty) {
       return "O campo 'email' é obrigatório!";
     }

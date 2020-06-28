@@ -28,7 +28,6 @@ class _EnterPageState extends State<EnterPage> {
   void initState() {
     super.initState();
     storage.get("userData").then((userData) {
-      print("userData -> $userData");
       verifyIsLogged(userData, context);
     });
   }
@@ -49,7 +48,6 @@ class _EnterPageState extends State<EnterPage> {
   }
 
   _handleSubmittedData() {
-    print("pressionou botao!");
     switch (_selectedPage) {
       case EnterPages.login:
         loginUser(context);
@@ -169,7 +167,6 @@ class _EnterPageState extends State<EnterPage> {
                 floatingActionButtonLocation:
                     FloatingActionButtonLocation.endDocked,
                 floatingActionButton: Observer(builder: (_) {
-                  print("enterPageController -> $enterPageController");
                   final isLoading = enterPageController.isLoadingEnterButton;
                   final isValid = _selectedPage == EnterPages.register
                       ? registerPageController.isValid
@@ -198,16 +195,19 @@ class _EnterPageState extends State<EnterPage> {
                   );
                 }),
               )
-            : Scaffold(
-                body: Container(
-                  child: Center(
-                    child: CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                        Theme.of(context).primaryColorLight,
+            : WillPopScope(
+                onWillPop: () async => false,
+                child: Scaffold(
+                  body: Container(
+                    child: Center(
+                      child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          Theme.of(context).primaryColorLight,
+                        ),
                       ),
                     ),
+                    color: Theme.of(context).backgroundColor,
                   ),
-                  color: Theme.of(context).backgroundColor,
                 ),
               );
       },

@@ -148,7 +148,6 @@ class _NewEventPageState extends State<NewEventPage> {
             onPressed: () {
               if (!newEventFormsPageController.isLoadingSomeAction &&
                   newEventFormsPageController.isValid) {
-                print("PODE ENVIAR O FORMULARIO!!");
                 createNewEvent(context);
               }
             },

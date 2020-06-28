@@ -1,3 +1,4 @@
+import 'package:congreven_app/actions/events_page_actions.dart';
 import 'package:congreven_app/models/user.dart';
 import 'package:congreven_app/pages/new_event_forms_page/new_event_forms_page_controller.dart';
 import 'package:flutter/cupertino.dart';
@@ -22,7 +23,6 @@ createNewEvent(BuildContext context) async {
   newEventFormsPageController.changeIsLoadingSomeAction(true);
   final event = newEventFormsPageController.eventToRegister;
   event["cpf_owner"] = userModel.cpf;
-  print("event -> $event");
   try {
     final auth = "Bearer ${userModel.token}";
     final response = await http.post(
@@ -30,12 +30,10 @@ createNewEvent(BuildContext context) async {
       body: event,
       headers: {"Accept": "application/json", "Authorization": auth},
     );
-    print("response statusCode -> ${response.statusCode}");
-    print("response body -> ${response.body}");
     final data =
         response.body.isNotEmpty ? convert.jsonDecode(response.body) : null;
-    print("data -> $data");
     if (response.statusCode == 200) {
+      Navigator.pop(context);
       if (data != null) {
         toast(
           title: "Sucesso!",
@@ -45,8 +43,7 @@ createNewEvent(BuildContext context) async {
         );
       }
       cleanNewEventState(context);
-      Navigator.pop(context);
-      // TODO: fazer para buscar os eventos ao voltar a página e tirar os toasts informando coisas relacionadas a buscar eventos, e mostrar na lista mesmo.
+      fetchEvents(context);
     } else if (response.statusCode == 400) {
       toast(
         title: "Erro",

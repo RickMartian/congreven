@@ -1,3 +1,4 @@
+import 'package:congreven_app/actions/new_event_page_actions.dart';
 import 'package:congreven_app/components/text_field.dart';
 import 'package:congreven_app/pages/new_event_forms_page/new_event_forms_page_controller.dart';
 import 'package:flutter/material.dart';
@@ -34,109 +35,116 @@ class _NewEventFormsPageState extends State<NewEventFormsPage> {
     }
   }
 
+  Future<bool> _onWillPop() async {
+    cleanNewEventState(context);
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
     final newEventFormsPageController =
         Provider.of<NewEventFormsPageController>(context);
     _startDateController.text = newEventFormsPageController.startDate;
     _endDateController.text = newEventFormsPageController.endDate;
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 20.0),
-      padding: EdgeInsets.only(top: 10.0),
-      child: ListView(
-        children: <Widget>[
-          Observer(
-            builder: (_) {
-              return renderTextField(
-                labelText: "Nome",
-                onChanged: newEventFormsPageController.changeName,
-                errorText: newEventFormsPageController.validateName,
-              );
-            },
-          ),
-          SizedBox(
-            height: 15.0,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            mainAxisSize: MainAxisSize.max,
-            children: <Widget>[
-              Observer(builder: (_) {
-                return Checkbox(
-                  activeColor: Theme.of(context).primaryColorLight,
-                  onChanged: (bool value) {
-                    print("value -> $value");
-                    newEventFormsPageController.changeIsOwner(value);
-                  },
-                  value: newEventFormsPageController.isOwner,
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 20.0),
+        padding: EdgeInsets.only(top: 10.0),
+        child: ListView(
+          children: <Widget>[
+            Observer(
+              builder: (_) {
+                return renderTextField(
+                  labelText: "Nome",
+                  onChanged: newEventFormsPageController.changeName,
+                  errorText: newEventFormsPageController.validateName,
                 );
-              }),
-              Text(
-                "Eu sou o proprietário do evento",
-                style: TextStyle(
-                  color: Colors.black54,
-                  fontSize: 14.0,
+              },
+            ),
+            SizedBox(
+              height: 15.0,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.max,
+              children: <Widget>[
+                Observer(builder: (_) {
+                  return Checkbox(
+                    activeColor: Theme.of(context).primaryColorLight,
+                    onChanged: (bool value) {
+                      newEventFormsPageController.changeIsOwner(value);
+                    },
+                    value: newEventFormsPageController.isOwner,
+                  );
+                }),
+                Text(
+                  "Eu sou o proprietário do evento",
+                  style: TextStyle(
+                    color: Colors.black54,
+                    fontSize: 14.0,
+                  ),
                 ),
-              ),
-            ],
-          ),
-          Observer(
-            builder: (_) {
-              return _handleIsOwner(newEventFormsPageController);
-            },
-          ),
-          SizedBox(
-            height: 15.0,
-          ),
-          Observer(
-            builder: (_) {
-              return renderTextField(
-                labelText: "Endereço",
-                onChanged: newEventFormsPageController.changeAddress,
-                errorText: newEventFormsPageController.validateAddress,
-              );
-            },
-          ),
-          SizedBox(
-            height: 15.0,
-          ),
-          Observer(
-            builder: (_) {
-              return renderTextField(
-                  labelText: "Data inicial",
-                  onChanged: newEventFormsPageController.changeStartDate,
-                  errorText: newEventFormsPageController.validateStartDate,
-                  controller: _startDateController);
-            },
-          ),
-          SizedBox(
-            height: 15.0,
-          ),
-          Observer(
-            builder: (_) {
-              return renderTextField(
-                  labelText: "Data final",
-                  onChanged: newEventFormsPageController.changeEndDate,
-                  errorText: newEventFormsPageController.validateEndDate,
-                  controller: _endDateController);
-            },
-          ),
-          SizedBox(
-            height: 15.0,
-          ),
-          Observer(
-            builder: (_) {
-              return renderTextField(
-                labelText: "Descrição do evento",
-                onChanged: newEventFormsPageController.changeDescription,
-                errorText: newEventFormsPageController.validateDescription,
-              );
-            },
-          ),
-          SizedBox(
-            height: 15.0,
-          ),
-        ],
+              ],
+            ),
+            Observer(
+              builder: (_) {
+                return _handleIsOwner(newEventFormsPageController);
+              },
+            ),
+            SizedBox(
+              height: 15.0,
+            ),
+            Observer(
+              builder: (_) {
+                return renderTextField(
+                  labelText: "Endereço",
+                  onChanged: newEventFormsPageController.changeAddress,
+                  errorText: newEventFormsPageController.validateAddress,
+                );
+              },
+            ),
+            SizedBox(
+              height: 15.0,
+            ),
+            Observer(
+              builder: (_) {
+                return renderTextField(
+                    labelText: "Data inicial",
+                    onChanged: newEventFormsPageController.changeStartDate,
+                    errorText: newEventFormsPageController.validateStartDate,
+                    controller: _startDateController);
+              },
+            ),
+            SizedBox(
+              height: 15.0,
+            ),
+            Observer(
+              builder: (_) {
+                return renderTextField(
+                    labelText: "Data final",
+                    onChanged: newEventFormsPageController.changeEndDate,
+                    errorText: newEventFormsPageController.validateEndDate,
+                    controller: _endDateController);
+              },
+            ),
+            SizedBox(
+              height: 15.0,
+            ),
+            Observer(
+              builder: (_) {
+                return renderTextField(
+                  labelText: "Descrição do evento",
+                  onChanged: newEventFormsPageController.changeDescription,
+                  errorText: newEventFormsPageController.validateDescription,
+                );
+              },
+            ),
+            SizedBox(
+              height: 15.0,
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -2,6 +2,7 @@ import 'package:congreven_app/models/events.dart';
 import 'package:congreven_app/models/user.dart';
 import 'package:congreven_app/pages/enter_page/enter_page.dart';
 import 'package:congreven_app/pages/enter_page/enter_page_controller.dart';
+import 'package:congreven_app/pages/events_page/events_page_controller.dart';
 import 'package:congreven_app/pages/home_page/home_page_controller.dart';
 import 'package:congreven_app/pages/login_page/login_page_controller.dart';
 import 'package:congreven_app/pages/new_event_forms_page/new_event_forms_page_controller.dart';
@@ -38,6 +39,9 @@ class MyApp extends StatelessWidget {
         ),
         Provider(
           create: (_) => NewEventFormsPageController(),
+        ),
+        Provider(
+          create: (_) => EventsPageController(),
         ),
       ],
       child: MaterialApp(

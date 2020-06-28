@@ -59,7 +59,6 @@ loginUser(context) async {
       final token = data["token"];
       final user = data["user"];
       String userData = convert.jsonEncode({"token": token, "user": user});
-      print(userData);
       storage.put("userData", userData);
       userModel.loggedUser(convert.jsonDecode(userData));
       toast(
@@ -79,7 +78,6 @@ loginUser(context) async {
       );
     }
   } catch (error) {
-    print('error -> $error');
     toast(
       title: "Erro",
       message:

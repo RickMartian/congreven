@@ -22,19 +22,15 @@ changeIsLoadingApp(BuildContext context, bool status) {
 }
 
 logoutUser({String token, BuildContext context}) async {
-  print("CAIU NO LOGOUT!!");
   final userModel = Provider.of<User>(context, listen: false);
   final homePageController =
       Provider.of<HomePageController>(context, listen: false);
   final ILocalStorage storage = SharedLocalStorageService();
   try {
-    print("token -> Bearer $token");
     final response = await http.get(
       "${Config.server_url}:${Config.server_port}/user/logout",
       headers: {"Accept": "application/json", "Authorization": "Bearer $token"},
     );
-    print("response.statusCode -> ${response.statusCode}");
-    print("response.body -> ${response.body}");
     // final data =
     //     response.body.isNotEmpty ? convert.jsonDecode(response.body) : null;
     // print("data -> $data");
@@ -47,14 +43,12 @@ logoutUser({String token, BuildContext context}) async {
         context: context,
       );
     } else {
-      print("LOGOUT!!");
       userModel.clean();
       storage.delete("userData");
       routeTo(context, EnterPage());
     }
     homePageController.changeIsLoadingLogout(false);
   } catch (error) {
-    print("ERROR -> $error");
     homePageController.changeIsLoadingLogout(false);
     toast(
       title: "Erro",

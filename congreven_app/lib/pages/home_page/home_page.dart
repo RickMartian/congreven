@@ -29,7 +29,6 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     changeIsLoadingApp(context, false);
     if (_selectedPage == Pages.events) {
-      print("CAIU NO INIT STATE PARA BUSCAR EVENTOS!!");
       fetchEvents(context);
     }
   }
@@ -73,149 +72,153 @@ class _HomePageState extends State<HomePage> {
     final userModel = Provider.of<User>(context);
     final enterPageController = Provider.of<EnterPageController>(context);
     final homePageController = Provider.of<HomePageController>(context);
-    print("user model -> $userModel");
-    print("homePage -> $homePageController");
     return Observer(
       builder: (_) {
         return (enterPageController.isLoadingApp)
-            ? Scaffold(
-                body: Container(
-                  child: Center(
-                    child: CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                        Theme.of(context).primaryColorLight,
+            ? WillPopScope(
+                onWillPop: () async => false,
+                child: Scaffold(
+                  body: Container(
+                    child: Center(
+                      child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          Theme.of(context).primaryColorLight,
+                        ),
                       ),
                     ),
+                    color: Theme.of(context).backgroundColor,
                   ),
-                  color: Theme.of(context).backgroundColor,
                 ),
               )
-            : Scaffold(
-                appBar: AppBar(
-                  backgroundColor: Theme.of(context).backgroundColor,
-                  elevation: 0.0,
-                  leading: Builder(
-                    builder: (context) {
-                      return Container(
-                        margin: EdgeInsets.fromLTRB(20.0, 10.0, 0.0, 10.0),
-                        child: Center(
-                          child: IconButton(
-                            icon: Icon(
-                              Icons.person_outline,
-                              color: Colors.white,
+            : WillPopScope(
+                onWillPop: () async => false,
+                child: Scaffold(
+                  appBar: AppBar(
+                    backgroundColor: Theme.of(context).backgroundColor,
+                    elevation: 0.0,
+                    leading: Builder(
+                      builder: (context) {
+                        return Container(
+                          margin: EdgeInsets.fromLTRB(20.0, 10.0, 0.0, 10.0),
+                          child: Center(
+                            child: IconButton(
+                              icon: Icon(
+                                Icons.person_outline,
+                                color: Colors.white,
+                              ),
+                              onPressed: () {
+                                if (!homePageController.isLoadingLogout) {
+                                  _handleButtonClicked(Pages.profile);
+                                }
+                              },
                             ),
-                            onPressed: () {
-                              if (!homePageController.isLoadingLogout) {
-                                _handleButtonClicked(Pages.profile);
-                              }
-                            },
                           ),
-                        ),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).primaryColorLight,
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                      );
-                    },
-                  ),
-                  actions: <Widget>[
-                    InkWell(
-                      onTap: () {
-                        if (!homePageController.isLoadingLogout) {
-                          _handleButtonClicked(Pages.events);
-                        }
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).primaryColorLight,
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                        );
                       },
-                      child: Container(
-                        alignment: Alignment.center,
-                        margin: EdgeInsets.fromLTRB(0.0, 12.0, 20.0, 12.0),
-                        child: Text(
-                          "Eventos",
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: _selectedPage == Pages.events
-                                ? FontWeight.bold
-                                : FontWeight.normal,
-                          ),
-                        ),
-                        decoration: BoxDecoration(
-                          border: Border(
-                            bottom: BorderSide(
-                              width: _selectedPage == Pages.events ? 2.0 : 0.0,
-                              color: _selectedPage == Pages.events
-                                  ? Colors.black
-                                  : Colors.transparent,
-                            ),
-                          ),
-                        ),
-                      ),
                     ),
-                    InkWell(
-                      onTap: () {
-                        _handleButtonClicked(Pages.logout);
-                        homePageController.changeIsLoadingLogout(true);
-                        logoutUser(token: userModel.token, context: context);
-                      },
-                      child: Container(
-                        alignment: Alignment.center,
-                        margin: EdgeInsets.fromLTRB(0.0, 12.0, 20.0, 12.0),
-                        child: Text(
-                          "Sair",
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: _selectedPage == Pages.logout
-                                ? FontWeight.bold
-                                : FontWeight.normal,
-                          ),
-                        ),
-                        decoration: BoxDecoration(
-                          border: Border(
-                            bottom: BorderSide(
-                              width: _selectedPage == Pages.logout ? 2.0 : 0.0,
-                              color: _selectedPage == Pages.logout
-                                  ? Colors.black
-                                  : Colors.transparent,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                body: Container(
-                  color: Theme.of(context).backgroundColor,
-                  child: Container(
-                    child: _renderSelectedPage(
-                        isLoading: homePageController.isLoadingLogout),
-                  ),
-                ),
-                bottomNavigationBar: BottomAppBar(
-                  color: Colors.grey[300],
-                  child: Container(
-                    height: _deviceHeight / 11,
-                  ),
-                ),
-                floatingActionButtonLocation:
-                    FloatingActionButtonLocation.endDocked,
-                floatingActionButton: Observer(
-                  builder: (_) {
-                    print(
-                        "homePageController.isLoadingLogout!! _> ${homePageController.isLoadingLogout}");
-                    return FloatingActionButton(
-                        onPressed: () {
+                    actions: <Widget>[
+                      InkWell(
+                        onTap: () {
                           if (!homePageController.isLoadingLogout) {
-                            routeTo(context, NewEventPage());
+                            _handleButtonClicked(Pages.events);
                           }
                         },
-                        backgroundColor: Theme.of(context).primaryColorLight,
-                        elevation: 0.0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8.0),
+                        child: Container(
+                          alignment: Alignment.center,
+                          margin: EdgeInsets.fromLTRB(0.0, 12.0, 20.0, 12.0),
+                          child: Text(
+                            "Eventos",
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: _selectedPage == Pages.events
+                                  ? FontWeight.bold
+                                  : FontWeight.normal,
+                            ),
+                          ),
+                          decoration: BoxDecoration(
+                            border: Border(
+                              bottom: BorderSide(
+                                width:
+                                    _selectedPage == Pages.events ? 2.0 : 0.0,
+                                color: _selectedPage == Pages.events
+                                    ? Colors.black
+                                    : Colors.transparent,
+                              ),
+                            ),
+                          ),
                         ),
-                        child: Icon(
-                          Icons.add,
-                          color: Colors.white,
-                        ));
-                  },
+                      ),
+                      InkWell(
+                        onTap: () {
+                          _handleButtonClicked(Pages.logout);
+                          homePageController.changeIsLoadingLogout(true);
+                          logoutUser(token: userModel.token, context: context);
+                        },
+                        child: Container(
+                          alignment: Alignment.center,
+                          margin: EdgeInsets.fromLTRB(0.0, 12.0, 20.0, 12.0),
+                          child: Text(
+                            "Sair",
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: _selectedPage == Pages.logout
+                                  ? FontWeight.bold
+                                  : FontWeight.normal,
+                            ),
+                          ),
+                          decoration: BoxDecoration(
+                            border: Border(
+                              bottom: BorderSide(
+                                width:
+                                    _selectedPage == Pages.logout ? 2.0 : 0.0,
+                                color: _selectedPage == Pages.logout
+                                    ? Colors.black
+                                    : Colors.transparent,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  body: Container(
+                    color: Theme.of(context).backgroundColor,
+                    child: Container(
+                      child: _renderSelectedPage(
+                          isLoading: homePageController.isLoadingLogout),
+                    ),
+                  ),
+                  bottomNavigationBar: BottomAppBar(
+                    color: Colors.grey[300],
+                    child: Container(
+                      height: _deviceHeight / 11,
+                    ),
+                  ),
+                  floatingActionButtonLocation:
+                      FloatingActionButtonLocation.endDocked,
+                  floatingActionButton: Observer(
+                    builder: (_) {
+                      return FloatingActionButton(
+                          onPressed: () {
+                            if (!homePageController.isLoadingLogout) {
+                              routeTo(context, NewEventPage());
+                            }
+                          },
+                          backgroundColor: Theme.of(context).primaryColorLight,
+                          elevation: 0.0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          child: Icon(
+                            Icons.add,
+                            color: Colors.white,
+                          ));
+                    },
+                  ),
                 ),
               );
       },
