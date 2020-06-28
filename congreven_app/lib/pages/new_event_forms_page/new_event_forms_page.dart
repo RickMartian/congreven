@@ -1,6 +1,7 @@
 import 'package:congreven_app/actions/new_event_page_actions.dart';
 import 'package:congreven_app/actions/organizer_page_actions.dart';
 import 'package:congreven_app/components/text_field.dart';
+import 'package:congreven_app/pages/my_events_edit_page/my_events_edit_page_controller.dart';
 import 'package:congreven_app/pages/new_event_forms_page/new_event_forms_page_controller.dart';
 import 'package:congreven_app/pages/organizer_home_page/organizer_home_page.dart';
 import 'package:congreven_app/utils/routeTo.dart';
@@ -19,6 +20,45 @@ class _NewEventFormsPageState extends State<NewEventFormsPage> {
       MaskedTextController(mask: "00/00/0000");
   final MaskedTextController _endDateController =
       MaskedTextController(mask: "00/00/0000");
+  final _nameController = TextEditingController();
+  final _addressController = TextEditingController();
+  final _descriptionController = TextEditingController();
+  final _ownerDescriptionController = TextEditingController();
+
+  void initState() {
+    super.initState();
+    final newEventFormsPageController =
+        Provider.of<NewEventFormsPageController>(context, listen: false);
+    final myEventsEditPageController =
+        Provider.of<MyEventsEditPageController>(context, listen: false);
+    print("EVENT TO EDIT -> ${myEventsEditPageController.eventToEdit}");
+    final eventToEdit = myEventsEditPageController.eventToEdit;
+    if (eventToEdit == null) {
+      _startDateController.text = newEventFormsPageController.startDate;
+      _endDateController.text = newEventFormsPageController.endDate;
+    }
+    if (eventToEdit != null) {
+      _nameController.text = eventToEdit["name"];
+      _addressController.text = eventToEdit["address"];
+      _startDateController.text = eventToEdit["start_date_formatted"];
+      _endDateController.text = eventToEdit["end_date_formatted"];
+      _descriptionController.text = eventToEdit["description"];
+      _ownerDescriptionController.text = eventToEdit["owner_description"];
+      newEventFormsPageController.changeName(eventToEdit["name"]);
+      newEventFormsPageController.changeAddress(eventToEdit["address"]);
+      newEventFormsPageController.changeDescription(eventToEdit["description"]);
+      newEventFormsPageController
+          .changeOwnerDescription(eventToEdit["owner_description"]);
+      newEventFormsPageController
+          .changeStartDate(eventToEdit["start_date_formatted"]);
+      newEventFormsPageController
+          .changeEndDate(eventToEdit["end_date_formatted"]);
+      if (eventToEdit["owner_description"] == null || eventToEdit.isEmpty) {
+        newEventFormsPageController.changeIsOwner(false);
+      }
+      // TODO: fazer GET para buscar organizadores relacionado ao evento a ser editado!
+    }
+  }
 
   _handleIsOwner(newEventFormsPageController) {
     if (newEventFormsPageController.isOwner) {
@@ -26,6 +66,7 @@ class _NewEventFormsPageState extends State<NewEventFormsPage> {
         labelText: "Descrição do proprietário",
         onChanged: newEventFormsPageController.changeOwnerDescription,
         errorText: newEventFormsPageController.validateOwnerDescription,
+        controller: _ownerDescriptionController,
       );
     } else {
       final List<dynamic> organizers =
@@ -113,8 +154,6 @@ class _NewEventFormsPageState extends State<NewEventFormsPage> {
   Widget build(BuildContext context) {
     final newEventFormsPageController =
         Provider.of<NewEventFormsPageController>(context);
-    _startDateController.text = newEventFormsPageController.startDate;
-    _endDateController.text = newEventFormsPageController.endDate;
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Container(
@@ -128,6 +167,7 @@ class _NewEventFormsPageState extends State<NewEventFormsPage> {
                   labelText: "Nome",
                   onChanged: newEventFormsPageController.changeName,
                   errorText: newEventFormsPageController.validateName,
+                  controller: _nameController,
                 );
               },
             ),
@@ -170,6 +210,7 @@ class _NewEventFormsPageState extends State<NewEventFormsPage> {
                   labelText: "Endereço",
                   onChanged: newEventFormsPageController.changeAddress,
                   errorText: newEventFormsPageController.validateAddress,
+                  controller: _addressController,
                 );
               },
             ),
@@ -179,10 +220,11 @@ class _NewEventFormsPageState extends State<NewEventFormsPage> {
             Observer(
               builder: (_) {
                 return renderTextField(
-                    labelText: "Data inicial",
-                    onChanged: newEventFormsPageController.changeStartDate,
-                    errorText: newEventFormsPageController.validateStartDate,
-                    controller: _startDateController);
+                  labelText: "Data inicial",
+                  onChanged: newEventFormsPageController.changeStartDate,
+                  errorText: newEventFormsPageController.validateStartDate,
+                  controller: _startDateController,
+                );
               },
             ),
             SizedBox(
@@ -191,10 +233,11 @@ class _NewEventFormsPageState extends State<NewEventFormsPage> {
             Observer(
               builder: (_) {
                 return renderTextField(
-                    labelText: "Data final",
-                    onChanged: newEventFormsPageController.changeEndDate,
-                    errorText: newEventFormsPageController.validateEndDate,
-                    controller: _endDateController);
+                  labelText: "Data final",
+                  onChanged: newEventFormsPageController.changeEndDate,
+                  errorText: newEventFormsPageController.validateEndDate,
+                  controller: _endDateController,
+                );
               },
             ),
             SizedBox(
@@ -206,6 +249,7 @@ class _NewEventFormsPageState extends State<NewEventFormsPage> {
                   labelText: "Descrição do evento",
                   onChanged: newEventFormsPageController.changeDescription,
                   errorText: newEventFormsPageController.validateDescription,
+                  controller: _descriptionController,
                 );
               },
             ),

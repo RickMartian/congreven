@@ -2,7 +2,7 @@ import 'package:congreven_app/actions/organizer_page_actions.dart';
 import 'package:congreven_app/pages/new_organizer_page/new_organizer_page.dart';
 import 'package:congreven_app/pages/organizer_page/organizer_page.dart';
 import 'package:congreven_app/pages/organizer_page/organizer_page_controller.dart';
-import 'package:congreven_app/pages/profile_page/profile_page.dart';
+import 'package:congreven_app/pages/profile_home_page/profile_home_page.dart';
 import 'package:congreven_app/utils/routeTo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -32,8 +32,6 @@ class _OrganizerHomePageState extends State<OrganizerHomePage> {
     switch (_selectedPage) {
       case Pages.organizers:
         return OrganizerPage();
-      case Pages.profile:
-        return ProfilePage();
     }
   }
 
@@ -58,7 +56,7 @@ class _OrganizerHomePageState extends State<OrganizerHomePage> {
                   ),
                   onPressed: () {
                     if (!organizerPageController.isFetchingOrganizer) {
-                      _handleButtonClicked(Pages.profile);
+                      routeTo(context, ProfileHomePage());
                     }
                   },
                 ),

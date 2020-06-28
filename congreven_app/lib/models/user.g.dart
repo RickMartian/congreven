@@ -83,6 +83,17 @@ mixin _$User on _UserBase, Store {
   }
 
   @override
+  void updateUser(dynamic userData) {
+    final _$actionInfo =
+        _$_UserBaseActionController.startAction(name: '_UserBase.updateUser');
+    try {
+      return super.updateUser(userData);
+    } finally {
+      _$_UserBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void clean() {
     final _$actionInfo =
         _$_UserBaseActionController.startAction(name: '_UserBase.clean');

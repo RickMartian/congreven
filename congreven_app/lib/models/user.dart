@@ -25,6 +25,11 @@ abstract class _UserBase with Store {
   }
 
   @action
+  void updateUser(userData) {
+    name = userData["name"];
+  }
+
+  @action
   void clean() {
     name = null;
     token = null;

@@ -5,7 +5,7 @@ import 'package:congreven_app/pages/enter_page/enter_page_controller.dart';
 import 'package:congreven_app/pages/events_page/events_page.dart';
 import 'package:congreven_app/pages/home_page/home_page_controller.dart';
 import 'package:congreven_app/pages/new_event_page/new_event_page.dart';
-import 'package:congreven_app/pages/profile_page/profile_page.dart';
+import 'package:congreven_app/pages/profile_home_page/profile_home_page.dart';
 import 'package:congreven_app/utils/routeTo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -46,8 +46,6 @@ class _HomePageState extends State<HomePage> {
     switch (_selectedPage) {
       case Pages.events:
         return EventsPage();
-      case Pages.profile:
-        return ProfilePage();
       case Pages.logout:
         if (isLoading) {
           return Container(
@@ -108,7 +106,7 @@ class _HomePageState extends State<HomePage> {
                               ),
                               onPressed: () {
                                 if (!homePageController.isLoadingLogout) {
-                                  _handleButtonClicked(Pages.profile);
+                                  routeTo(context, ProfileHomePage());
                                 }
                               },
                             ),

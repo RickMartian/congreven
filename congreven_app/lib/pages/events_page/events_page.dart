@@ -1,6 +1,9 @@
 import 'package:congreven_app/models/events.dart';
 import 'package:congreven_app/pages/events_page/events_page_controller.dart';
+import 'package:congreven_app/pages/my_events_edit_page/my_events_edit_page_controller.dart';
+import 'package:congreven_app/pages/new_event_page/new_event_page.dart';
 import 'package:congreven_app/utils/debouncer.dart';
+import 'package:congreven_app/utils/routeTo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:intl/intl.dart';
@@ -8,6 +11,9 @@ import 'package:provider/provider.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 class EventsPage extends StatefulWidget {
+  final cpfOwner;
+  EventsPage({this.cpfOwner = ""});
+
   @override
   _EventsPageState createState() => _EventsPageState();
 }
@@ -57,6 +63,35 @@ class _EventsPageState extends State<EventsPage> {
     );
   }
 
+  Widget _renderEditButton(eventCpfOwner, event) {
+    final myEventsEditPageController =
+        Provider.of<MyEventsEditPageController>(context, listen: false);
+    if (verifyIsCpfOwner(eventCpfOwner)) {
+      return FlatButton(
+        onPressed: () {
+          event["start_date_formatted"] =
+              _dateFormat.format(DateTime.parse(event["start_date"]));
+          event["end_date_formatted"] =
+              _dateFormat.format(DateTime.parse(event["end_date"]));
+          myEventsEditPageController.changeEventToEdit(event);
+          routeTo(context, NewEventPage());
+        },
+        child: Text("Editar"),
+        color: Colors.blueAccent,
+      );
+    }
+    return SizedBox(
+      height: 0.0,
+    );
+  }
+
+  bool verifyIsCpfOwner(eventCpfOwner) {
+    if (eventCpfOwner == widget.cpfOwner) {
+      return true;
+    }
+    return false;
+  }
+
   Widget _itemBuilder(BuildContext context, int index, double deviceHeight,
       double deviceWidth, List<dynamic> events) {
     return Card(
@@ -104,6 +139,16 @@ class _EventsPageState extends State<EventsPage> {
                 "Descrição",
                 events[index]["description"],
               ),
+              SizedBox(
+                height: 10.0,
+              ),
+              Row(
+                children: <Widget>[
+                  Expanded(
+                      child: _renderEditButton(
+                          events[index]["cpf_owner"], events[index])),
+                ],
+              ),
             ],
           ),
         ),
@@ -111,9 +156,17 @@ class _EventsPageState extends State<EventsPage> {
     );
   }
 
-  _filterEventByName(List<dynamic> events) {
-    return events.length > 0
+  List<dynamic> _filterEventByCpfOwner(List<dynamic> events) {
+    return widget.cpfOwner.isNotEmpty
         ? events
+            .where((element) => element["cpf_owner"] == widget.cpfOwner)
+            .toList()
+        : events;
+  }
+
+  List<dynamic> _filterEventByName(List<dynamic> events) {
+    return events.length > 0
+        ? _filterEventByCpfOwner(events)
             .where((element) =>
                 element["name"].toLowerCase().startsWith(_search.toLowerCase()))
             .toList()

@@ -1,7 +1,8 @@
 import 'package:congreven_app/actions/new_event_page_actions.dart';
+import 'package:congreven_app/pages/my_events_edit_page/my_events_edit_page_controller.dart';
 import 'package:congreven_app/pages/new_event_forms_page/new_event_forms_page.dart';
 import 'package:congreven_app/pages/new_event_forms_page/new_event_forms_page_controller.dart';
-import 'package:congreven_app/pages/profile_page/profile_page.dart';
+import 'package:congreven_app/pages/profile_home_page/profile_home_page.dart';
 import 'package:congreven_app/utils/routeTo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -29,8 +30,6 @@ class _NewEventPageState extends State<NewEventPage> {
 
   _renderSelectedPage({bool isLoading = false}) {
     switch (_selectedPage) {
-      case Pages.profile:
-        return ProfilePage();
       case Pages.new_event:
         return NewEventFormsPage();
     }
@@ -41,6 +40,8 @@ class _NewEventPageState extends State<NewEventPage> {
     double _deviceHeight = MediaQuery.of(context).size.height;
     final newEventFormsPageController =
         Provider.of<NewEventFormsPageController>(context);
+    final myEventsEditPageController =
+        Provider.of<MyEventsEditPageController>(context);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).backgroundColor,
@@ -57,7 +58,7 @@ class _NewEventPageState extends State<NewEventPage> {
                   ),
                   onPressed: () {
                     cleanNewEventState(context);
-                    _handleButtonClicked(Pages.profile);
+                    routeTo(context, ProfileHomePage());
                   },
                 ),
               ),
@@ -148,7 +149,11 @@ class _NewEventPageState extends State<NewEventPage> {
             onPressed: () {
               if (!newEventFormsPageController.isLoadingSomeAction &&
                   newEventFormsPageController.isValid) {
-                createNewEvent(context);
+                if (myEventsEditPageController.eventToEdit != null) {
+                  updateEvent(context);
+                } else {
+                  createNewEvent(context);
+                }
               }
             },
             backgroundColor: Theme.of(context).primaryColorLight,

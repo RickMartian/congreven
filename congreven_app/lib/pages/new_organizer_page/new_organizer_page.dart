@@ -1,9 +1,9 @@
 import 'package:congreven_app/actions/new_event_page_actions.dart';
 import 'package:congreven_app/actions/new_organizer_page_actions.dart';
-import 'package:congreven_app/pages/new_event_forms_page/new_event_forms_page.dart';
 import 'package:congreven_app/pages/new_organizer_forms_page/new_organizer_forms_page.dart';
 import 'package:congreven_app/pages/new_organizer_forms_page/new_organizer_forms_page_controller.dart';
-import 'package:congreven_app/pages/profile_page/profile_page.dart';
+import 'package:congreven_app/pages/profile_home_page/profile_home_page.dart';
+import 'package:congreven_app/utils/routeTo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
@@ -30,8 +30,6 @@ class _NewOrganizerPageState extends State<NewOrganizerPage> {
 
   _renderSelectedPage({bool isLoading = false}) {
     switch (_selectedPage) {
-      case Pages.profile:
-        return ProfilePage();
       case Pages.new_organizer:
         return NewOrganizerFormsPage();
     }
@@ -58,7 +56,7 @@ class _NewOrganizerPageState extends State<NewOrganizerPage> {
                   ),
                   onPressed: () {
                     cleanNewEventState(context);
-                    _handleButtonClicked(Pages.profile);
+                    routeTo(context, ProfileHomePage());
                   },
                 ),
               ),
