@@ -148,6 +148,22 @@ mixin _$NewEventFormsPageController on _NewEventFormsPageControllerBase, Store {
     });
   }
 
+  final _$selectedOrganizersAtom =
+      Atom(name: '_NewEventFormsPageControllerBase.selectedOrganizers');
+
+  @override
+  ObservableList<dynamic> get selectedOrganizers {
+    _$selectedOrganizersAtom.reportRead();
+    return super.selectedOrganizers;
+  }
+
+  @override
+  set selectedOrganizers(ObservableList<dynamic> value) {
+    _$selectedOrganizersAtom.reportWrite(value, super.selectedOrganizers, () {
+      super.selectedOrganizers = value;
+    });
+  }
+
   final _$isLoadingSomeActionAtom =
       Atom(name: '_NewEventFormsPageControllerBase.isLoadingSomeAction');
 
@@ -267,6 +283,32 @@ mixin _$NewEventFormsPageController on _NewEventFormsPageControllerBase, Store {
   }
 
   @override
+  void addOrganizerToEvent(dynamic newOrganizer) {
+    final _$actionInfo =
+        _$_NewEventFormsPageControllerBaseActionController.startAction(
+            name: '_NewEventFormsPageControllerBase.addOrganizerToEvent');
+    try {
+      return super.addOrganizerToEvent(newOrganizer);
+    } finally {
+      _$_NewEventFormsPageControllerBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void removeOrganizerFromEvent(dynamic organizer) {
+    final _$actionInfo =
+        _$_NewEventFormsPageControllerBaseActionController.startAction(
+            name: '_NewEventFormsPageControllerBase.removeOrganizerFromEvent');
+    try {
+      return super.removeOrganizerFromEvent(organizer);
+    } finally {
+      _$_NewEventFormsPageControllerBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void changeIsLoadingSomeAction(bool status) {
     final _$actionInfo =
         _$_NewEventFormsPageControllerBaseActionController.startAction(
@@ -302,6 +344,7 @@ endDate: ${endDate},
 description: ${description},
 ownerDescription: ${ownerDescription},
 isOwner: ${isOwner},
+selectedOrganizers: ${selectedOrganizers},
 isLoadingSomeAction: ${isLoadingSomeAction},
 eventToRegister: ${eventToRegister},
 isValid: ${isValid}

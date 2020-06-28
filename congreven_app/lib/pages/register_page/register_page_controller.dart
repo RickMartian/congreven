@@ -85,7 +85,7 @@ abstract class _RegisterPageControllerBase with Store {
   @computed
   get userToRegister => {
         "name": name,
-        "cpf": cpf.replaceAll(RegExp(r"[^\s\w]"), ''),
+        "cpf": cpf != null ? cpf.replaceAll(RegExp(r"[^\s\w]"), '') : "",
         "email": email,
         "password": password
       };

@@ -16,6 +16,17 @@ cleanNewEventState(BuildContext context) {
   newEventFormsPageController.changeIsOwner(true);
 }
 
+createSupport(int eventId, String cnpj, String token) async {
+  final body = {"event_id": eventId, "cnpj_organizer": cnpj};
+  print("body -> $body");
+  final response = await http.post(
+    "${Config.server_url}:${Config.server_port}/supports",
+    body: body,
+    headers: {"Accept": "application/json", "Authorization": token},
+  );
+  return response;
+}
+
 createNewEvent(BuildContext context) async {
   final userModel = Provider.of<User>(context, listen: false);
   final newEventFormsPageController =
@@ -23,8 +34,12 @@ createNewEvent(BuildContext context) async {
   newEventFormsPageController.changeIsLoadingSomeAction(true);
   final event = newEventFormsPageController.eventToRegister;
   event["cpf_owner"] = userModel.cpf;
+  event["owner_description"] = "";
   try {
     final auth = "Bearer ${userModel.token}";
+    print("event -> $event");
+    print("token -> $auth");
+    print("url -> ${Config.server_url}:${Config.server_port}/events");
     final response = await http.post(
       "${Config.server_url}:${Config.server_port}/events",
       body: event,
@@ -32,7 +47,21 @@ createNewEvent(BuildContext context) async {
     );
     final data =
         response.body.isNotEmpty ? convert.jsonDecode(response.body) : null;
+    print("data -> $data");
     if (response.statusCode == 200) {
+      if (!newEventFormsPageController.isOwner) {
+        final organizers = newEventFormsPageController.selectedOrganizers;
+        for (var value in organizers) {
+          print("value -> $value");
+          // TODO: pegar id do evento pela resposta e linkar!
+          await createSupport(data["id"], value["cnpj"], auth).then((resp) {
+            if (resp != null) {
+              print("code -> ${resp.statusCode}");
+              print("resp -> ${resp.body}");
+            }
+          });
+        }
+      }
       Navigator.pop(context);
       if (data != null) {
         toast(
@@ -61,6 +90,7 @@ createNewEvent(BuildContext context) async {
     }
     newEventFormsPageController.changeIsLoadingSomeAction(false);
   } catch (error) {
+    print("error -> $error");
     newEventFormsPageController.changeIsLoadingSomeAction(false);
     toast(
       title: "Erro",

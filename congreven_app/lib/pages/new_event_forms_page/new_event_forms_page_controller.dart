@@ -61,6 +61,21 @@ abstract class _NewEventFormsPageControllerBase with Store {
   }
 
   @observable
+  ObservableList<dynamic> selectedOrganizers =
+      ObservableList<dynamic>().asObservable();
+
+  @action
+  void addOrganizerToEvent(dynamic newOrganizer) {
+    selectedOrganizers.add(newOrganizer);
+  }
+
+  @action
+  void removeOrganizerFromEvent(dynamic organizer) {
+    selectedOrganizers
+        .removeWhere((element) => element["cnpj"] == organizer["cnpj"]);
+  }
+
+  @observable
   bool isLoadingSomeAction = false;
 
   @action
@@ -69,7 +84,10 @@ abstract class _NewEventFormsPageControllerBase with Store {
   }
 
   String reverseDate(String date) {
-    return date.split('/').reversed.join("-");
+    if (date != null) {
+      return date.split('/').reversed.join("-");
+    }
+    return "";
   }
 
   DateTime formatDate(String date) {
@@ -167,6 +185,16 @@ abstract class _NewEventFormsPageControllerBase with Store {
     return null;
   }
 
+  String validateSelectedOrganizer() {
+    if (isOwner) {
+      return null;
+    }
+    if (selectedOrganizers.isEmpty || selectedOrganizers == null) {
+      return "pelo menos um organizador é necessário para o evento!";
+    }
+    return null;
+  }
+
   @action
   void clean() {
     name = null;
@@ -175,6 +203,7 @@ abstract class _NewEventFormsPageControllerBase with Store {
     endDate = null;
     description = null;
     ownerDescription = null;
+    selectedOrganizers = ObservableList<dynamic>();
   }
 
   @computed
@@ -194,5 +223,6 @@ abstract class _NewEventFormsPageControllerBase with Store {
       validateStartDate() == null &&
       validateEndDate() == null &&
       validateDescription() == null &&
+      validateSelectedOrganizer() == null &&
       validateOwnerDescription() == null;
 }

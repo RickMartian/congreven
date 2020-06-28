@@ -165,16 +165,21 @@ class _EventsPageState extends State<EventsPage> {
             child: Observer(
               builder: (_) {
                 return !eventsPageController.isFetchingEvents
-                    ? ListView.builder(
-                        itemBuilder: (_, int index) => _itemBuilder(
-                            context,
-                            index,
-                            deviceHeight,
-                            deviceWidth,
-                            _filterEventByName(eventsModel.events)),
-                        itemCount:
-                            _filterEventByName(eventsModel.events).length,
-                      )
+                    ? _filterEventByName(eventsModel.events).length > 0
+                        ? ListView.builder(
+                            itemBuilder: (_, int index) => _itemBuilder(
+                                context,
+                                index,
+                                deviceHeight,
+                                deviceWidth,
+                                _filterEventByName(eventsModel.events)),
+                            itemCount:
+                                _filterEventByName(eventsModel.events).length,
+                          )
+                        : Container(
+                            margin: EdgeInsets.all(10.0),
+                            child: Text("Não há evento."),
+                          )
                     : Container(
                         margin: EdgeInsets.all(10.0),
                         child: CircularProgressIndicator(
