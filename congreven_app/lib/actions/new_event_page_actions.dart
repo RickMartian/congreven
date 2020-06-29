@@ -17,7 +17,7 @@ cleanNewEventState(BuildContext context) {
   newEventFormsPageController.clean();
   newEventFormsPageController.changeIsLoadingSomeAction(false);
   newEventFormsPageController.changeIsOwner(true);
-  myEventsEditPageController.changeEventToEdit(null);
+  myEventsEditPageController.changeEventToUse(null);
 }
 
 createSupport(int eventId, String cnpj, String token) async {
@@ -58,7 +58,7 @@ updateEvent(BuildContext context) async {
   print("EVENT TO UPDATE -> $event");
   try {
     final auth = "Bearer ${userModel.token}";
-    final id = myEventsEditPageController.eventToEdit["id"];
+    final id = myEventsEditPageController.eventToUse["event"]["id"];
     print("event -> $event");
     print("token -> $auth");
     final response = await http.put(
@@ -74,7 +74,6 @@ updateEvent(BuildContext context) async {
         // final organizers = newEventFormsPageController.selectedOrganizers;
         // for (var value in organizers) {
         //   print("value -> $value");
-        //   // TODO: pegar id do evento pela resposta e linkar!
         //   await createSupport(data["id"], value["cnpj"], auth).then((resp) {
         //     if (resp != null) {
         //       print("code -> ${resp.statusCode}");

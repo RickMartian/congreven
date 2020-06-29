@@ -12,4 +12,12 @@ abstract class _EventsPageControllerBase with Store {
   void changeIsFetchingEvents(bool status) {
     isFetchingEvents = status;
   }
+
+  @observable
+  bool isFetchingEventById = false;
+
+  @action
+  void changeIsFetchingEventById(bool status) {
+    isFetchingEventById = status;
+  }
 }

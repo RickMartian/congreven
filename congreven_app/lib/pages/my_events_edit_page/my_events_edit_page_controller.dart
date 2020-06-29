@@ -6,10 +6,10 @@ class MyEventsEditPageController = _MyEventsEditPageControllerBase
 
 abstract class _MyEventsEditPageControllerBase with Store {
   @observable
-  dynamic eventToEdit;
+  dynamic eventToUse;
 
   @action
-  void changeEventToEdit(event) {
-    eventToEdit = event;
+  void changeEventToUse(event) {
+    eventToUse = event;
   }
 }

@@ -9,19 +9,19 @@ part of 'my_events_edit_page_controller.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$MyEventsEditPageController on _MyEventsEditPageControllerBase, Store {
-  final _$eventToEditAtom =
-      Atom(name: '_MyEventsEditPageControllerBase.eventToEdit');
+  final _$eventToUseAtom =
+      Atom(name: '_MyEventsEditPageControllerBase.eventToUse');
 
   @override
-  dynamic get eventToEdit {
-    _$eventToEditAtom.reportRead();
-    return super.eventToEdit;
+  dynamic get eventToUse {
+    _$eventToUseAtom.reportRead();
+    return super.eventToUse;
   }
 
   @override
-  set eventToEdit(dynamic value) {
-    _$eventToEditAtom.reportWrite(value, super.eventToEdit, () {
-      super.eventToEdit = value;
+  set eventToUse(dynamic value) {
+    _$eventToUseAtom.reportWrite(value, super.eventToUse, () {
+      super.eventToUse = value;
     });
   }
 
@@ -29,11 +29,11 @@ mixin _$MyEventsEditPageController on _MyEventsEditPageControllerBase, Store {
       ActionController(name: '_MyEventsEditPageControllerBase');
 
   @override
-  void changeEventToEdit(dynamic event) {
+  void changeEventToUse(dynamic event) {
     final _$actionInfo = _$_MyEventsEditPageControllerBaseActionController
-        .startAction(name: '_MyEventsEditPageControllerBase.changeEventToEdit');
+        .startAction(name: '_MyEventsEditPageControllerBase.changeEventToUse');
     try {
-      return super.changeEventToEdit(event);
+      return super.changeEventToUse(event);
     } finally {
       _$_MyEventsEditPageControllerBaseActionController.endAction(_$actionInfo);
     }
@@ -42,7 +42,7 @@ mixin _$MyEventsEditPageController on _MyEventsEditPageControllerBase, Store {
   @override
   String toString() {
     return '''
-eventToEdit: ${eventToEdit}
+eventToUse: ${eventToUse}
     ''';
   }
 }

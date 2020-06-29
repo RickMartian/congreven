@@ -31,33 +31,40 @@ class _NewEventFormsPageState extends State<NewEventFormsPage> {
         Provider.of<NewEventFormsPageController>(context, listen: false);
     final myEventsEditPageController =
         Provider.of<MyEventsEditPageController>(context, listen: false);
-    print("EVENT TO EDIT -> ${myEventsEditPageController.eventToEdit}");
-    final eventToEdit = myEventsEditPageController.eventToEdit;
-    if (eventToEdit == null) {
+    print("EVENT TO EDIT -> ${myEventsEditPageController.eventToUse}");
+    final eventToUse = myEventsEditPageController.eventToUse["event"];
+    final organizersToUse = myEventsEditPageController.eventToUse["organizers"];
+    print("event to use -> $eventToUse");
+    print("organizers to use -> $organizersToUse");
+    if (eventToUse == null) {
       _startDateController.text = newEventFormsPageController.startDate;
       _endDateController.text = newEventFormsPageController.endDate;
     }
-    if (eventToEdit != null) {
-      _nameController.text = eventToEdit["name"];
-      _addressController.text = eventToEdit["address"];
-      _startDateController.text = eventToEdit["start_date_formatted"];
-      _endDateController.text = eventToEdit["end_date_formatted"];
-      _descriptionController.text = eventToEdit["description"];
-      _ownerDescriptionController.text = eventToEdit["owner_description"];
-      newEventFormsPageController.changeName(eventToEdit["name"]);
-      newEventFormsPageController.changeAddress(eventToEdit["address"]);
-      newEventFormsPageController.changeDescription(eventToEdit["description"]);
+    if (eventToUse != null) {
+      _nameController.text = eventToUse["name"];
+      _addressController.text = eventToUse["address"];
+      _startDateController.text = eventToUse["start_date_formatted"];
+      _endDateController.text = eventToUse["end_date_formatted"];
+      _descriptionController.text = eventToUse["description"];
+      _ownerDescriptionController.text = eventToUse["owner_description"];
+      newEventFormsPageController.changeName(eventToUse["name"]);
+      newEventFormsPageController.changeAddress(eventToUse["address"]);
+      newEventFormsPageController.changeDescription(eventToUse["description"]);
       newEventFormsPageController
-          .changeOwnerDescription(eventToEdit["owner_description"]);
+          .changeOwnerDescription(eventToUse["owner_description"]);
       newEventFormsPageController
-          .changeStartDate(eventToEdit["start_date_formatted"]);
+          .changeStartDate(eventToUse["start_date_formatted"]);
       newEventFormsPageController
-          .changeEndDate(eventToEdit["end_date_formatted"]);
-      if (eventToEdit["owner_description"] == null || eventToEdit.isEmpty) {
+          .changeEndDate(eventToUse["end_date_formatted"]);
+      if (eventToUse["owner_description"] == null || eventToUse.isEmpty) {
         newEventFormsPageController.changeIsOwner(false);
+        if (organizersToUse.length > 0) {
+          organizersToUse.forEach((element) =>
+              newEventFormsPageController.addOrganizerToEvent(element));
+        }
       }
-      // TODO: fazer GET para buscar organizadores relacionado ao evento a ser editado!
     }
+    // TODO: fazer GET para buscar organizadores relacionado ao evento a ser editado!
   }
 
   _handleIsOwner(newEventFormsPageController) {

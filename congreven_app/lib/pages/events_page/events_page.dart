@@ -1,9 +1,12 @@
+import 'package:congreven_app/actions/events_page_actions.dart';
 import 'package:congreven_app/models/events.dart';
+import 'package:congreven_app/pages/event_details_home_page/event_details_home_page.dart';
 import 'package:congreven_app/pages/events_page/events_page_controller.dart';
 import 'package:congreven_app/pages/my_events_edit_page/my_events_edit_page_controller.dart';
 import 'package:congreven_app/pages/new_event_page/new_event_page.dart';
 import 'package:congreven_app/utils/debouncer.dart';
 import 'package:congreven_app/utils/routeTo.dart';
+import 'package:congreven_app/utils/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:intl/intl.dart';
@@ -24,6 +27,7 @@ class _EventsPageState extends State<EventsPage> {
   );
   DateFormat _dateFormat;
   String _search = "";
+  int _eventIdClicked;
   void initState() {
     super.initState();
     initializeDateFormatting();
@@ -66,17 +70,63 @@ class _EventsPageState extends State<EventsPage> {
   Widget _renderEditButton(eventCpfOwner, event) {
     final myEventsEditPageController =
         Provider.of<MyEventsEditPageController>(context, listen: false);
+    final eventsPageController =
+        Provider.of<EventsPageController>(context, listen: false);
     if (verifyIsCpfOwner(eventCpfOwner)) {
       return FlatButton(
         onPressed: () {
-          event["start_date_formatted"] =
-              _dateFormat.format(DateTime.parse(event["start_date"]));
-          event["end_date_formatted"] =
-              _dateFormat.format(DateTime.parse(event["end_date"]));
-          myEventsEditPageController.changeEventToEdit(event);
-          routeTo(context, NewEventPage());
+          setState(() {
+            _eventIdClicked = event["id"];
+          });
+          try {
+            getEventById(context, event["id"]).then((response) {
+              setState(() {
+                _eventIdClicked = null;
+              });
+              print("response -> $response");
+              response["event"]["start_date_formatted"] = _dateFormat
+                  .format(DateTime.parse(response["event"]["start_date"]));
+              response["event"]["end_date_formatted"] = _dateFormat
+                  .format(DateTime.parse(response["event"]["end_date"]));
+              myEventsEditPageController.changeEventToUse(response);
+              routeTo(context, NewEventPage());
+            });
+          } catch (error) {
+            setState(() {
+              _eventIdClicked = null;
+            });
+            toast(
+              title: "Erro",
+              message:
+                  "Não foi possível selecionar o evento a ser editado. Por favor, reinicie o aplicativo e tente novamente.",
+              duration: Duration(milliseconds: 3000),
+              context: context,
+            );
+          }
         },
-        child: Text("Editar"),
+        child: eventsPageController.isFetchingEventById &&
+                _eventIdClicked == event["id"]
+            ? Container(
+                padding: EdgeInsets.all(4.0),
+                child: Flexible(
+                  child: Center(
+                    child: CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        Theme.of(context).primaryColorLight,
+                      ),
+                    ),
+                  ),
+                ),
+              )
+            : Container(
+                padding: EdgeInsets.all(4.0),
+                child: Text(
+                  "Editar",
+                  style: TextStyle(
+                    fontSize: 16.0,
+                  ),
+                ),
+              ),
         color: Colors.blueAccent,
       );
     }
@@ -98,7 +148,13 @@ class _EventsPageState extends State<EventsPage> {
       margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
       color: Theme.of(context).primaryColorLight,
       child: InkWell(
-        onTap: () {},
+        onTap: () {
+          try {
+            getEventById(context, events[index]["id"]).then((response) {
+              routeTo(context, EventDetailsHomePage());
+            });
+          } catch (error) {}
+        },
         child: Padding(
           padding: const EdgeInsets.all(10.0),
           child: Column(
@@ -142,13 +198,15 @@ class _EventsPageState extends State<EventsPage> {
               SizedBox(
                 height: 10.0,
               ),
-              Row(
-                children: <Widget>[
-                  Expanded(
-                      child: _renderEditButton(
-                          events[index]["cpf_owner"], events[index])),
-                ],
-              ),
+              Observer(builder: (_) {
+                return Row(
+                  children: <Widget>[
+                    Expanded(
+                        child: _renderEditButton(
+                            events[index]["cpf_owner"], events[index])),
+                  ],
+                );
+              }),
             ],
           ),
         ),

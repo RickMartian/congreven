@@ -25,6 +25,22 @@ mixin _$EventsPageController on _EventsPageControllerBase, Store {
     });
   }
 
+  final _$isFetchingEventByIdAtom =
+      Atom(name: '_EventsPageControllerBase.isFetchingEventById');
+
+  @override
+  bool get isFetchingEventById {
+    _$isFetchingEventByIdAtom.reportRead();
+    return super.isFetchingEventById;
+  }
+
+  @override
+  set isFetchingEventById(bool value) {
+    _$isFetchingEventByIdAtom.reportWrite(value, super.isFetchingEventById, () {
+      super.isFetchingEventById = value;
+    });
+  }
+
   final _$_EventsPageControllerBaseActionController =
       ActionController(name: '_EventsPageControllerBase');
 
@@ -40,9 +56,22 @@ mixin _$EventsPageController on _EventsPageControllerBase, Store {
   }
 
   @override
+  void changeIsFetchingEventById(bool status) {
+    final _$actionInfo =
+        _$_EventsPageControllerBaseActionController.startAction(
+            name: '_EventsPageControllerBase.changeIsFetchingEventById');
+    try {
+      return super.changeIsFetchingEventById(status);
+    } finally {
+      _$_EventsPageControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
-isFetchingEvents: ${isFetchingEvents}
+isFetchingEvents: ${isFetchingEvents},
+isFetchingEventById: ${isFetchingEventById}
     ''';
   }
 }
