@@ -112,7 +112,7 @@ class _EventsPageState extends State<EventsPage> {
                   child: Center(
                     child: CircularProgressIndicator(
                       valueColor: AlwaysStoppedAnimation<Color>(
-                        Theme.of(context).primaryColorLight,
+                        Theme.of(context).primaryColorDark,
                       ),
                     ),
                   ),
@@ -146,86 +146,111 @@ class _EventsPageState extends State<EventsPage> {
       double deviceWidth, List<dynamic> events) {
     final myEventsEditPageController =
         Provider.of<MyEventsEditPageController>(context, listen: false);
-    return Card(
-      margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-      color: Theme.of(context).primaryColorLight,
-      child: InkWell(
-        onTap: () {
-          try {
-            getEventById(context, events[index]["id"]).then((response) {
-              response["event"]["start_date_formatted"] = _dateFormat
-                  .format(DateTime.parse(response["event"]["start_date"]));
-              response["event"]["end_date_formatted"] = _dateFormat
-                  .format(DateTime.parse(response["event"]["end_date"]));
-              myEventsEditPageController.changeEventToUse(response);
-              routeTo(context, EventDetailsHomePage());
-            });
-          } catch (error) {
-            toast(
-              title: "Erro",
-              message:
-                  "Não foi possível selecionar o evento a ser visualizado. Por favor, reinicie o aplicativo e tente novamente.",
-              duration: Duration(milliseconds: 3000),
-              context: context,
-            );
-          }
-        },
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Column(
-            children: <Widget>[
-              Text(
-                "${events[index]["name"]}",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16.0,
-                ),
-              ),
-              SizedBox(
-                height: 15.0,
-              ),
-              _renderLine(
-                "Endereço",
-                events[index]["address"],
-              ),
-              SizedBox(
-                height: 10.0,
-              ),
-              _renderLine(
-                "Data inicial",
-                _dateFormat.format(DateTime.parse(events[index]["start_date"])),
-              ),
-              SizedBox(
-                height: 10.0,
-              ),
-              _renderLine(
-                "Data final",
-                _dateFormat.format(DateTime.parse(events[index]["end_date"])),
-              ),
-              SizedBox(
-                height: 10.0,
-              ),
-              _renderLine(
-                "Descrição",
-                events[index]["description"],
-              ),
-              SizedBox(
-                height: 10.0,
-              ),
-              Observer(builder: (_) {
-                return Row(
-                  children: <Widget>[
-                    Expanded(
-                        child: _renderEditButton(
-                            events[index]["cpf_owner"], events[index])),
-                  ],
+    return Column(
+      children: <Widget>[
+        Card(
+          margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 0),
+          color: Colors.white,
+          elevation: 0,
+          child: InkWell(
+            onTap: () {
+              try {
+                getEventById(context, events[index]["id"]).then((response) {
+                  response["event"]["start_date_formatted"] = _dateFormat
+                      .format(DateTime.parse(response["event"]["start_date"]));
+                  response["event"]["end_date_formatted"] = _dateFormat
+                      .format(DateTime.parse(response["event"]["end_date"]));
+                  myEventsEditPageController.changeEventToUse(response);
+                  routeTo(context, EventDetailsHomePage());
+                });
+              } catch (error) {
+                toast(
+                  title: "Erro",
+                  message:
+                      "Não foi possível selecionar o evento a ser visualizado. Por favor, reinicie o aplicativo e tente novamente.",
+                  duration: Duration(milliseconds: 3000),
+                  context: context,
                 );
-              }),
-            ],
+              }
+            },
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  SizedBox(
+                    height: 8.0,
+                  ),
+                  Text(
+                    "${_dateFormat.format(DateTime.parse(events[index]["start_date"]))}",
+                    style: TextStyle(
+                      fontSize: 15.0,
+                      color: Colors.red[300],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 8.0,
+                  ),
+                  Text(
+                    "${events[index]["name"]}",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18.0,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 8.0,
+                  ),
+                  Text(
+                    "${events[index]["description"]}",
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      color: Colors.grey,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 8.0,
+                  ),
+                  RichText(
+                    text: TextSpan(
+                      children: [
+                        WidgetSpan(
+                          child: Icon(Icons.location_on,
+                              size: 18.0,
+                              color: Theme.of(context).primaryColorDark),
+                        ),
+                        TextSpan(
+                            text: "${events[index]["address"]}",
+                            style: TextStyle(
+                                color: Colors.grey[600], fontSize: 16.0)),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 8.0,
+                  ),
+                  Observer(builder: (_) {
+                    return Row(
+                      children: <Widget>[
+                        Expanded(
+                            child: _renderEditButton(
+                                events[index]["cpf_owner"], events[index])),
+                      ],
+                    );
+                  }),
+                ],
+              ),
+            ),
           ),
         ),
-      ),
+        Divider(
+          color: Colors.black,
+          height: 15,
+          thickness: 0.25,
+          indent: 0,
+          endIndent: 0,
+        ),
+      ],
     );
   }
 
@@ -310,7 +335,7 @@ class _EventsPageState extends State<EventsPage> {
                         margin: EdgeInsets.all(10.0),
                         child: CircularProgressIndicator(
                           valueColor: AlwaysStoppedAnimation<Color>(
-                            Theme.of(context).primaryColorLight,
+                            Theme.of(context).primaryColorDark,
                           ),
                         ),
                       );

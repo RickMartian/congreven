@@ -154,10 +154,10 @@ abstract class _NewEventFormsPageControllerBase with Store {
     if (endDate == null || endDate.isEmpty) {
       return "O campo 'data final' é obrigatório!";
     } else if (endDate.length < 10) {
-      return "Insira uma data inicial válida!";
+      return "Insira uma data final válida!";
     } else if (endDate.length == 10) {
       if (!isValidDate(endDate)) {
-        return "Insira uma data inicial válida!";
+        return "Insira uma data final válida!";
       }
       if (startDate?.length == 10) {
         if (!firstDateIsBeforeSecondDate(startDate, endDate)) {

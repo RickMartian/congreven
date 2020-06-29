@@ -67,7 +67,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Congreven',
         theme: ThemeData(
-            primarySwatch: Colors.pink,
+            primarySwatch: Colors.green,
             visualDensity: VisualDensity.adaptivePlatformDensity,
             backgroundColor: Colors.white),
         home: EnterPage(),

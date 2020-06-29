@@ -98,7 +98,7 @@ class EventDetailsPage extends StatelessWidget {
                       child: Text(buttonTitle),
                     ),
                     onPressed: onPressed,
-                    color: Theme.of(context).primaryColorLight,
+                    color: Theme.of(context).primaryColorDark,
                   ),
                 ),
               )

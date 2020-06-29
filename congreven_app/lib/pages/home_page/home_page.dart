@@ -52,7 +52,7 @@ class _HomePageState extends State<HomePage> {
             child: Center(
               child: CircularProgressIndicator(
                 valueColor: AlwaysStoppedAnimation<Color>(
-                  Theme.of(context).primaryColorLight,
+                  Theme.of(context).primaryColorDark,
                 ),
               ),
             ),
@@ -80,7 +80,7 @@ class _HomePageState extends State<HomePage> {
                     child: Center(
                       child: CircularProgressIndicator(
                         valueColor: AlwaysStoppedAnimation<Color>(
-                          Theme.of(context).primaryColorLight,
+                          Theme.of(context).primaryColorDark,
                         ),
                       ),
                     ),
@@ -98,21 +98,19 @@ class _HomePageState extends State<HomePage> {
                       builder: (context) {
                         return Container(
                           margin: EdgeInsets.fromLTRB(20.0, 10.0, 0.0, 10.0),
-                          child: Center(
-                            child: IconButton(
-                              icon: Icon(
-                                Icons.person_outline,
-                                color: Colors.white,
-                              ),
-                              onPressed: () {
-                                if (!homePageController.isLoadingLogout) {
-                                  routeTo(context, ProfileHomePage());
-                                }
-                              },
+                          child: IconButton(
+                            icon: Icon(
+                              Icons.person_outline,
+                              color: Colors.white,
                             ),
+                            onPressed: () {
+                              if (!homePageController.isLoadingLogout) {
+                                routeTo(context, ProfileHomePage());
+                              }
+                            },
                           ),
                           decoration: BoxDecoration(
-                            color: Theme.of(context).primaryColorLight,
+                            color: Theme.of(context).primaryColorDark,
                             borderRadius: BorderRadius.circular(8.0),
                           ),
                         );
@@ -191,7 +189,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   bottomNavigationBar: BottomAppBar(
-                    color: Colors.grey[300],
+                    color: Colors.grey[200],
                     child: Container(
                       height: _deviceHeight / 11,
                     ),
@@ -206,7 +204,7 @@ class _HomePageState extends State<HomePage> {
                               routeTo(context, NewEventPage());
                             }
                           },
-                          backgroundColor: Theme.of(context).primaryColorLight,
+                          backgroundColor: Theme.of(context).primaryColorDark,
                           elevation: 0.0,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8.0),

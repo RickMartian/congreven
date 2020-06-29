@@ -61,7 +61,7 @@ class _NewOrganizerPageState extends State<NewOrganizerPage> {
                 ),
               ),
               decoration: BoxDecoration(
-                color: Theme.of(context).primaryColorLight,
+                color: Theme.of(context).primaryColorDark,
                 borderRadius: BorderRadius.circular(8.0),
               ),
             );
@@ -135,7 +135,7 @@ class _NewOrganizerPageState extends State<NewOrganizerPage> {
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        color: Colors.grey[300],
+        color: Colors.grey[200],
         child: Container(
           height: _deviceHeight / 11,
         ),
@@ -150,7 +150,7 @@ class _NewOrganizerPageState extends State<NewOrganizerPage> {
                 createNewOrganizer(context);
               }
             },
-            backgroundColor: Theme.of(context).primaryColorLight,
+            backgroundColor: Theme.of(context).primaryColorDark,
             elevation: 0.0,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8.0),

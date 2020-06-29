@@ -90,7 +90,7 @@ class _ProfileHomePageState extends State<ProfileHomePage> {
                     ),
                   ),
                   decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColorLight,
+                    color: Theme.of(context).primaryColorDark,
                     borderRadius: BorderRadius.circular(8.0),
                   ),
                 );
@@ -198,7 +198,7 @@ class _ProfileHomePageState extends State<ProfileHomePage> {
             ),
           ),
           bottomNavigationBar: BottomAppBar(
-            color: Colors.grey[300],
+            color: Colors.grey[200],
             child: Container(
               height: _deviceHeight / 11,
             ),
@@ -218,7 +218,7 @@ class _ProfileHomePageState extends State<ProfileHomePage> {
                       }
                     }
                   },
-                  backgroundColor: Theme.of(context).primaryColorLight,
+                  backgroundColor: Theme.of(context).primaryColorDark,
                   elevation: 0.0,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8.0),

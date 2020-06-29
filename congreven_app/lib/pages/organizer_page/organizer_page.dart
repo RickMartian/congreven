@@ -94,7 +94,7 @@ class _OrganizerPageState extends State<OrganizerPage> {
       List<dynamic> selectedOrganizers) {
     return Card(
       margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-      color: Theme.of(context).primaryColorLight,
+      color: Theme.of(context).primaryColorDark,
       child: InkWell(
         onTap: () {},
         child: Padding(
@@ -281,7 +281,7 @@ class _OrganizerPageState extends State<OrganizerPage> {
                         margin: EdgeInsets.all(10.0),
                         child: CircularProgressIndicator(
                           valueColor: AlwaysStoppedAnimation<Color>(
-                            Theme.of(context).primaryColorLight,
+                            Theme.of(context).primaryColorDark,
                           ),
                         ),
                       );

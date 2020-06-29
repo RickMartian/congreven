@@ -87,7 +87,7 @@ class _NewEventFormsPageState extends State<NewEventFormsPage> {
         shrinkWrap: true,
         children: <Widget>[
           FlatButton(
-            color: Theme.of(context).primaryColorLight,
+            color: Theme.of(context).primaryColorDark,
             onPressed: () {
               fetchOrganizers(context);
               routeTo(context, OrganizerHomePage());
@@ -190,7 +190,7 @@ class _NewEventFormsPageState extends State<NewEventFormsPage> {
               children: <Widget>[
                 Observer(builder: (_) {
                   return Checkbox(
-                    activeColor: Theme.of(context).primaryColorLight,
+                    activeColor: Theme.of(context).primaryColorDark,
                     onChanged: (bool value) {
                       newEventFormsPageController.changeIsOwner(value);
                     },
