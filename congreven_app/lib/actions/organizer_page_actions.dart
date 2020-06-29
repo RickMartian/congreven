@@ -1,5 +1,7 @@
+import 'package:congreven_app/actions/new_event_page_actions.dart';
 import 'package:congreven_app/models/organizer.dart';
 import 'package:congreven_app/models/user.dart';
+import 'package:congreven_app/pages/my_events_edit_page/my_events_edit_page_controller.dart';
 import 'package:congreven_app/pages/new_event_forms_page/new_event_forms_page_controller.dart';
 import 'package:congreven_app/pages/organizer_page/organizer_page_controller.dart';
 import 'package:flutter/material.dart';
@@ -13,14 +15,109 @@ selectOrganizer(BuildContext context, dynamic organizer) {
   print("ORGANIZER TO LINK TO EVENT! -> $organizer");
   final newEventFormsPageController =
       Provider.of<NewEventFormsPageController>(context, listen: false);
-  newEventFormsPageController.addOrganizerToEvent(organizer);
+  final myEventsEditPageController =
+      Provider.of<MyEventsEditPageController>(context, listen: false);
+  final userModel = Provider.of<User>(context, listen: false);
+  final auth = "Bearer ${userModel.token}";
+  print("eventToUse -> ${myEventsEditPageController.eventToUse}");
+  try {
+    if (myEventsEditPageController.eventToUse != null) {
+      createSupport(myEventsEditPageController.eventToUse["event"]["id"],
+              organizer["cnpj"], auth)
+          .then((response) {
+        print("response -> $response");
+        print("response statusCode-> ${response.statusCode}");
+        print("response body -> ${response.body}");
+        final data =
+            response.body.isNotEmpty ? convert.jsonDecode(response.body) : null;
+        if (response.statusCode == 200) {
+          if (data != null) {
+            newEventFormsPageController.addOrganizerToEvent(organizer);
+            toast(
+              title: "Sucesso!",
+              message: data["message"] ??
+                  "Organizador vinculado ao evento com sucesso.",
+              duration: Duration(milliseconds: 2000),
+              context: context,
+            );
+          }
+        } else {
+          if (data != null) {
+            toast(
+              title: "Erro",
+              message: data["message"] ?? "Erro desconhecido.",
+              duration: Duration(milliseconds: 2000),
+              context: context,
+            );
+          }
+        }
+      });
+    } else {
+      newEventFormsPageController.addOrganizerToEvent(organizer);
+    }
+  } catch (error) {
+    toast(
+      title: "Erro",
+      message:
+          "Erro desconhecido. Por favor, reinicie o aplicativo e tente novamente.",
+      duration: Duration(milliseconds: 2000),
+      context: context,
+    );
+  }
 }
 
 removeSelectedOrganizer(BuildContext context, dynamic organizer) {
   print("remove organizzer !! -> $organizer");
   final newEventFormsPageController =
       Provider.of<NewEventFormsPageController>(context, listen: false);
-  newEventFormsPageController.removeOrganizerFromEvent(organizer);
+  final myEventsEditPageController =
+      Provider.of<MyEventsEditPageController>(context, listen: false);
+  final userModel = Provider.of<User>(context, listen: false);
+  final auth = "Bearer ${userModel.token}";
+  try {
+    if (myEventsEditPageController.eventToUse != null) {
+      deleteSupport(myEventsEditPageController.eventToUse["event"]["id"],
+              organizer["cnpj"], auth)
+          .then((response) {
+        print("response -> $response");
+        print("response statusCode-> ${response.statusCode}");
+        print("response body -> ${response.body}");
+        final data =
+            response.body.isNotEmpty ? convert.jsonDecode(response.body) : null;
+        if (response.statusCode == 200) {
+          if (data != null) {
+            newEventFormsPageController.removeOrganizerFromEvent(organizer);
+            toast(
+              title: "Sucesso!",
+              message: data["message"] ??
+                  "Organizador removido do evento com sucesso.",
+              duration: Duration(milliseconds: 2000),
+              context: context,
+            );
+          }
+        } else {
+          if (data != null) {
+            toast(
+              title: "Erro",
+              message: data["message"] ?? "Erro desconhecido.",
+              duration: Duration(milliseconds: 2000),
+              context: context,
+            );
+          }
+        }
+      });
+    } else {
+      newEventFormsPageController.removeOrganizerFromEvent(organizer);
+    }
+  } catch (error) {
+    toast(
+      title: "Erro",
+      message:
+          "Erro desconhecido. Por favor, reinicie o aplicativo e tente novamente.",
+      duration: Duration(milliseconds: 2000),
+      context: context,
+    );
+  }
 }
 
 fetchOrganizers(BuildContext context) async {

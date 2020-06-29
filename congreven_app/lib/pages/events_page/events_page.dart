@@ -144,6 +144,8 @@ class _EventsPageState extends State<EventsPage> {
 
   Widget _itemBuilder(BuildContext context, int index, double deviceHeight,
       double deviceWidth, List<dynamic> events) {
+    final myEventsEditPageController =
+        Provider.of<MyEventsEditPageController>(context, listen: false);
     return Card(
       margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
       color: Theme.of(context).primaryColorLight,
@@ -151,9 +153,22 @@ class _EventsPageState extends State<EventsPage> {
         onTap: () {
           try {
             getEventById(context, events[index]["id"]).then((response) {
+              response["event"]["start_date_formatted"] = _dateFormat
+                  .format(DateTime.parse(response["event"]["start_date"]));
+              response["event"]["end_date_formatted"] = _dateFormat
+                  .format(DateTime.parse(response["event"]["end_date"]));
+              myEventsEditPageController.changeEventToUse(response);
               routeTo(context, EventDetailsHomePage());
             });
-          } catch (error) {}
+          } catch (error) {
+            toast(
+              title: "Erro",
+              message:
+                  "Não foi possível selecionar o evento a ser visualizado. Por favor, reinicie o aplicativo e tente novamente.",
+              duration: Duration(milliseconds: 3000),
+              context: context,
+            );
+          }
         },
         child: Padding(
           padding: const EdgeInsets.all(10.0),

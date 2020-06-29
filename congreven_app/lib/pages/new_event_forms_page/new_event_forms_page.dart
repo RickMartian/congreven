@@ -32,39 +32,42 @@ class _NewEventFormsPageState extends State<NewEventFormsPage> {
     final myEventsEditPageController =
         Provider.of<MyEventsEditPageController>(context, listen: false);
     print("EVENT TO EDIT -> ${myEventsEditPageController.eventToUse}");
-    final eventToUse = myEventsEditPageController.eventToUse["event"];
-    final organizersToUse = myEventsEditPageController.eventToUse["organizers"];
-    print("event to use -> $eventToUse");
-    print("organizers to use -> $organizersToUse");
-    if (eventToUse == null) {
-      _startDateController.text = newEventFormsPageController.startDate;
-      _endDateController.text = newEventFormsPageController.endDate;
-    }
-    if (eventToUse != null) {
-      _nameController.text = eventToUse["name"];
-      _addressController.text = eventToUse["address"];
-      _startDateController.text = eventToUse["start_date_formatted"];
-      _endDateController.text = eventToUse["end_date_formatted"];
-      _descriptionController.text = eventToUse["description"];
-      _ownerDescriptionController.text = eventToUse["owner_description"];
-      newEventFormsPageController.changeName(eventToUse["name"]);
-      newEventFormsPageController.changeAddress(eventToUse["address"]);
-      newEventFormsPageController.changeDescription(eventToUse["description"]);
-      newEventFormsPageController
-          .changeOwnerDescription(eventToUse["owner_description"]);
-      newEventFormsPageController
-          .changeStartDate(eventToUse["start_date_formatted"]);
-      newEventFormsPageController
-          .changeEndDate(eventToUse["end_date_formatted"]);
-      if (eventToUse["owner_description"] == null || eventToUse.isEmpty) {
-        newEventFormsPageController.changeIsOwner(false);
-        if (organizersToUse.length > 0) {
-          organizersToUse.forEach((element) =>
-              newEventFormsPageController.addOrganizerToEvent(element));
+    if (myEventsEditPageController.eventToUse != null) {
+      final eventToUse = myEventsEditPageController.eventToUse["event"];
+      final organizersToUse =
+          myEventsEditPageController.eventToUse["organizers"];
+      print("event to use -> $eventToUse");
+      print("organizers to use -> $organizersToUse");
+      if (eventToUse == null) {
+        _startDateController.text = newEventFormsPageController.startDate;
+        _endDateController.text = newEventFormsPageController.endDate;
+      }
+      if (eventToUse != null) {
+        _nameController.text = eventToUse["name"];
+        _addressController.text = eventToUse["address"];
+        _startDateController.text = eventToUse["start_date_formatted"];
+        _endDateController.text = eventToUse["end_date_formatted"];
+        _descriptionController.text = eventToUse["description"];
+        _ownerDescriptionController.text = eventToUse["owner_description"];
+        newEventFormsPageController.changeName(eventToUse["name"]);
+        newEventFormsPageController.changeAddress(eventToUse["address"]);
+        newEventFormsPageController
+            .changeDescription(eventToUse["description"]);
+        newEventFormsPageController
+            .changeOwnerDescription(eventToUse["owner_description"]);
+        newEventFormsPageController
+            .changeStartDate(eventToUse["start_date_formatted"]);
+        newEventFormsPageController
+            .changeEndDate(eventToUse["end_date_formatted"]);
+        if (eventToUse["owner_description"] == null || eventToUse.isEmpty) {
+          newEventFormsPageController.changeIsOwner(false);
+          if (organizersToUse.length > 0) {
+            organizersToUse.forEach((element) =>
+                newEventFormsPageController.addOrganizerToEvent(element));
+          }
         }
       }
     }
-    // TODO: fazer GET para buscar organizadores relacionado ao evento a ser editado!
   }
 
   _handleIsOwner(newEventFormsPageController) {

@@ -25,22 +25,23 @@ createSupport(int eventId, String cnpj, String token) async {
   print("body -> $body");
   final response = await http.post(
     "${Config.server_url}:${Config.server_port}/supports",
-    body: body,
-    headers: {"Accept": "application/json", "Authorization": token},
+    body: convert.jsonEncode(body),
+    headers: {
+      "Accept": "application/json",
+      "Authorization": token,
+      "Content-Type": "application/json"
+    },
   );
   return response;
 }
 
-// updateSupport(int eventId, String cnpj, String token) async {
-//    final body = {"event_id": eventId, "cnpj_organizer": cnpj};
-//   print("body -> $body");
-//   final response = await http.put(
-//     "${Config.server_url}:${Config.server_port}/supports",
-//     body: body,
-//     headers: {"Accept": "application/json", "Authorization": token},
-//   );
-//   return response;
-// }
+deleteSupport(int eventId, String cnpj, String token) async {
+  final response = await http.delete(
+    "${Config.server_url}:${Config.server_port}/supports?event_id=$eventId&cnpj_organizer=$cnpj",
+    headers: {"Accept": "application/json", "Authorization": token},
+  );
+  return response;
+}
 
 updateEvent(BuildContext context) async {
   final userModel = Provider.of<User>(context, listen: false);
@@ -70,18 +71,6 @@ updateEvent(BuildContext context) async {
         response.body.isNotEmpty ? convert.jsonDecode(response.body) : null;
     print("data -> $data");
     if (response.statusCode == 200) {
-      if (!newEventFormsPageController.isOwner) {
-        // final organizers = newEventFormsPageController.selectedOrganizers;
-        // for (var value in organizers) {
-        //   print("value -> $value");
-        //   await createSupport(data["id"], value["cnpj"], auth).then((resp) {
-        //     if (resp != null) {
-        //       print("code -> ${resp.statusCode}");
-        //       print("resp -> ${resp.body}");
-        //     }
-        //   });
-        // }
-      }
       Navigator.pop(context);
       if (data != null) {
         toast(
@@ -128,37 +117,36 @@ createNewEvent(BuildContext context) async {
       Provider.of<NewEventFormsPageController>(context, listen: false);
   newEventFormsPageController.changeIsLoadingSomeAction(true);
   final event = newEventFormsPageController.eventToRegister;
-  event["cpf_owner"] = userModel.cpf;
-  if (!newEventFormsPageController.isOwner) {
-    event["owner_description"] = "";
-  }
   try {
     final auth = "Bearer ${userModel.token}";
+    event["cpf_owner"] = userModel.cpf;
+    var organizersCnpj = newEventFormsPageController.selectedOrganizers
+        .map((element) => element["cnpj"].toString())
+        .toList();
+    print("organizers cnpj -> $organizersCnpj");
+    if (!newEventFormsPageController.isOwner) {
+      event["owner_description"] = "";
+    }
+    if (event["organizers"] == null) {
+      event["organizers"] = [];
+    }
     print("event -> $event");
     print("token -> $auth");
     print("url -> ${Config.server_url}:${Config.server_port}/events");
+    print("json encoded -> ${convert.jsonEncode(event)}");
     final response = await http.post(
       "${Config.server_url}:${Config.server_port}/events",
-      body: event,
-      headers: {"Accept": "application/json", "Authorization": auth},
+      body: convert.jsonEncode(event),
+      headers: {
+        "Accept": "application/json",
+        "Authorization": auth,
+        "Content-Type": "application/json"
+      },
     );
     final data =
         response.body.isNotEmpty ? convert.jsonDecode(response.body) : null;
     print("data -> $data");
     if (response.statusCode == 200) {
-      if (!newEventFormsPageController.isOwner) {
-        final organizers = newEventFormsPageController.selectedOrganizers;
-        for (var value in organizers) {
-          print("value -> $value");
-          // TODO: pegar id do evento pela resposta e linkar!
-          await createSupport(data["id"], value["cnpj"], auth).then((resp) {
-            if (resp != null) {
-              print("code -> ${resp.statusCode}");
-              print("resp -> ${resp.body}");
-            }
-          });
-        }
-      }
       Navigator.pop(context);
       if (data != null) {
         toast(

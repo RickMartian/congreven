@@ -214,6 +214,8 @@ abstract class _NewEventFormsPageControllerBase with Store {
         "end_date": reverseDate(endDate),
         "description": description,
         "owner_description": ownerDescription,
+        "organizers":
+            selectedOrganizers.map((element) => element["cnpj"]).toList()
       };
 
   @computed
