@@ -22,6 +22,8 @@ createNewOrganizer(BuildContext context) async {
       Provider.of<NewOrganizerFormsPageController>(context, listen: false);
   newOrganizerFormsPageController.changeIsLoadingSomeAction(true);
   final organizer = newOrganizerFormsPageController.organizerToRegister;
+  organizer["cpf_owner"] = userModel.cpf;
+
   try {
     final auth = "Bearer ${userModel.token}";
     final response = await http.post(
