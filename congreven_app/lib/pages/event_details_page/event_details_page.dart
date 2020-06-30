@@ -13,6 +13,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:random_color/random_color.dart';
 
 class EventDetailsPage extends StatefulWidget {
   @override
@@ -31,8 +32,8 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
   _renderTextLine({
     String firstLine = "",
     String secondLine = "",
-    firstLineSize: 20.0,
-    secondLineSize: 14.0,
+    firstLineSize: 18.0,
+    secondLineSize: 16.0,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -60,34 +61,86 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
     );
   }
 
+  _renderDescriptionEvent(dynamic event) {
+    print("event -> $event");
+    if (event != null) {
+      return Container(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            _renderTextLine(
+                firstLine: "Descrição",
+                secondLine: event["event"]["description"]),
+            event["event"]["owner_description"] != null
+                ? _renderTextLine(
+                    firstLine: "Descrição do criador",
+                    secondLine: event["event"]["owner_description"])
+                : Container(
+                    width: 0.0,
+                    height: 0.0,
+                  ),
+          ],
+        ),
+      );
+    }
+    return SizedBox(
+      height: 0.0,
+    );
+  }
+
   _renderEventDetails(dynamic event) {
     print("event -> $event");
     if (event != null) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          _renderTextLine(
-              firstLine: "Nome", secondLine: event["event"]["name"]),
-          _renderTextLine(
-              firstLine: "Endereço", secondLine: event["event"]["address"]),
-          _renderTextLine(
-              firstLine: "Data inicial",
-              secondLine: event["event"]["start_date_formatted"]),
-          _renderTextLine(
-              firstLine: "Data final",
-              secondLine: event["event"]["end_date_formatted"]),
-          _renderTextLine(
-              firstLine: "Descrição",
-              secondLine: event["event"]["description"]),
-          event["event"]["owner_description"] != null
-              ? _renderTextLine(
-                  firstLine: "Data inicial",
-                  secondLine: event["event"]["owner_description"])
-              : Container(
-                  width: 0.0,
-                  height: 0.0,
-                ),
-        ],
+      return Container(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              event["event"]["name"],
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(
+              height: 15.0,
+            ),
+            RichText(
+              text: TextSpan(
+                children: [
+                  WidgetSpan(
+                    child: Icon(Icons.query_builder,
+                        size: 18.0, color: Theme.of(context).primaryColorDark),
+                  ),
+                  TextSpan(
+                      text: " " +
+                          event["event"]["start_date_formatted"] +
+                          " - " +
+                          event["event"]["end_date_formatted"],
+                      style:
+                          TextStyle(color: Colors.grey[600], fontSize: 16.0)),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 10.0,
+            ),
+            RichText(
+              text: TextSpan(
+                children: [
+                  WidgetSpan(
+                    child: Icon(Icons.location_on,
+                        size: 18.0, color: Theme.of(context).primaryColorDark),
+                  ),
+                  TextSpan(
+                      text: " " + event["event"]["address"],
+                      style:
+                          TextStyle(color: Colors.grey[600], fontSize: 16.0)),
+                ],
+              ),
+            ),
+          ],
+        ),
       );
     }
     return SizedBox(
@@ -109,15 +162,7 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
           child: Container(
             margin: EdgeInsets.only(right: needButton ? 20.0 : 0.0),
             child: renderEnterTitle(
-                firstLine: title, secondLine: "", firstLineSize: 26.0),
-            decoration: BoxDecoration(
-              border: Border(
-                bottom: BorderSide(
-                  width: 2.0,
-                  color: Colors.black,
-                ),
-              ),
-            ),
+                firstLine: title, secondLine: "", firstLineSize: 18.0),
           ),
         ),
         needButton
@@ -145,15 +190,69 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
 
   Widget _renderOrganizerDetails(dynamic organizers) {
     final List<Widget> listWidget = List<Widget>();
+    RandomColor _randomColor = RandomColor();
+
     for (var element in organizers) {
       listWidget.add(
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            _renderTextLine(firstLine: "Nome", secondLine: element["name"]),
-            _renderTextLine(firstLine: "CNPJ", secondLine: element["cnpj"]),
-            _renderTextLine(
-                firstLine: "Descrição", secondLine: element["description"]),
+            Divider(
+              color: Colors.black,
+              height: 15,
+              thickness: 0.15,
+              indent: 0,
+              endIndent: 0,
+            ),
+            SizedBox(
+              height: 5.0,
+            ),
+            Row(
+              children: <Widget>[
+                CircleAvatar(
+                  radius: 30,
+                  backgroundColor: _randomColor.randomColor(
+                      colorBrightness: ColorBrightness.light),
+                  child: Text(element["name"][0].toUpperCase(),
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 25.0,
+                          color: Colors.black)),
+                ),
+                SizedBox(width: 20),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      element["name"],
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 4.0,
+                    ),
+                    Text(
+                      element["cnpj"],
+                      style: TextStyle(
+                        fontSize: 16,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 4.0,
+                    ),
+                    Text(
+                      element["description"],
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.grey[600],
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
             SizedBox(
               height: 10.0,
             ),
@@ -161,9 +260,13 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
         ),
       );
     }
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: listWidget,
+    return Container(
+      padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+      color: Colors.white,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: listWidget,
+      ),
     );
   }
 
@@ -198,6 +301,13 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
+              Divider(
+                color: Colors.black,
+                height: 15,
+                thickness: 0.15,
+                indent: 0,
+                endIndent: 0,
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
@@ -207,6 +317,9 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                     children: <Widget>[
                       _isEventOwnerToRenderWidget(
                           Card(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(25.0),
+                            ),
                             color: Theme.of(context).primaryColorDark,
                             child: IconButton(
                               tooltip: "Editar",
@@ -224,12 +337,15 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                       ),
                       _isEventOwnerToRenderWidget(
                           Card(
-                            color: Theme.of(context).primaryColorDark,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(25.0),
+                            ),
+                            color: Colors.red,
                             child: IconButton(
                               tooltip: "Remover",
                               splashColor: Colors.green,
                               icon: Icon(
-                                Icons.remove,
+                                Icons.delete_outline,
                                 color: Colors.white,
                               ),
                               onPressed: () {},
@@ -247,7 +363,7 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                   secondLine:
                       _dateFormat.format(DateTime.parse(element["ndate"]))),
               SizedBox(
-                height: 10.0,
+                height: 5.0,
               ),
             ],
           ),
@@ -283,83 +399,102 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
       final List<Widget> listWidget = List<Widget>();
       for (var element in activities) {
         listWidget.add(
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  _renderTextLine(
-                      firstLine: "Nome", secondLine: element["name"]),
-                  Row(
-                    children: <Widget>[
-                      _isEventOwnerToRenderWidget(
-                          Card(
-                            color: Theme.of(context).primaryColorDark,
-                            child: IconButton(
-                              tooltip: "Editar",
-                              splashColor: Colors.green,
-                              icon: Icon(
-                                Icons.edit,
-                                color: Colors.white,
+          Container(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Divider(
+                  color: Colors.black,
+                  height: 15,
+                  thickness: 0.15,
+                  indent: 0,
+                  endIndent: 0,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    _renderTextLine(
+                        firstLine: "Nome", secondLine: element["name"]),
+                    Row(
+                      children: <Widget>[
+                        _isEventOwnerToRenderWidget(
+                            Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(25.0),
                               ),
-                              onPressed: () {},
+                              color: Theme.of(context).primaryColorDark,
+                              child: IconButton(
+                                tooltip: "Editar",
+                                splashColor: Colors.green,
+                                icon: Icon(
+                                  Icons.edit,
+                                  color: Colors.white,
+                                ),
+                                onPressed: () {},
+                              ),
                             ),
-                          ),
-                          isEventOwner),
-                      SizedBox(
-                        width: 5.0,
-                      ),
-                      Card(
-                        color: Theme.of(context).primaryColorDark,
-                        child: IconButton(
-                          tooltip: "Detalhes",
-                          splashColor: Colors.green,
-                          icon: Icon(
-                            Icons.details,
-                            color: Colors.white,
-                          ),
-                          onPressed: () {
-                            getActivityById(context, element["id"]);
-                            routeTo(context, ActivityDetailsHomePage());
-                          },
+                            isEventOwner),
+                        SizedBox(
+                          width: 5.0,
                         ),
-                      ),
-                      SizedBox(
-                        width: 5.0,
-                      ),
-                      _isEventOwnerToRenderWidget(
-                          Card(
-                            color: Theme.of(context).primaryColorDark,
-                            child: IconButton(
-                              tooltip: "Remover",
-                              splashColor: Colors.green,
-                              icon: Icon(
-                                Icons.remove,
-                                color: Colors.white,
-                              ),
-                              onPressed: () {},
-                            ),
+                        Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25.0),
                           ),
-                          isEventOwner),
-                    ],
-                  ),
-                ],
-              ),
-              _renderTextLine(
-                  firstLine: "Período", secondLine: element["period"]),
-              _renderTextLine(
-                  firstLine: "Data",
-                  secondLine: _dateFormat
-                      .format(DateTime.parse(element["date_activity"]))),
-              _renderTextLine(
-                  firstLine: "Hora inicial", secondLine: element["start_hour"]),
-              _renderTextLine(
-                  firstLine: "Hora final", secondLine: element["end_hour"]),
-              SizedBox(
-                height: 10.0,
-              ),
-            ],
+                          color: Colors.blue,
+                          child: IconButton(
+                            tooltip: "Detalhes",
+                            splashColor: Colors.green,
+                            icon: Icon(
+                              Icons.remove_red_eye,
+                              color: Colors.white,
+                            ),
+                            onPressed: () {
+                              getActivityById(context, element["id"]);
+                              routeTo(context, ActivityDetailsHomePage());
+                            },
+                          ),
+                        ),
+                        SizedBox(
+                          width: 5.0,
+                        ),
+                        _isEventOwnerToRenderWidget(
+                            Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(25.0),
+                              ),
+                              color: Colors.red,
+                              child: IconButton(
+                                tooltip: "Remover",
+                                splashColor: Colors.green,
+                                icon: Icon(
+                                  Icons.delete_outline,
+                                  color: Colors.white,
+                                ),
+                                onPressed: () {},
+                              ),
+                            ),
+                            isEventOwner),
+                      ],
+                    ),
+                  ],
+                ),
+                _renderTextLine(
+                    firstLine: "Período", secondLine: element["period"]),
+                _renderTextLine(
+                    firstLine: "Data",
+                    secondLine: _dateFormat
+                        .format(DateTime.parse(element["date_activity"]))),
+                _renderTextLine(
+                    firstLine: "Hora inicial",
+                    secondLine: element["start_hour"]),
+                _renderTextLine(
+                    firstLine: "Hora final", secondLine: element["end_hour"]),
+                SizedBox(
+                  height: 10.0,
+                ),
+              ],
+            ),
           ),
         );
       }
@@ -391,46 +526,57 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
     final userModel = Provider.of<User>(context);
     print("myEventsEditPageController -> $myEventsEditPageController");
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 20.0),
       child: ListView(
         children: <Widget>[
-          Observer(
-            builder: (_) {
-              return _renderTitleLine(
-                title: "Evento",
-                needButton: false,
-                context: context,
-                //  buttonTitle: "Participar",
-                //onPressed: () {},
-              );
-            },
+          SizedBox(
+            height: 10.0,
+          ),
+          Container(
+            padding: EdgeInsets.all(10.0),
+            color: Colors.white,
+            child: Observer(
+              builder: (_) {
+                return _renderEventDetails(
+                    myEventsEditPageController.eventToUse);
+              },
+            ),
           ),
           SizedBox(
             height: 10.0,
           ),
-          Observer(
-            builder: (_) {
-              return _renderEventDetails(myEventsEditPageController.eventToUse);
-            },
+          Container(
+            padding: EdgeInsets.all(10.0),
+            color: Colors.white,
+            child: Observer(
+              builder: (_) {
+                return _renderDescriptionEvent(
+                    myEventsEditPageController.eventToUse);
+              },
+            ),
           ),
           SizedBox(
             height: 15.0,
           ),
           myEventsEditPageController.eventToUse["organizers"].length > 0
-              ? Observer(
-                  builder: (_) {
-                    return _renderTitleLine(
-                      title: "Organizadores",
-                      needButton: false,
-                      context: context,
-                    );
-                  },
+              ? Container(
+                  padding: EdgeInsets.fromLTRB(10.0, 10.0, 0, 0.0),
+                  color: Colors.white,
+                  child: Observer(
+                    builder: (_) {
+                      return _renderTitleLine(
+                        title: "Sobre os organizadores",
+                        needButton: false,
+                        context: context,
+                      );
+                    },
+                  ),
                 )
               : Container(
                   height: 0.0,
                   width: 0.0,
                 ),
-          SizedBox(
+          Container(
+            color: Colors.white,
             height:
                 myEventsEditPageController.eventToUse["organizers"].length > 0
                     ? 10.0
@@ -443,91 +589,112 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                   height: 0.0,
                   width: 0.0,
                 ),
-          SizedBox(
-            height:
-                myEventsEditPageController.eventToUse["organizers"].length > 0
-                    ? 15.0
-                    : 0.0,
+          Container(
+            child: SizedBox(
+              height:
+                  myEventsEditPageController.eventToUse["organizers"].length > 0
+                      ? 15.0
+                      : 0.0,
+            ),
           ),
-          Observer(
-            builder: (_) {
-              return _renderTitleLine(
-                title: "Atividades",
-                needButton: _verifyIsEventOwner(
-                  userCpf: userModel.cpf,
-                  eventCpfOwner: myEventsEditPageController.eventToUse != null
-                      ? myEventsEditPageController.eventToUse["event"]
-                          ["cpf_owner"]
-                      : "",
-                ),
-                buttonIcon: Icons.add,
-                onPressed: () {
-                  print("adicionar atividade nova!");
-                  routeTo(context, NewActivityPage());
-                },
-                context: context,
-              );
-            },
+          Container(
+            padding: EdgeInsets.fromLTRB(10.0, 10.0, 0, 0.0),
+            color: Colors.white,
+            child: Observer(
+              builder: (_) {
+                return _renderTitleLine(
+                  title: "Atividades",
+                  needButton: _verifyIsEventOwner(
+                    userCpf: userModel.cpf,
+                    eventCpfOwner: myEventsEditPageController.eventToUse != null
+                        ? myEventsEditPageController.eventToUse["event"]
+                            ["cpf_owner"]
+                        : "",
+                  ),
+                  buttonIcon: Icons.add,
+                  onPressed: () {
+                    print("adicionar atividade nova!");
+                    routeTo(context, NewActivityPage());
+                  },
+                  context: context,
+                );
+              },
+            ),
           ),
-          SizedBox(
+          Container(
+            color: Colors.white,
             height: 10.0,
           ),
-          Observer(
-            builder: (_) {
-              return _renderActivitiesDetails(
-                  activitiesModel.activities,
-                  activitiesModel.errorMessage,
-                  activitiesModel.isFetchingActivities,
+          Container(
+            padding: EdgeInsets.fromLTRB(10.0, 0, 0, 0),
+            color: Colors.white,
+            child: Observer(
+              builder: (_) {
+                return _renderActivitiesDetails(
+                    activitiesModel.activities,
+                    activitiesModel.errorMessage,
+                    activitiesModel.isFetchingActivities,
+                    _verifyIsEventOwner(
+                      userCpf: userModel.cpf,
+                      eventCpfOwner:
+                          myEventsEditPageController.eventToUse != null
+                              ? myEventsEditPageController.eventToUse["event"]
+                                  ["cpf_owner"]
+                              : "",
+                    ));
+              },
+            ),
+          ),
+          SizedBox(
+            height: 15.0,
+          ),
+          Container(
+            padding: EdgeInsets.fromLTRB(10.0, 10.0, 0, 0),
+            color: Colors.white,
+            child: Observer(
+              builder: (_) {
+                return _renderTitleLine(
+                  title: "Notícias",
+                  context: context,
+                  needButton: _verifyIsEventOwner(
+                    userCpf: userModel.cpf,
+                    eventCpfOwner: myEventsEditPageController.eventToUse != null
+                        ? myEventsEditPageController.eventToUse["event"]
+                            ["cpf_owner"]
+                        : "",
+                  ),
+                  buttonIcon: Icons.add,
+                  onPressed: () {
+                    print("adicionar noticia nova!");
+                    routeTo(context, NewNewsPage());
+                  },
+                );
+              },
+            ),
+          ),
+          Container(
+            color: Colors.white,
+            height: 10.0,
+          ),
+          Container(
+            padding: EdgeInsets.fromLTRB(10.0, 0, 0, 0),
+            color: Colors.white,
+            child: Observer(
+              builder: (_) {
+                return _renderNewsDetails(
+                  newsModel.news,
+                  newsModel.errorMessage,
+                  newsModel.isFetchingNews,
                   _verifyIsEventOwner(
                     userCpf: userModel.cpf,
                     eventCpfOwner: myEventsEditPageController.eventToUse != null
                         ? myEventsEditPageController.eventToUse["event"]
                             ["cpf_owner"]
                         : "",
-                  ));
-            },
-          ),
-          SizedBox(
-            height: 15.0,
-          ),
-          Observer(
-            builder: (_) {
-              return _renderTitleLine(
-                title: "Notícias",
-                context: context,
-                needButton: _verifyIsEventOwner(
-                  userCpf: userModel.cpf,
-                  eventCpfOwner: myEventsEditPageController.eventToUse != null
-                      ? myEventsEditPageController.eventToUse["event"]
-                          ["cpf_owner"]
-                      : "",
-                ),
-                buttonIcon: Icons.add,
-                onPressed: () {
-                  print("adicionar noticia nova!");
-                  routeTo(context, NewNewsPage());
-                },
-              );
-            },
-          ),
-          SizedBox(
-            height: 10.0,
-          ),
-          Observer(
-            builder: (_) {
-              return _renderNewsDetails(
-                newsModel.news,
-                newsModel.errorMessage,
-                newsModel.isFetchingNews,
-                _verifyIsEventOwner(
-                  userCpf: userModel.cpf,
-                  eventCpfOwner: myEventsEditPageController.eventToUse != null
-                      ? myEventsEditPageController.eventToUse["event"]
-                          ["cpf_owner"]
-                      : "",
-                ),
-              );
-            },
+                  ),
+                );
+              },
+            ),
           ),
           SizedBox(
             height: 15.0,
