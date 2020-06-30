@@ -15,8 +15,11 @@ registerUser(context) async {
   try {
     final response = await http.post(
         "${Config.server_url}:${Config.server_port}/users",
-        body: user,
-        headers: {"Accept": "application/json"});
+        body: convert.jsonEncode(user),
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json"
+        });
     if (response.statusCode == 200) {
       toast(
         title: "Sucesso!",

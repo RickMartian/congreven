@@ -46,8 +46,11 @@ loginUser(context) async {
   try {
     final response = await http.post(
         "${Config.server_url}:${Config.server_port}/user/login",
-        body: user,
-        headers: {"Accept": "application/json"});
+        body: convert.jsonEncode(user),
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+        });
     if (response.statusCode == 401) {
       toast(
         title: "Erro",
