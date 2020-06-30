@@ -1,6 +1,8 @@
+import 'package:congreven_app/actions/events_details_page_actions.dart';
 import 'package:congreven_app/models/activities.dart';
 import 'package:congreven_app/models/news.dart';
 import 'package:congreven_app/models/user.dart';
+import 'package:congreven_app/pages/activity_details_home_page/activity_details_home_page.dart';
 import 'package:congreven_app/pages/my_events_edit_page/my_events_edit_page_controller.dart';
 import 'package:congreven_app/pages/new_activity_page/new_activity_page.dart';
 import 'package:congreven_app/pages/new_news_page/new_news_page.dart';
@@ -317,7 +319,10 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                             Icons.details,
                             color: Colors.white,
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            getActivityById(context, element["id"]);
+                            routeTo(context, ActivityDetailsHomePage());
+                          },
                         ),
                       ),
                       SizedBox(

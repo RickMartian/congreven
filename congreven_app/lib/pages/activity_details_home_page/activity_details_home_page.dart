@@ -1,7 +1,4 @@
-import 'package:congreven_app/actions/events_details_page_actions.dart';
-import 'package:congreven_app/pages/event_details_page/event_details_page.dart';
-import 'package:congreven_app/pages/my_events_edit_page/my_events_edit_page_controller.dart';
-import 'package:congreven_app/pages/new_event_forms_page/new_event_forms_page_controller.dart';
+import 'package:congreven_app/pages/activity_details_page/activity_details_page.dart';
 import 'package:congreven_app/pages/profile_home_page/profile_home_page.dart';
 import 'package:congreven_app/utils/routeTo.dart';
 import 'package:flutter/material.dart';
@@ -9,17 +6,18 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 
 class Pages {
-  static const event_details = 0;
+  static const activity_details = 0;
   static const back = 2;
 }
 
-class EventDetailsHomePage extends StatefulWidget {
+class ActivityDetailsHomePage extends StatefulWidget {
   @override
-  _EventDetailsHomePageState createState() => _EventDetailsHomePageState();
+  _ActivityDetailsHomePageState createState() =>
+      _ActivityDetailsHomePageState();
 }
 
-class _EventDetailsHomePageState extends State<EventDetailsHomePage> {
-  int _selectedPage = Pages.event_details;
+class _ActivityDetailsHomePageState extends State<ActivityDetailsHomePage> {
+  int _selectedPage = Pages.activity_details;
 
   _handleButtonClicked(int pageSelected) {
     setState(() {
@@ -29,21 +27,16 @@ class _EventDetailsHomePageState extends State<EventDetailsHomePage> {
 
   _renderSelectedPage({bool isLoading = false}) {
     switch (_selectedPage) {
-      case Pages.event_details:
-        return EventDetailsPage();
+      case Pages.activity_details:
+        return ActivityDetailsPage();
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    double _deviceHeight = MediaQuery.of(context).size.height;
-    final newEventFormsPageController =
-        Provider.of<NewEventFormsPageController>(context);
-    final myEventsEditPageController =
-        Provider.of<MyEventsEditPageController>(context);
     return WillPopScope(
       onWillPop: () async {
-        cleanAllRelatedToEventDetails(context);
+        // cleanAllRelatedToEventDetails(context);
         return true;
       },
       child: Scaffold(
@@ -75,16 +68,16 @@ class _EventDetailsHomePageState extends State<EventDetailsHomePage> {
           actions: <Widget>[
             InkWell(
               onTap: () {
-                _handleButtonClicked(Pages.event_details);
+                _handleButtonClicked(Pages.activity_details);
               },
               child: Container(
                 alignment: Alignment.center,
                 margin: EdgeInsets.fromLTRB(0.0, 12.0, 20.0, 12.0),
                 child: Text(
-                  "Detalhes do evento",
+                  "Detalhes da atividade",
                   style: TextStyle(
                     color: Colors.black,
-                    fontWeight: _selectedPage == Pages.event_details
+                    fontWeight: _selectedPage == Pages.activity_details
                         ? FontWeight.bold
                         : FontWeight.normal,
                   ),
@@ -92,8 +85,9 @@ class _EventDetailsHomePageState extends State<EventDetailsHomePage> {
                 decoration: BoxDecoration(
                   border: Border(
                     bottom: BorderSide(
-                      width: _selectedPage == Pages.event_details ? 2.0 : 0.0,
-                      color: _selectedPage == Pages.event_details
+                      width:
+                          _selectedPage == Pages.activity_details ? 2.0 : 0.0,
+                      color: _selectedPage == Pages.activity_details
                           ? Colors.black
                           : Colors.transparent,
                     ),
@@ -104,7 +98,7 @@ class _EventDetailsHomePageState extends State<EventDetailsHomePage> {
             InkWell(
               onTap: () {
                 _handleButtonClicked(Pages.back);
-                cleanAllRelatedToEventDetails(context);
+                // cleanAllRelatedToEventDetails(context);
                 Navigator.pop(context);
               },
               child: Container(
@@ -138,33 +132,6 @@ class _EventDetailsHomePageState extends State<EventDetailsHomePage> {
           child: Container(
             child: _renderSelectedPage(),
           ),
-        ),
-        bottomNavigationBar: BottomAppBar(
-          color: Colors.grey[200],
-          child: Container(
-            height: _deviceHeight / 11,
-          ),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-        floatingActionButton: Observer(
-          builder: (_) {
-            return FloatingActionButton(
-              onPressed: () {},
-              backgroundColor: Theme.of(context).primaryColorDark,
-              elevation: 0.0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              child: !newEventFormsPageController.isLoadingSomeAction
-                  ? Icon(
-                      Icons.arrow_forward,
-                      color: Colors.white,
-                    )
-                  : CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                    ),
-            );
-          },
         ),
       ),
     );

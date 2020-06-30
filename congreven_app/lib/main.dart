@@ -4,6 +4,7 @@ import 'package:congreven_app/models/guest_speakers.dart';
 import 'package:congreven_app/models/news.dart';
 import 'package:congreven_app/models/organizer.dart';
 import 'package:congreven_app/models/user.dart';
+import 'package:congreven_app/pages/activity_details_page/activity_details_page_controller.dart';
 import 'package:congreven_app/pages/enter_page/enter_page.dart';
 import 'package:congreven_app/pages/enter_page/enter_page_controller.dart';
 import 'package:congreven_app/pages/events_page/events_page_controller.dart';
@@ -82,6 +83,9 @@ class MyApp extends StatelessWidget {
         ),
         Provider(
           create: (_) => NewActivityFormsPageController(),
+        ),
+        Provider(
+          create: (_) => ActivityDetailsPageController(),
         ),
       ],
       child: MaterialApp(

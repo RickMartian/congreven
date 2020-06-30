@@ -1,9 +1,9 @@
 import 'package:congreven_app/models/activities.dart';
 import 'package:congreven_app/models/news.dart';
+import 'package:congreven_app/pages/activity_details_page/activity_details_page_controller.dart';
 import 'package:congreven_app/pages/my_events_edit_page/my_events_edit_page_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:congreven_app/models/user.dart';
-import 'package:congreven_app/pages/events_page/events_page_controller.dart';
 import 'package:provider/provider.dart';
 import 'package:congreven_app/config.dart';
 import 'package:congreven_app/utils/toast.dart';
@@ -15,8 +15,11 @@ cleanAllRelatedToEventDetails(BuildContext context) {
   final activitiesModel = Provider.of<Activities>(context, listen: false);
   final myEventsEditPageController =
       Provider.of<MyEventsEditPageController>(context, listen: false);
+  final activityDetailsPageController =
+      Provider.of<ActivityDetailsPageController>(context, listen: false);
   newsModel.clean();
   activitiesModel.clean();
+  activityDetailsPageController.changeActivityToUse(null);
   myEventsEditPageController.changeEventToUse(null);
 }
 
@@ -87,15 +90,13 @@ getActivityByEventId(BuildContext context, int eventId) async {
           response.body.isNotEmpty ? convert.jsonDecode(response.body) : null;
       if (data != null) {
         print("data getActivityByEventId -> $data");
-        if (data != null) {
-          print("data getNewsByEventId -> $data");
-          if (data is Map) {
-            print("message -> ${data["message"]}");
-            activitiesModel.changeFetchingActivitiesErrorMessage(
-                data["message"] ?? "Não há atividades ainda.");
-          } else {
-            activitiesModel.updateActivities(data);
-          }
+        print("data getNewsByEventId -> $data");
+        if (data is Map) {
+          print("message -> ${data["message"]}");
+          activitiesModel.changeFetchingActivitiesErrorMessage(
+              data["message"] ?? "Não há atividades ainda.");
+        } else {
+          activitiesModel.updateActivities(data);
         }
       }
     } else {
@@ -123,11 +124,9 @@ getActivityByEventId(BuildContext context, int eventId) async {
 
 getActivityById(BuildContext context, int activityId) async {
   final userModel = Provider.of<User>(context, listen: false);
-  final eventsPageController =
-      Provider.of<EventsPageController>(context, listen: false);
-  // eventsPageController.changeIsFetchingEventById(true);
-  // TODO: Colocar loading para quando tiver buscando Atividades pelo id e criar uma variável para isso
-
+  final activityDetailsPageController =
+      Provider.of<ActivityDetailsPageController>(context, listen: false);
+  activityDetailsPageController.changeIsFetchingActitityToUse(true);
   try {
     final auth = "Bearer ${userModel.token}";
     final response = await http.get(
@@ -142,12 +141,16 @@ getActivityById(BuildContext context, int activityId) async {
           response.body.isNotEmpty ? convert.jsonDecode(response.body) : null;
       if (data != null) {
         print("data getActivityById -> $data");
-        // eventsPageController.changeIsFetchingEventById(false);
-        return data;
+        if (data["activity"] == null) {
+          print("message -> ${data["message"] ?? "Não tem mensagem"}");
+          activityDetailsPageController.changeFetchingActivitiesErrorMessage(
+              "Não foi possível buscar detalhes da atividade.");
+        } else {
+          activityDetailsPageController.changeActivityToUse(data);
+        }
       }
     } else {
       final respDecoded = convert.jsonDecode(response.body);
-      // eventsPageController.changeIsFetchingEventById(false);
       toast(
         title: "Erro",
         message: respDecoded["message"] ?? "Erro desconhecido.",
@@ -155,8 +158,10 @@ getActivityById(BuildContext context, int activityId) async {
         context: context,
       );
     }
+    activityDetailsPageController.changeIsFetchingActitityToUse(false);
   } catch (error) {
-    // eventsPageController.changeIsFetchingEventById(false);
+    activityDetailsPageController.changeIsFetchingActitityToUse(false);
+
     toast(
       title: "Erro",
       message:
