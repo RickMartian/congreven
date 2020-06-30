@@ -39,7 +39,6 @@ updateUser(BuildContext context) async {
     if (response.statusCode == 200) {
       final data =
           response.body.isNotEmpty ? convert.jsonDecode(response.body) : null;
-      print("data -> $data");
       if (data != null) {
         String userData =
             convert.jsonEncode({"token": userModel.token, "user": data});

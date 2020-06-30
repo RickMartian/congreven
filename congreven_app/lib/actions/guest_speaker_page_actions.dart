@@ -10,7 +10,6 @@ import 'dart:convert' as convert;
 
 createSpeak(int activityId, String rg, String auth) async {
   final body = {"activity_id": activityId, "rg_guest_speaker": rg};
-  print("body -> $body");
   final response = await http.post(
     "${Config.server_url}:${Config.server_port}/speaks",
     body: convert.jsonEncode(body),
@@ -35,23 +34,18 @@ deleteSpeak(int activityId, String rg, String auth) async {
 }
 
 selectGuestSpeaker(BuildContext context, dynamic guestSpeaker) {
-  print("GUEST SPEAKER TO LINK TO EVENT! -> $guestSpeaker");
   final activityDetailsPageController =
       Provider.of<ActivityDetailsPageController>(context, listen: false);
   final userModel = Provider.of<User>(context, listen: false);
   final guestSpeakerPageController =
       Provider.of<GuestSpeakerPageController>(context, listen: false);
   final auth = "Bearer ${userModel.token}";
-  print("eventToUse -> ${activityDetailsPageController.activityToUse}");
   try {
     createSpeak(
       activityDetailsPageController.activityToUse["activity"]["id"],
       guestSpeaker["rg"],
       auth,
     ).then((response) {
-      print("response -> $response");
-      print("response statusCode-> ${response.statusCode}");
-      print("response body -> ${response.body}");
       final data =
           response.body.isNotEmpty ? convert.jsonDecode(response.body) : null;
       if (response.statusCode == 200) {
@@ -88,7 +82,6 @@ selectGuestSpeaker(BuildContext context, dynamic guestSpeaker) {
 }
 
 removeSelectedGuestSpeaker(BuildContext context, dynamic guestSpeaker) {
-  print("remove guest speaker !! -> $guestSpeaker");
   final activityDetailsPageController =
       Provider.of<ActivityDetailsPageController>(context, listen: false);
   final guestSpeakerPageController =
@@ -99,9 +92,6 @@ removeSelectedGuestSpeaker(BuildContext context, dynamic guestSpeaker) {
     deleteSpeak(activityDetailsPageController.activityToUse["activity"]["id"],
             guestSpeaker["rg"], auth)
         .then((response) {
-      print("response -> $response");
-      print("response statusCode-> ${response.statusCode}");
-      print("response body -> ${response.body}");
       final data =
           response.body.isNotEmpty ? convert.jsonDecode(response.body) : null;
       if (response.statusCode == 200) {

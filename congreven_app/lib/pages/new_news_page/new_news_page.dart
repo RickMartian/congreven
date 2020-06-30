@@ -149,9 +149,6 @@ class _NewNewsPageState extends State<NewNewsPage> {
             onPressed: () {
               if (!newNewsFormsPageController.isLoadingSomeAction &&
                   newNewsFormsPageController.isValid) {
-                print("CAIU");
-                print(
-                    "EVENT TO USE -> ${myEventsEditPageController.eventToUse}");
                 // if (myEventsEditPageController.eventToUse != null) {
                 //   updateEvent(context);
                 // } else {

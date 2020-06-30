@@ -31,13 +31,10 @@ class _NewEventFormsPageState extends State<NewEventFormsPage> {
         Provider.of<NewEventFormsPageController>(context, listen: false);
     final myEventsEditPageController =
         Provider.of<MyEventsEditPageController>(context, listen: false);
-    print("EVENT TO EDIT -> ${myEventsEditPageController.eventToUse}");
     if (myEventsEditPageController.eventToUse != null) {
       final eventToUse = myEventsEditPageController.eventToUse["event"];
       final organizersToUse =
           myEventsEditPageController.eventToUse["organizers"];
-      print("event to use -> $eventToUse");
-      print("organizers to use -> $organizersToUse");
       if (eventToUse == null) {
         _startDateController.text = newEventFormsPageController.startDate;
         _endDateController.text = newEventFormsPageController.endDate;
@@ -81,7 +78,6 @@ class _NewEventFormsPageState extends State<NewEventFormsPage> {
     } else {
       final List<dynamic> organizers =
           newEventFormsPageController.selectedOrganizers;
-      print("organizers new event forms -> $organizers");
       return ListView(
         scrollDirection: Axis.vertical,
         shrinkWrap: true,

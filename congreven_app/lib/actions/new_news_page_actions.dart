@@ -24,12 +24,6 @@ createNewNews(BuildContext context, int eventId) async {
   final news = newNewsFormsPageController.newsToRegister;
   try {
     final auth = "Bearer ${userModel.token}";
-    print("event id -> $eventId");
-    news["event_id"] = eventId.toString();
-    print("news -> $news");
-    print("token -> $auth");
-    print("url -> ${Config.server_url}:${Config.server_port}/news");
-    print("json encoded -> ${convert.jsonEncode(news)}");
     final response = await http.post(
       "${Config.server_url}:${Config.server_port}/news",
       body: convert.jsonEncode(news),
@@ -41,7 +35,6 @@ createNewNews(BuildContext context, int eventId) async {
     );
     final data =
         response.body.isNotEmpty ? convert.jsonDecode(response.body) : null;
-    print("data -> $data");
     if (response.statusCode == 200) {
       Navigator.pop(context);
       if (data != null) {
@@ -71,7 +64,6 @@ createNewNews(BuildContext context, int eventId) async {
     }
     newNewsFormsPageController.changeIsLoadingSomeAction(false);
   } catch (error) {
-    print("error -> $error");
     newNewsFormsPageController.changeIsLoadingSomeAction(false);
     toast(
       title: "Erro",

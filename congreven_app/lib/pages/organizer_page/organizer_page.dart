@@ -53,7 +53,6 @@ class _OrganizerPageState extends State<OrganizerPage> {
 
   bool verifySelectedOrganizer(dynamic organizer, selectedOrganizers) {
     bool flag = false;
-    print("selected Organizers -> $selectedOrganizers");
     if (selectedOrganizers.length > 0) {
       selectedOrganizers.forEach((element) {
         if (element["cnpj"] == organizer["cnpj"]) {

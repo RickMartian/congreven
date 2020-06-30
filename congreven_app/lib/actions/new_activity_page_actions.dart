@@ -24,12 +24,6 @@ createNewActivity(BuildContext context, int eventId) async {
   final activity = newActivityFormsPageController.activityToRegister;
   try {
     final auth = "Bearer ${userModel.token}";
-    print("event id -> $eventId");
-    activity["event_id"] = eventId.toString();
-    print("activity -> $activity");
-    print("token -> $auth");
-    print("url -> ${Config.server_url}:${Config.server_port}/activity");
-    print("json encoded -> ${convert.jsonEncode(activity)}");
     final response = await http.post(
       "${Config.server_url}:${Config.server_port}/activities",
       body: convert.jsonEncode(activity),
@@ -41,7 +35,6 @@ createNewActivity(BuildContext context, int eventId) async {
     );
     final data =
         response.body.isNotEmpty ? convert.jsonDecode(response.body) : null;
-    print("data -> $data");
     if (response.statusCode == 200) {
       Navigator.pop(context);
       if (data != null) {
@@ -71,7 +64,6 @@ createNewActivity(BuildContext context, int eventId) async {
     }
     newActivityFormsPageController.changeIsLoadingSomeAction(false);
   } catch (error) {
-    print("error -> $error");
     newActivityFormsPageController.changeIsLoadingSomeAction(false);
     toast(
       title: "Erro",

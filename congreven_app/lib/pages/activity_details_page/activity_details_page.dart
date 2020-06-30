@@ -131,9 +131,6 @@ class _ActivityDetailsPageState extends State<ActivityDetailsPage> {
 
   Widget _renderActivityDetails(dynamic activity, String errorMessage,
       bool isLoading, bool isEventOwner) {
-    print("activity to render -> $activity");
-    print("errorMessage -> $errorMessage");
-
     if (isLoading) {
       return _loading();
     }
@@ -168,8 +165,6 @@ class _ActivityDetailsPageState extends State<ActivityDetailsPage> {
 
   Widget _renderGuestSpeakerDetails(dynamic guestSpeakers, String errorMessage,
       bool isLoading, bool isEventOwner) {
-    print("guestSpeakers to render -> $guestSpeakers");
-    print("errorMessage -> $errorMessage");
     if (isLoading) {
       return _loading();
     }
@@ -224,7 +219,6 @@ class _ActivityDetailsPageState extends State<ActivityDetailsPage> {
   bool _verifyExistsGuestSpeakers(dynamic activity) {
     if (_verifyActivityNotNull(activity)) {
       final guestSpeakers = activity["guestSpeakers"];
-      print("guestSpeakers -> $guestSpeakers");
       if (guestSpeakers != null && guestSpeakers.isNotEmpty) {
         return true;
       }
@@ -249,7 +243,6 @@ class _ActivityDetailsPageState extends State<ActivityDetailsPage> {
     final userModel = Provider.of<User>(context);
     final activityDetailsPageController =
         Provider.of<ActivityDetailsPageController>(context);
-    print("myEventsEditPageController -> $myEventsEditPageController");
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 20.0),
       child: ListView(
@@ -303,7 +296,6 @@ class _ActivityDetailsPageState extends State<ActivityDetailsPage> {
                 ),
                 buttonIcon: Icons.add,
                 onPressed: () {
-                  print("adicionar palestrante novo!");
                   fetchGuestSpeakers(context);
                   routeTo(context, GuestSpeakerHomePage());
                 },

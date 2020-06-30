@@ -40,9 +40,7 @@ getNewsByEventId(BuildContext context, int eventId) async {
       final data =
           response.body.isNotEmpty ? convert.jsonDecode(response.body) : null;
       if (data != null) {
-        print("data getNewsByEventId -> $data");
         if (data is Map) {
-          print("message -> ${data["message"]}");
           newsModel.changeFetchingNewsErrorMessage(
               data["message"] ?? "Não há notícias ainda.");
         } else {
@@ -89,9 +87,7 @@ getActivityByEventId(BuildContext context, int eventId) async {
       final data =
           response.body.isNotEmpty ? convert.jsonDecode(response.body) : null;
       if (data != null) {
-        print("data getActivityByEventId -> $data");
         if (data is Map) {
-          print("message -> ${data["message"]}");
           activitiesModel.changeFetchingActivitiesErrorMessage(
               data["message"] ?? "Não há atividades ainda.");
         } else {
@@ -139,9 +135,7 @@ getActivityById(BuildContext context, int activityId) async {
       final data =
           response.body.isNotEmpty ? convert.jsonDecode(response.body) : null;
       if (data != null) {
-        print("data getActivityById -> $data");
         if (data["activity"] == null) {
-          print("message -> ${data["message"] ?? "Não tem mensagem"}");
           activityDetailsPageController.changeFetchingActivitiesErrorMessage(
               "Não foi possível buscar detalhes da atividade.");
         } else {

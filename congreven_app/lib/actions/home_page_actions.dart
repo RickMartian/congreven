@@ -31,9 +31,6 @@ logoutUser({String token, BuildContext context}) async {
       "${Config.server_url}:${Config.server_port}/user/logout",
       headers: {"Accept": "application/json", "Authorization": "Bearer $token"},
     );
-    // final data =
-    //     response.body.isNotEmpty ? convert.jsonDecode(response.body) : null;
-    // print("data -> $data");
     if (response.statusCode == 401) {
       toast(
         title: "Erro",

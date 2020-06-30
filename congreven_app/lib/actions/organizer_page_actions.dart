@@ -12,22 +12,17 @@ import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 
 selectOrganizer(BuildContext context, dynamic organizer) {
-  print("ORGANIZER TO LINK TO EVENT! -> $organizer");
   final newEventFormsPageController =
       Provider.of<NewEventFormsPageController>(context, listen: false);
   final myEventsEditPageController =
       Provider.of<MyEventsEditPageController>(context, listen: false);
   final userModel = Provider.of<User>(context, listen: false);
   final auth = "Bearer ${userModel.token}";
-  print("eventToUse -> ${myEventsEditPageController.eventToUse}");
   try {
     if (myEventsEditPageController.eventToUse != null) {
       createSupport(myEventsEditPageController.eventToUse["event"]["id"],
               organizer["cnpj"], auth)
           .then((response) {
-        print("response -> $response");
-        print("response statusCode-> ${response.statusCode}");
-        print("response body -> ${response.body}");
         final data =
             response.body.isNotEmpty ? convert.jsonDecode(response.body) : null;
         if (response.statusCode == 200) {
@@ -67,7 +62,6 @@ selectOrganizer(BuildContext context, dynamic organizer) {
 }
 
 removeSelectedOrganizer(BuildContext context, dynamic organizer) {
-  print("remove organizzer !! -> $organizer");
   final newEventFormsPageController =
       Provider.of<NewEventFormsPageController>(context, listen: false);
   final myEventsEditPageController =
@@ -79,9 +73,6 @@ removeSelectedOrganizer(BuildContext context, dynamic organizer) {
       deleteSupport(myEventsEditPageController.eventToUse["event"]["id"],
               organizer["cnpj"], auth)
           .then((response) {
-        print("response -> $response");
-        print("response statusCode-> ${response.statusCode}");
-        print("response body -> ${response.body}");
         final data =
             response.body.isNotEmpty ? convert.jsonDecode(response.body) : null;
         if (response.statusCode == 200) {

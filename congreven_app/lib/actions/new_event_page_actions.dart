@@ -22,7 +22,6 @@ cleanNewEventState(BuildContext context) {
 
 createSupport(int eventId, String cnpj, String token) async {
   final body = {"event_id": eventId, "cnpj_organizer": cnpj};
-  print("body -> $body");
   final response = await http.post(
     "${Config.server_url}:${Config.server_port}/supports",
     body: convert.jsonEncode(body),
@@ -56,12 +55,9 @@ updateEvent(BuildContext context) async {
     event["owner_description"] = "";
   }
 
-  print("EVENT TO UPDATE -> $event");
   try {
     final auth = "Bearer ${userModel.token}";
     final id = myEventsEditPageController.eventToUse["event"]["id"];
-    print("event -> $event");
-    print("token -> $auth");
     final response = await http.put(
       "${Config.server_url}:${Config.server_port}/events/$id",
       body: event,
@@ -69,7 +65,6 @@ updateEvent(BuildContext context) async {
     );
     final data =
         response.body.isNotEmpty ? convert.jsonDecode(response.body) : null;
-    print("data -> $data");
     if (response.statusCode == 200) {
       Navigator.pop(context);
       if (data != null) {
@@ -99,7 +94,6 @@ updateEvent(BuildContext context) async {
     }
     newEventFormsPageController.changeIsLoadingSomeAction(false);
   } catch (error) {
-    print("error -> $error");
     newEventFormsPageController.changeIsLoadingSomeAction(false);
     toast(
       title: "Erro",
@@ -120,20 +114,12 @@ createNewEvent(BuildContext context) async {
   try {
     final auth = "Bearer ${userModel.token}";
     event["cpf_owner"] = userModel.cpf;
-    var organizersCnpj = newEventFormsPageController.selectedOrganizers
-        .map((element) => element["cnpj"].toString())
-        .toList();
-    print("organizers cnpj -> $organizersCnpj");
     if (!newEventFormsPageController.isOwner) {
       event["owner_description"] = "";
     }
     if (event["organizers"] == null) {
       event["organizers"] = [];
     }
-    print("event -> $event");
-    print("token -> $auth");
-    print("url -> ${Config.server_url}:${Config.server_port}/events");
-    print("json encoded -> ${convert.jsonEncode(event)}");
     final response = await http.post(
       "${Config.server_url}:${Config.server_port}/events",
       body: convert.jsonEncode(event),
@@ -145,7 +131,6 @@ createNewEvent(BuildContext context) async {
     );
     final data =
         response.body.isNotEmpty ? convert.jsonDecode(response.body) : null;
-    print("data -> $data");
     if (response.statusCode == 200) {
       Navigator.pop(context);
       if (data != null) {
@@ -175,7 +160,6 @@ createNewEvent(BuildContext context) async {
     }
     newEventFormsPageController.changeIsLoadingSomeAction(false);
   } catch (error) {
-    print("error -> $error");
     newEventFormsPageController.changeIsLoadingSomeAction(false);
     toast(
       title: "Erro",

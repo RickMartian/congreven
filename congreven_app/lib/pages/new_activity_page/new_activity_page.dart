@@ -149,9 +149,6 @@ class _NewActivityPageState extends State<NewActivityPage> {
             onPressed: () {
               if (!newNewsFormsPageController.isLoadingSomeAction &&
                   newNewsFormsPageController.isValid) {
-                print("CAIU CREATE NEW ACTIVITY!");
-                print(
-                    "EVENT TO USE -> ${myEventsEditPageController.eventToUse}");
                 // if (myEventsEditPageController.eventToUse != null) {
                 //   updateEvent(context);
                 // } else {

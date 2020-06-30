@@ -116,7 +116,6 @@ class _GuestSpeakerPageState extends State<GuestSpeakerPage> {
       double deviceWidth,
       List<dynamic> guestSpeakers,
       List<dynamic> selectedGuestSpeakers) {
-    print("guestSpeakers -> ${guestSpeakers[index]["bdate"]}");
     if (guestSpeakers.length > 0) {
       return Column(
         children: <Widget>[
@@ -290,8 +289,6 @@ class _GuestSpeakerPageState extends State<GuestSpeakerPage> {
         Provider.of<ActivityDetailsPageController>(context);
     final deviceHeight = MediaQuery.of(context).size.height;
     final deviceWidth = MediaQuery.of(context).size.width;
-    print("guestSpeakerModel -> $guestSpeakerModel");
-    print("GUEST SPEAKER -> ${activityDetailsPageController.activityToUse}");
     return Container(
       child: Column(
         children: <Widget>[

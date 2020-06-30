@@ -62,7 +62,6 @@ class _EventsPageState extends State<EventsPage> {
               setState(() {
                 _eventIdClicked = null;
               });
-              print("response -> $response");
               response["event"]["start_date_formatted"] = _dateFormat
                   .format(DateTime.parse(response["event"]["start_date"]));
               response["event"]["end_date_formatted"] = _dateFormat

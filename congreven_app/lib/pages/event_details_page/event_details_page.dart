@@ -62,7 +62,6 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
   }
 
   _renderDescriptionEvent(dynamic event) {
-    print("event -> $event");
     if (event != null) {
       return Container(
         child: Column(
@@ -89,7 +88,6 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
   }
 
   _renderEventDetails(dynamic event) {
-    print("event -> $event");
     if (event != null) {
       return Container(
         child: Column(
@@ -289,8 +287,6 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
 
   Widget _renderNewsDetails(
       dynamic news, String errorMessage, bool isLoading, bool isEventOwner) {
-    print("news to render -> $news");
-    print("errorMessage -> $errorMessage");
     if (isLoading) {
       return _loading();
     }
@@ -390,8 +386,6 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
 
   Widget _renderActivitiesDetails(dynamic activities, String errorMessage,
       bool isLoading, bool isEventOwner) {
-    print("activities to render -> $activities");
-    print("errorMessage -> $errorMessage");
     if (isLoading) {
       return _loading();
     }
@@ -524,7 +518,6 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
     final newsModel = Provider.of<News>(context);
     final activitiesModel = Provider.of<Activities>(context);
     final userModel = Provider.of<User>(context);
-    print("myEventsEditPageController -> $myEventsEditPageController");
     return Container(
       child: ListView(
         children: <Widget>[
@@ -613,7 +606,6 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                   ),
                   buttonIcon: Icons.add,
                   onPressed: () {
-                    print("adicionar atividade nova!");
                     routeTo(context, NewActivityPage());
                   },
                   context: context,
@@ -665,7 +657,6 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                   ),
                   buttonIcon: Icons.add,
                   onPressed: () {
-                    print("adicionar noticia nova!");
                     routeTo(context, NewNewsPage());
                   },
                 );
