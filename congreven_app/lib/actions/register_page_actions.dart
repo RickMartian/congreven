@@ -20,7 +20,7 @@ registerUser(context) async {
     if (response.statusCode == 200) {
       toast(
         title: "Sucesso!",
-        message: "Cadastro realizado com sucesso! Tente favor login agora!",
+        message: "Cadastro realizado com sucesso! Por favor, realize o login!",
         duration: Duration(milliseconds: 3000),
         context: context,
       );

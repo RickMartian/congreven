@@ -67,21 +67,24 @@ class _OrganizerPageState extends State<OrganizerPage> {
   _renderSelectButton(dynamic organizer, selectedOrganizers) {
     if (verifySelectedOrganizer(organizer, selectedOrganizers)) {
       return Text(
-        "Selecionado",
+        "SELECIONADO",
         textAlign: TextAlign.center,
+        style: TextStyle(color: Colors.green),
       );
     } else {
       return Text(
-        "Selecionar",
+        "SELECIONAR",
         textAlign: TextAlign.center,
+        style: TextStyle(color: Colors.green),
       );
     }
   }
 
   _renderEditButton(dynamic organizer) {
     return Text(
-      "Editar",
+      "EDITAR",
       textAlign: TextAlign.center,
+      style: TextStyle(color: Colors.white),
     );
   }
 
@@ -92,112 +95,139 @@ class _OrganizerPageState extends State<OrganizerPage> {
       double deviceWidth,
       List<dynamic> organizers,
       List<dynamic> selectedOrganizers) {
-    return Card(
-      margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-      color: Theme.of(context).primaryColorDark,
-      child: InkWell(
-        onTap: () {},
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Column(
-            children: <Widget>[
-              Text(
-                "${organizers[index]["name"]}",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16.0,
-                ),
-              ),
-              SizedBox(
-                height: 15.0,
-              ),
-              _renderLine(
-                "CNPJ",
-                formatCnpj(organizers[index]["cnpj"]),
-              ),
-              SizedBox(
-                height: 10.0,
-              ),
-              _renderLine(
-                "Descrição",
-                organizers[index]["description"],
-              ),
-              SizedBox(
-                height: 10.0,
-              ),
-              Row(
+    return Column(
+      children: <Widget>[
+        Card(
+          margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+          color: Colors.white,
+          elevation: 0,
+          child: InkWell(
+            onTap: () {},
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Column(
                 children: <Widget>[
-                  Observer(builder: (_) {
-                    return Expanded(
-                      child: FlatButton(
-                        onPressed: () {
-                          if (!verifySelectedOrganizer(
-                              organizers[index], selectedOrganizers)) {
-                            selectOrganizer(context, organizers[index]);
-                          }
+                  Text(
+                    "${organizers[index]["name"]}",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16.0,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 15.0,
+                  ),
+                  _renderLine(
+                    "CNPJ",
+                    formatCnpj(organizers[index]["cnpj"]),
+                  ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  _renderLine(
+                    "Descrição",
+                    organizers[index]["description"],
+                  ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Observer(builder: (_) {
+                        return Expanded(
+                          child: OutlineButton(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(18.0),
+                                side: BorderSide(color: Colors.green)),
+                            borderSide: BorderSide(color: Colors.green),
+                            onPressed: () {
+                              if (!verifySelectedOrganizer(
+                                  organizers[index], selectedOrganizers)) {
+                                selectOrganizer(context, organizers[index]);
+                              }
+                            },
+                            child: Container(
+                              child: _renderSelectButton(
+                                  organizers[index], selectedOrganizers),
+                            ),
+                            color: verifySelectedOrganizer(
+                                    organizers[index], selectedOrganizers)
+                                ? Colors.green
+                                : Colors.blue[200],
+                          ),
+                        );
+                      }),
+                      SizedBox(
+                        width: 10.0,
+                      ),
+                      Observer(
+                        builder: (_) {
+                          return verifySelectedOrganizer(
+                                  organizers[index], selectedOrganizers)
+                              ? Expanded(
+                                  child: FlatButton(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(18.0),
+                                    ),
+                                    onPressed: () {
+                                      if (verifySelectedOrganizer(
+                                          organizers[index],
+                                          selectedOrganizers)) {
+                                        removeSelectedOrganizer(
+                                            context, organizers[index]);
+                                      }
+                                    },
+                                    child: Container(
+                                      child: Text(
+                                        "REMOVER",
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                    color: Colors.red,
+                                  ),
+                                )
+                              : SizedBox(
+                                  width: 0.0,
+                                );
                         },
-                        child: Container(
-                          child: _renderSelectButton(
-                              organizers[index], selectedOrganizers),
-                        ),
-                        color: verifySelectedOrganizer(
-                                organizers[index], selectedOrganizers)
-                            ? Colors.green
-                            : Colors.blue[200],
                       ),
-                    );
-                  }),
-                  SizedBox(
-                    width: 10.0,
-                  ),
-                  Observer(
-                    builder: (_) {
-                      return verifySelectedOrganizer(
-                              organizers[index], selectedOrganizers)
-                          ? Expanded(
-                              child: FlatButton(
-                                onPressed: () {
-                                  if (verifySelectedOrganizer(
-                                      organizers[index], selectedOrganizers)) {
-                                    removeSelectedOrganizer(
-                                        context, organizers[index]);
-                                  }
-                                },
-                                child: Container(
-                                  child: Text("Remover"),
-                                ),
-                                color: Colors.red,
-                              ),
-                            )
-                          : SizedBox(
-                              width: 0.0,
-                            );
-                    },
-                  ),
-                  SizedBox(
-                    width: 10.0,
-                  ),
-                  Observer(builder: (_) {
-                    return Expanded(
-                      child: FlatButton(
-                        onPressed: () {},
-                        child: Container(
-                          child: _renderEditButton(organizers[index]),
-                        ),
-                        color: verifySelectedOrganizer(
-                                organizers[index], selectedOrganizers)
-                            ? Colors.grey
-                            : Colors.blue[200],
+                      SizedBox(
+                        width: 10.0,
                       ),
-                    );
-                  }),
+                      Observer(builder: (_) {
+                        return Expanded(
+                          child: FlatButton(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18.0),
+                            ),
+                            onPressed: () {},
+                            child: Container(
+                              child: _renderEditButton(organizers[index]),
+                            ),
+                            color: verifySelectedOrganizer(
+                                    organizers[index], selectedOrganizers)
+                                ? Colors.grey
+                                : Colors.green[600],
+                          ),
+                        );
+                      }),
+                    ],
+                  ),
                 ],
               ),
-            ],
+            ),
           ),
         ),
-      ),
+        Divider(
+          color: Colors.black,
+          height: 15,
+          thickness: 0.25,
+          indent: 0,
+          endIndent: 0,
+        ),
+      ],
     );
   }
 

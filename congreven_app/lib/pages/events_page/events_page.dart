@@ -50,6 +50,9 @@ class _EventsPageState extends State<EventsPage> {
         Provider.of<EventsPageController>(context, listen: false);
     if (verifyIsCpfOwner(eventCpfOwner)) {
       return FlatButton(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(18.0),
+        ),
         onPressed: () {
           setState(() {
             _eventIdClicked = event["id"];
@@ -96,14 +99,25 @@ class _EventsPageState extends State<EventsPage> {
               )
             : Container(
                 padding: EdgeInsets.all(4.0),
-                child: Text(
-                  "Editar",
-                  style: TextStyle(
-                    fontSize: 16.0,
+                child: RichText(
+                  text: TextSpan(
+                    children: [
+                      WidgetSpan(
+                        child:
+                            Icon(Icons.create, size: 18.0, color: Colors.white),
+                      ),
+                      TextSpan(
+                          text: " EDITAR",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16.0,
+                              letterSpacing: 0.5,
+                              fontWeight: FontWeight.bold)),
+                    ],
                   ),
                 ),
               ),
-        color: Colors.blueAccent,
+        color: Colors.green,
       );
     }
     return SizedBox(
