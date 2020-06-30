@@ -90,7 +90,6 @@ getActivityByEventId(BuildContext context, int eventId) async {
           response.body.isNotEmpty ? convert.jsonDecode(response.body) : null;
       if (data != null) {
         print("data getActivityByEventId -> $data");
-        print("data getNewsByEventId -> $data");
         if (data is Map) {
           print("message -> ${data["message"]}");
           activitiesModel.changeFetchingActivitiesErrorMessage(

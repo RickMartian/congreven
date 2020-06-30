@@ -2,7 +2,7 @@ import 'package:congreven_app/actions/events_page_actions.dart';
 import 'package:congreven_app/models/user.dart';
 import 'package:congreven_app/pages/my_events_edit_page/my_events_edit_page_controller.dart';
 import 'package:congreven_app/pages/new_event_forms_page/new_event_forms_page_controller.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:congreven_app/config.dart';
 import 'package:congreven_app/utils/toast.dart';

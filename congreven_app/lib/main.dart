@@ -8,12 +8,14 @@ import 'package:congreven_app/pages/activity_details_page/activity_details_page_
 import 'package:congreven_app/pages/enter_page/enter_page.dart';
 import 'package:congreven_app/pages/enter_page/enter_page_controller.dart';
 import 'package:congreven_app/pages/events_page/events_page_controller.dart';
+import 'package:congreven_app/pages/guest_speaker_page/guest_speaker_page_controller.dart';
 import 'package:congreven_app/pages/home_page/home_page_controller.dart';
 import 'package:congreven_app/pages/login_page/login_page_controller.dart';
 import 'package:congreven_app/pages/my_account_page/my_account_page_controller.dart';
 import 'package:congreven_app/pages/my_events_edit_page/my_events_edit_page_controller.dart';
 import 'package:congreven_app/pages/new_activity_forms_page/new_activity_forms_page_controller.dart';
 import 'package:congreven_app/pages/new_event_forms_page/new_event_forms_page_controller.dart';
+import 'package:congreven_app/pages/new_guest_speaker_forms_page/new_guest_speaker_forms_page_controller.dart';
 import 'package:congreven_app/pages/new_news_forms_page/new_news_forms_page_controller.dart';
 import 'package:congreven_app/pages/new_organizer_forms_page/new_organizer_forms_page_controller.dart';
 import 'package:congreven_app/pages/organizer_page/organizer_page_controller.dart';
@@ -86,6 +88,12 @@ class MyApp extends StatelessWidget {
         ),
         Provider(
           create: (_) => ActivityDetailsPageController(),
+        ),
+        Provider(
+          create: (_) => GuestSpeakerPageController(),
+        ),
+        Provider(
+          create: (_) => NewGuestSpeakerFormsPageController(),
         ),
       ],
       child: MaterialApp(

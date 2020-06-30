@@ -1,6 +1,7 @@
-import 'package:congreven_app/models/guest_speakers.dart';
+import 'package:congreven_app/actions/new_guest_speaker_page_actions.dart';
 import 'package:congreven_app/models/user.dart';
 import 'package:congreven_app/pages/activity_details_page/activity_details_page_controller.dart';
+import 'package:congreven_app/pages/guest_speaker_home_page/guest_speaker_home_page.dart';
 import 'package:congreven_app/pages/my_events_edit_page/my_events_edit_page_controller.dart';
 import 'package:congreven_app/utils/enter_title.dart';
 import 'package:congreven_app/utils/routeTo.dart';
@@ -179,32 +180,7 @@ class _ActivityDetailsPageState extends State<ActivityDetailsPage> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  _renderTextLine(
-                      firstLine: "Nome", secondLine: element["name"]),
-                  Row(
-                    children: <Widget>[
-                      _isEventOwnerToRenderWidget(
-                        Card(
-                          color: Theme.of(context).primaryColorDark,
-                          child: IconButton(
-                            tooltip: "Editar",
-                            splashColor: Colors.green,
-                            icon: Icon(
-                              Icons.edit,
-                              color: Colors.white,
-                            ),
-                            onPressed: () {},
-                          ),
-                        ),
-                        isEventOwner,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+              _renderTextLine(firstLine: "Nome", secondLine: element["name"]),
               _renderTextLine(firstLine: "RG", secondLine: element["rg"]),
               _renderTextLine(
                   firstLine: "Escolaridade", secondLine: element["scholarity"]),
@@ -328,7 +304,8 @@ class _ActivityDetailsPageState extends State<ActivityDetailsPage> {
                 buttonIcon: Icons.add,
                 onPressed: () {
                   print("adicionar palestrante novo!");
-                  // routeTo(context, ());
+                  fetchGuestSpeakers(context);
+                  routeTo(context, GuestSpeakerHomePage());
                 },
               );
             },
