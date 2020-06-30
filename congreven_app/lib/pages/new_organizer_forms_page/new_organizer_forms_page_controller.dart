@@ -32,6 +32,22 @@ abstract class _NewOrganizerFormsPageControllerBase with Store {
   @action
   void changeDescription(String newDescription) => description = newDescription;
 
+  @observable
+  bool isEditting = false;
+
+  @action
+  void changeIsEditting(bool status) {
+    isEditting = status;
+  }
+
+  @observable
+  dynamic organizerToEdit;
+
+  @action
+  void changeOrganizerToEdit(dynamic organizer) {
+    organizerToEdit = organizer;
+  }
+
   @action
   void clean() {
     name = null;

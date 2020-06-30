@@ -76,7 +76,9 @@ class _NewOrganizerPageState extends State<NewOrganizerPage> {
               alignment: Alignment.center,
               margin: EdgeInsets.fromLTRB(0.0, 12.0, 20.0, 12.0),
               child: Text(
-                "Novo organizador",
+                newOrganizerFormsPageController.isEditting
+                    ? "Editar organizador"
+                    : "Novo organizador",
                 style: TextStyle(
                   color: Colors.black,
                   fontWeight: _selectedPage == Pages.new_organizer
@@ -147,7 +149,11 @@ class _NewOrganizerPageState extends State<NewOrganizerPage> {
             onPressed: () {
               if (!newOrganizerFormsPageController.isLoadingSomeAction &&
                   newOrganizerFormsPageController.isValid) {
-                createNewOrganizer(context);
+                if (newOrganizerFormsPageController.isEditting) {
+                  updateOrganizer(context);
+                } else {
+                  createNewOrganizer(context);
+                }
               }
             },
             backgroundColor: Theme.of(context).primaryColorDark,

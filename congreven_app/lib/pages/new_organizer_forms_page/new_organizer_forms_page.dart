@@ -1,5 +1,6 @@
 import 'package:congreven_app/actions/new_organizer_page_actions.dart';
 import 'package:congreven_app/components/text_field.dart';
+import 'package:congreven_app/utils/formatCnpj.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -14,9 +15,28 @@ class NewOrganizerFormsPage extends StatefulWidget {
 
 class _NewOrganizerFormsPageState extends State<NewOrganizerFormsPage> {
   final _cnpjController = MaskedTextController(mask: "00.000.000/0000-00");
+  final _nameController = TextEditingController();
+  final _descriptionController = TextEditingController();
   Future<bool> _onWillPop() async {
     cleanNewOrganizerState(context);
     return true;
+  }
+
+  void initState() {
+    super.initState();
+    final newOrganizerFormsPageController =
+        Provider.of<NewOrganizerFormsPageController>(context, listen: false);
+    final organizerToEdit = newOrganizerFormsPageController.organizerToEdit;
+    if (newOrganizerFormsPageController.isEditting && organizerToEdit != null) {
+      _cnpjController.text = organizerToEdit["cnpj"];
+      _nameController.text = organizerToEdit["name"];
+      _descriptionController.text = organizerToEdit["description"];
+      newOrganizerFormsPageController.changeName(organizerToEdit["name"]);
+      newOrganizerFormsPageController
+          .changeDescription(organizerToEdit["description"]);
+      newOrganizerFormsPageController
+          .changeCnpj(formatCnpj(organizerToEdit["cnpj"]));
+    }
   }
 
   @override
@@ -37,6 +57,7 @@ class _NewOrganizerFormsPageState extends State<NewOrganizerFormsPage> {
                   labelText: "Nome",
                   onChanged: newOrganizerFormsPageController.changeName,
                   errorText: newOrganizerFormsPageController.validateName,
+                  controller: _nameController,
                 );
               },
             ),
@@ -50,6 +71,7 @@ class _NewOrganizerFormsPageState extends State<NewOrganizerFormsPage> {
                   onChanged: newOrganizerFormsPageController.changeCnpj,
                   errorText: newOrganizerFormsPageController.validateCnpj,
                   controller: _cnpjController,
+                  enabled: !newOrganizerFormsPageController.isEditting,
                   keyboardType: TextInputType.number,
                 );
               },
@@ -64,6 +86,7 @@ class _NewOrganizerFormsPageState extends State<NewOrganizerFormsPage> {
                   onChanged: newOrganizerFormsPageController.changeDescription,
                   errorText:
                       newOrganizerFormsPageController.validateDescription,
+                  controller: _descriptionController,
                 );
               },
             ),

@@ -1,9 +1,13 @@
 import 'package:congreven_app/actions/organizer_page_actions.dart';
 import 'package:congreven_app/models/organizer.dart';
+import 'package:congreven_app/models/user.dart';
 import 'package:congreven_app/pages/new_event_forms_page/new_event_forms_page_controller.dart';
+import 'package:congreven_app/pages/new_organizer_forms_page/new_organizer_forms_page_controller.dart';
+import 'package:congreven_app/pages/new_organizer_page/new_organizer_page.dart';
 import 'package:congreven_app/pages/organizer_page/organizer_page_controller.dart';
 import 'package:congreven_app/utils/debouncer.dart';
 import 'package:congreven_app/utils/formatCnpj.dart';
+import 'package:congreven_app/utils/routeTo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
@@ -87,6 +91,13 @@ class _OrganizerPageState extends State<OrganizerPage> {
     );
   }
 
+  _verifyOrganizerCpfOwner({String userCpf, String organizerCpfOwner}) {
+    if (userCpf == organizerCpfOwner) {
+      return true;
+    }
+    return false;
+  }
+
   Widget _itemBuilder(
       BuildContext context,
       int index,
@@ -94,6 +105,9 @@ class _OrganizerPageState extends State<OrganizerPage> {
       double deviceWidth,
       List<dynamic> organizers,
       List<dynamic> selectedOrganizers) {
+    final newOrganizerFormsPageController =
+        Provider.of<NewOrganizerFormsPageController>(context, listen: false);
+    final userModel = Provider.of<User>(context, listen: false);
     return Column(
       children: <Widget>[
         Card(
@@ -196,21 +210,40 @@ class _OrganizerPageState extends State<OrganizerPage> {
                         width: 10.0,
                       ),
                       Observer(builder: (_) {
-                        return Expanded(
-                          child: FlatButton(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(18.0),
-                            ),
-                            onPressed: () {},
-                            child: Container(
-                              child: _renderEditButton(organizers[index]),
-                            ),
-                            color: verifySelectedOrganizer(
-                                    organizers[index], selectedOrganizers)
-                                ? Colors.grey
-                                : Colors.green[600],
-                          ),
-                        );
+                        return _verifyOrganizerCpfOwner(
+                                userCpf: userModel.cpf,
+                                organizerCpfOwner: organizers[index]
+                                    ["cpf_owner"])
+                            ? Expanded(
+                                child: FlatButton(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(18.0),
+                                  ),
+                                  onPressed: () {
+                                    if (!verifySelectedOrganizer(
+                                        organizers[index],
+                                        selectedOrganizers)) {
+                                      newOrganizerFormsPageController
+                                          .changeIsEditting(true);
+                                      newOrganizerFormsPageController
+                                          .changeOrganizerToEdit(
+                                              organizers[index]);
+                                      routeTo(context, NewOrganizerPage());
+                                    }
+                                  },
+                                  child: Container(
+                                    child: _renderEditButton(organizers[index]),
+                                  ),
+                                  color: verifySelectedOrganizer(
+                                          organizers[index], selectedOrganizers)
+                                      ? Colors.grey
+                                      : Colors.green[600],
+                                ),
+                              )
+                            : Container(
+                                height: 0.0,
+                                width: 0.0,
+                              );
                       }),
                     ],
                   ),
