@@ -11,6 +11,7 @@ import 'package:congreven_app/pages/home_page/home_page_controller.dart';
 import 'package:congreven_app/pages/login_page/login_page_controller.dart';
 import 'package:congreven_app/pages/my_account_page/my_account_page_controller.dart';
 import 'package:congreven_app/pages/my_events_edit_page/my_events_edit_page_controller.dart';
+import 'package:congreven_app/pages/new_activity_forms_page/new_activity_forms_page_controller.dart';
 import 'package:congreven_app/pages/new_event_forms_page/new_event_forms_page_controller.dart';
 import 'package:congreven_app/pages/new_news_forms_page/new_news_forms_page_controller.dart';
 import 'package:congreven_app/pages/new_organizer_forms_page/new_organizer_forms_page_controller.dart';
@@ -78,6 +79,9 @@ class MyApp extends StatelessWidget {
         ),
         Provider(
           create: (_) => NewNewsFormsPageController(),
+        ),
+        Provider(
+          create: (_) => NewActivityFormsPageController(),
         ),
       ],
       child: MaterialApp(

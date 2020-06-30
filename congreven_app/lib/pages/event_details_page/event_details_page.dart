@@ -2,6 +2,7 @@ import 'package:congreven_app/models/activities.dart';
 import 'package:congreven_app/models/news.dart';
 import 'package:congreven_app/models/user.dart';
 import 'package:congreven_app/pages/my_events_edit_page/my_events_edit_page_controller.dart';
+import 'package:congreven_app/pages/new_activity_page/new_activity_page.dart';
 import 'package:congreven_app/pages/new_news_page/new_news_page.dart';
 import 'package:congreven_app/utils/enter_title.dart';
 import 'package:congreven_app/utils/routeTo.dart';
@@ -120,18 +121,15 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
         needButton
             ? Expanded(
                 flex: 1,
-                child: Container(
+                child: Card(
+                  color: Theme.of(context).primaryColorDark,
                   child: IconButton(
+                    splashColor: Colors.green,
                     icon: Icon(
-                      buttonIcon,
+                      Icons.add,
                       color: Colors.white,
-                      size: 30.0,
                     ),
                     onPressed: onPressed,
-                  ),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8.0),
-                    color: Theme.of(context).primaryColorDark,
                   ),
                 ),
               )
@@ -184,14 +182,12 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
     );
   }
 
-  Widget _renderNewsDetails(dynamic news, String errorMessage, bool isLoading) {
+  Widget _renderNewsDetails(
+      dynamic news, String errorMessage, bool isLoading, bool isEventOwner) {
     print("news to render -> $news");
     print("errorMessage -> $errorMessage");
     if (isLoading) {
       return _loading();
-    }
-    if (errorMessage.isNotEmpty) {
-      return _renderTextLine(secondLine: errorMessage, firstLineSize: 0.0);
     }
     if (news.length > 0) {
       final List<Widget> listWidget = List<Widget>();
@@ -200,7 +196,48 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              _renderTextLine(firstLine: "Nome", secondLine: element["name"]),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  _renderTextLine(
+                      firstLine: "Nome", secondLine: element["name"]),
+                  Row(
+                    children: <Widget>[
+                      _isEventOwnerToRenderWidget(
+                          Card(
+                            color: Theme.of(context).primaryColorDark,
+                            child: IconButton(
+                              tooltip: "Editar",
+                              splashColor: Colors.green,
+                              icon: Icon(
+                                Icons.edit,
+                                color: Colors.white,
+                              ),
+                              onPressed: () {},
+                            ),
+                          ),
+                          isEventOwner),
+                      SizedBox(
+                        width: 5.0,
+                      ),
+                      _isEventOwnerToRenderWidget(
+                          Card(
+                            color: Theme.of(context).primaryColorDark,
+                            child: IconButton(
+                              tooltip: "Remover",
+                              splashColor: Colors.green,
+                              icon: Icon(
+                                Icons.remove,
+                                color: Colors.white,
+                              ),
+                              onPressed: () {},
+                            ),
+                          ),
+                          isEventOwner),
+                    ],
+                  ),
+                ],
+              ),
               _renderTextLine(
                   firstLine: "Descrição", secondLine: element["description"]),
               _renderTextLine(
@@ -218,21 +255,27 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: listWidget,
       );
+    } else if (errorMessage.isNotEmpty) {
+      return _renderTextLine(secondLine: errorMessage, firstLineSize: 0.0);
     } else
       return SizedBox(
         height: 0.0,
       );
   }
 
-  Widget _renderActivitiesDetails(
-      dynamic activities, String errorMessage, bool isLoading) {
+  _isEventOwnerToRenderWidget(Widget widget, bool isEventOwner) {
+    if (isEventOwner) {
+      return widget;
+    } else
+      return Container(width: 0.0, height: 0.0);
+  }
+
+  Widget _renderActivitiesDetails(dynamic activities, String errorMessage,
+      bool isLoading, bool isEventOwner) {
     print("activities to render -> $activities");
     print("errorMessage -> $errorMessage");
     if (isLoading) {
       return _loading();
-    }
-    if (errorMessage.isNotEmpty) {
-      return _renderTextLine(secondLine: errorMessage, firstLineSize: 0.0);
     }
     if (activities.length > 0) {
       final List<Widget> listWidget = List<Widget>();
@@ -241,7 +284,63 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              _renderTextLine(firstLine: "Nome", secondLine: element["name"]),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  _renderTextLine(
+                      firstLine: "Nome", secondLine: element["name"]),
+                  Row(
+                    children: <Widget>[
+                      _isEventOwnerToRenderWidget(
+                          Card(
+                            color: Theme.of(context).primaryColorDark,
+                            child: IconButton(
+                              tooltip: "Editar",
+                              splashColor: Colors.green,
+                              icon: Icon(
+                                Icons.edit,
+                                color: Colors.white,
+                              ),
+                              onPressed: () {},
+                            ),
+                          ),
+                          isEventOwner),
+                      SizedBox(
+                        width: 5.0,
+                      ),
+                      Card(
+                        color: Theme.of(context).primaryColorDark,
+                        child: IconButton(
+                          tooltip: "Detalhes",
+                          splashColor: Colors.green,
+                          icon: Icon(
+                            Icons.details,
+                            color: Colors.white,
+                          ),
+                          onPressed: () {},
+                        ),
+                      ),
+                      SizedBox(
+                        width: 5.0,
+                      ),
+                      _isEventOwnerToRenderWidget(
+                          Card(
+                            color: Theme.of(context).primaryColorDark,
+                            child: IconButton(
+                              tooltip: "Remover",
+                              splashColor: Colors.green,
+                              icon: Icon(
+                                Icons.remove,
+                                color: Colors.white,
+                              ),
+                              onPressed: () {},
+                            ),
+                          ),
+                          isEventOwner),
+                    ],
+                  ),
+                ],
+              ),
               _renderTextLine(
                   firstLine: "Período", secondLine: element["period"]),
               _renderTextLine(
@@ -263,6 +362,8 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: listWidget,
       );
+    } else if (errorMessage.isNotEmpty) {
+      return _renderTextLine(secondLine: errorMessage, firstLineSize: 0.0);
     } else
       return SizedBox(
         height: 0.0,
@@ -357,6 +458,7 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                 buttonIcon: Icons.add,
                 onPressed: () {
                   print("adicionar atividade nova!");
+                  routeTo(context, NewActivityPage());
                 },
                 context: context,
               );
@@ -370,7 +472,14 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
               return _renderActivitiesDetails(
                   activitiesModel.activities,
                   activitiesModel.errorMessage,
-                  activitiesModel.isFetchingActivities);
+                  activitiesModel.isFetchingActivities,
+                  _verifyIsEventOwner(
+                    userCpf: userModel.cpf,
+                    eventCpfOwner: myEventsEditPageController.eventToUse != null
+                        ? myEventsEditPageController.eventToUse["event"]
+                            ["cpf_owner"]
+                        : "",
+                  ));
             },
           ),
           SizedBox(
@@ -401,8 +510,18 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
           ),
           Observer(
             builder: (_) {
-              return _renderNewsDetails(newsModel.news, newsModel.errorMessage,
-                  newsModel.isFetchingNews);
+              return _renderNewsDetails(
+                newsModel.news,
+                newsModel.errorMessage,
+                newsModel.isFetchingNews,
+                _verifyIsEventOwner(
+                  userCpf: userModel.cpf,
+                  eventCpfOwner: myEventsEditPageController.eventToUse != null
+                      ? myEventsEditPageController.eventToUse["event"]
+                          ["cpf_owner"]
+                      : "",
+                ),
+              );
             },
           ),
           SizedBox(
