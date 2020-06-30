@@ -1,3 +1,4 @@
+import 'package:congreven_app/actions/events_details_page_actions.dart';
 import 'package:congreven_app/actions/events_page_actions.dart';
 import 'package:congreven_app/models/events.dart';
 import 'package:congreven_app/pages/event_details_home_page/event_details_home_page.dart';
@@ -40,31 +41,6 @@ class _EventsPageState extends State<EventsPage> {
         _search = value;
       });
     });
-  }
-
-  Widget _renderLine(String title, String value) {
-    return Row(
-      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: <Widget>[
-        Container(
-          alignment: Alignment.centerLeft,
-          margin: EdgeInsets.only(right: 10.0),
-          child: Text(
-            title,
-            style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold),
-          ),
-        ),
-        Flexible(
-          child: Container(
-            child: Text(
-              value,
-              textAlign: TextAlign.right,
-            ),
-            alignment: Alignment.bottomRight,
-          ),
-        )
-      ],
-    );
   }
 
   Widget _renderEditButton(eventCpfOwner, event) {
@@ -161,6 +137,8 @@ class _EventsPageState extends State<EventsPage> {
                   response["event"]["end_date_formatted"] = _dateFormat
                       .format(DateTime.parse(response["event"]["end_date"]));
                   myEventsEditPageController.changeEventToUse(response);
+                  getNewsByEventId(context, response["event"]["id"]);
+                  getActivityByEventId(context, response["event"]["id"]);
                   routeTo(context, EventDetailsHomePage());
                 });
               } catch (error) {

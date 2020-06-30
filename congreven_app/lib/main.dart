@@ -1,4 +1,7 @@
+import 'package:congreven_app/models/activities.dart';
 import 'package:congreven_app/models/events.dart';
+import 'package:congreven_app/models/guest_speakers.dart';
+import 'package:congreven_app/models/news.dart';
 import 'package:congreven_app/models/organizer.dart';
 import 'package:congreven_app/models/user.dart';
 import 'package:congreven_app/pages/enter_page/enter_page.dart';
@@ -9,6 +12,7 @@ import 'package:congreven_app/pages/login_page/login_page_controller.dart';
 import 'package:congreven_app/pages/my_account_page/my_account_page_controller.dart';
 import 'package:congreven_app/pages/my_events_edit_page/my_events_edit_page_controller.dart';
 import 'package:congreven_app/pages/new_event_forms_page/new_event_forms_page_controller.dart';
+import 'package:congreven_app/pages/new_news_forms_page/new_news_forms_page_controller.dart';
 import 'package:congreven_app/pages/new_organizer_forms_page/new_organizer_forms_page_controller.dart';
 import 'package:congreven_app/pages/organizer_page/organizer_page_controller.dart';
 import 'package:congreven_app/pages/register_page/register_page_controller.dart';
@@ -62,6 +66,18 @@ class MyApp extends StatelessWidget {
         ),
         Provider(
           create: (_) => MyEventsEditPageController(),
+        ),
+        Provider(
+          create: (_) => News(),
+        ),
+        Provider(
+          create: (_) => Activities(),
+        ),
+        Provider(
+          create: (_) => GuestSpeakers(),
+        ),
+        Provider(
+          create: (_) => NewNewsFormsPageController(),
         ),
       ],
       child: MaterialApp(

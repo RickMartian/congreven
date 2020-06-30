@@ -25,12 +25,6 @@ getEventById(BuildContext context, int id) async {
       if (data != null) {
         eventsPageController.changeIsFetchingEventById(false);
         return data;
-        // toast(
-        //   title: "Sucesso!",
-        //   message: "Eventos buscados com sucesso!",
-        //   duration: Duration(milliseconds: 2000),
-        //   context: context,
-        // );
       }
     } else {
       final respDecoded = convert.jsonDecode(response.body);
@@ -71,12 +65,6 @@ fetchEvents(BuildContext context) async {
           response.body.isNotEmpty ? convert.jsonDecode(response.body) : null;
       if (data != null) {
         eventsModel.updateEvents(data);
-        // toast(
-        //   title: "Sucesso!",
-        //   message: "Eventos buscados com sucesso!",
-        //   duration: Duration(milliseconds: 2000),
-        //   context: context,
-        // );
       }
     } else {
       final respDecoded = convert.jsonDecode(response.body);
