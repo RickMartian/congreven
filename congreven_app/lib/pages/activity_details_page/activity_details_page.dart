@@ -250,7 +250,7 @@ class _ActivityDetailsPageState extends State<ActivityDetailsPage> {
           Observer(
             builder: (_) {
               return _renderTitleLine(
-                title: "Atividades",
+                title: "Atividade",
                 needButton: false,
                 context: context,
               );
@@ -261,8 +261,6 @@ class _ActivityDetailsPageState extends State<ActivityDetailsPage> {
           ),
           Observer(
             builder: (_) {
-              print(
-                  "isLoading -> ${activityDetailsPageController.isFetchingActivityToUse}");
               return _renderActivityDetails(
                   _verifyExistisActivity(
                           activityDetailsPageController.activityToUse)
