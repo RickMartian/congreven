@@ -135,37 +135,10 @@ class _EventDetailsHomePageState extends State<EventDetailsHomePage> {
           ],
         ),
         body: Container(
-          color: Theme.of(context).backgroundColor,
+          color: Colors.grey[100],
           child: Container(
             child: _renderSelectedPage(),
           ),
-        ),
-        bottomNavigationBar: BottomAppBar(
-          color: Colors.grey[200],
-          child: Container(
-            height: _deviceHeight / 11,
-          ),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-        floatingActionButton: Observer(
-          builder: (_) {
-            return FloatingActionButton(
-              onPressed: () {},
-              backgroundColor: Theme.of(context).primaryColorDark,
-              elevation: 0.0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              child: !newEventFormsPageController.isLoadingSomeAction
-                  ? Icon(
-                      Icons.arrow_forward,
-                      color: Colors.white,
-                    )
-                  : CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                    ),
-            );
-          },
         ),
       ),
     );
