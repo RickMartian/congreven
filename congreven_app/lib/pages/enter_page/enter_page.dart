@@ -173,6 +173,15 @@ class _EnterPageState extends State<EnterPage> {
                       : loginPageController.isValid;
                   return FloatingActionButton(
                     onPressed: () {
+                      if (_selectedPage == EnterPages.login) {
+                        if (!loginPageController.canValidate) {
+                          loginPageController.changeCanValidate(true);
+                        }
+                      } else {
+                        if (!registerPageController.canValidate) {
+                          registerPageController.changeCanValidate(true);
+                        }
+                      }
                       if (!isLoading && isValid) {
                         enterPageController.changeIsLoadingEnterButton(true);
                         _handleSubmittedData();

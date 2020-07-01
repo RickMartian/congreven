@@ -70,6 +70,14 @@ abstract class _NewActivityFormsPageControllerBase with Store {
     activityToEdit = activity;
   }
 
+  @observable
+  bool canValidate = false;
+
+  @action
+  void changeCanValidate(bool status) {
+    canValidate = status;
+  }
+
   String reverseDate(String date) {
     if (date != null) {
       return date.split('/').reversed.join("-");
@@ -97,42 +105,52 @@ abstract class _NewActivityFormsPageControllerBase with Store {
   }
 
   String validateDate() {
-    if (date == null || date.isEmpty) {
-      return "O campo 'data' é obrigatório!";
-    } else if (date.length < 10) {
-      return "Insira uma data válida!";
-    } else if (date.length == 10) {
-      if (!isValidDate(date)) {
+    if (canValidate) {
+      if (date == null || date.isEmpty) {
+        return "O campo 'data' é obrigatório!";
+      } else if (date.length < 10) {
         return "Insira uma data válida!";
+      } else if (date.length == 10) {
+        if (!isValidDate(date)) {
+          return "Insira uma data válida!";
+        }
       }
     }
     return null;
   }
 
   String validateName() {
-    if (name == null || name.isEmpty) {
-      return "O campo 'nome' é obrigatório!";
+    if (canValidate) {
+      if (name == null || name.isEmpty) {
+        return "O campo 'nome' é obrigatório!";
+      }
     }
     return null;
   }
 
   String validatePeriod() {
-    if (period == null || period.isEmpty) {
-      return "O campo 'período' é obrigatório!";
+    if (canValidate) {
+      if (period == null || period.isEmpty) {
+        return "O campo 'período' é obrigatório!";
+      }
     }
     return null;
   }
 
   String validateStartHour() {
-    if (startHour == null || startHour.isEmpty) {
-      return "O campo 'hora inicial' é obrigatório!";
+    if (canValidate) {
+      if (startHour == null || startHour.isEmpty) {
+        return "O campo 'hora inicial' é obrigatório!";
+      }
     }
     return null;
   }
 
   String validateEndHour() {
-    if (endHour == null || endHour.isEmpty) {
-      return "O campo 'hora final' é obrigatório!";
+    if (canValidate) {
+      if (endHour == null || endHour.isEmpty) {
+        return "O campo 'hora final' é obrigatório!";
+      }
     }
     return null;
   }
@@ -144,6 +162,7 @@ abstract class _NewActivityFormsPageControllerBase with Store {
     period = null;
     startHour = null;
     endHour = null;
+    canValidate = false;
   }
 
   @computed
@@ -161,5 +180,6 @@ abstract class _NewActivityFormsPageControllerBase with Store {
       validateDate() == null &&
       validateStartHour() == null &&
       validateEndHour() == null &&
-      validatePeriod() == null;
+      validatePeriod() == null &&
+      canValidate;
 }

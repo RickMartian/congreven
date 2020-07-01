@@ -102,6 +102,22 @@ mixin _$NewNewsFormsPageController on _NewNewsFormsPageControllerBase, Store {
     });
   }
 
+  final _$canValidateAtom =
+      Atom(name: '_NewNewsFormsPageControllerBase.canValidate');
+
+  @override
+  bool get canValidate {
+    _$canValidateAtom.reportRead();
+    return super.canValidate;
+  }
+
+  @override
+  set canValidate(bool value) {
+    _$canValidateAtom.reportWrite(value, super.canValidate, () {
+      super.canValidate = value;
+    });
+  }
+
   final _$_NewNewsFormsPageControllerBaseActionController =
       ActionController(name: '_NewNewsFormsPageControllerBase');
 
@@ -163,6 +179,17 @@ mixin _$NewNewsFormsPageController on _NewNewsFormsPageControllerBase, Store {
   }
 
   @override
+  void changeCanValidate(bool status) {
+    final _$actionInfo = _$_NewNewsFormsPageControllerBaseActionController
+        .startAction(name: '_NewNewsFormsPageControllerBase.changeCanValidate');
+    try {
+      return super.changeCanValidate(status);
+    } finally {
+      _$_NewNewsFormsPageControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void clean() {
     final _$actionInfo = _$_NewNewsFormsPageControllerBaseActionController
         .startAction(name: '_NewNewsFormsPageControllerBase.clean');
@@ -181,6 +208,7 @@ name: ${name},
 date: ${date},
 description: ${description},
 isLoadingSomeAction: ${isLoadingSomeAction},
+canValidate: ${canValidate},
 newsToRegister: ${newsToRegister},
 isValid: ${isValid}
     ''';

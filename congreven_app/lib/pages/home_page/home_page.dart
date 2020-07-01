@@ -62,9 +62,9 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  _navigateAndWaitForResponse(BuildContext context) async {
+  _navigateAndWaitForResponse(BuildContext context, Widget route) async {
     final result = await Navigator.push(
-        context, MaterialPageRoute(builder: (context) => ProfileHomePage()));
+        context, MaterialPageRoute(builder: (context) => route));
 
     if (result == "needToFetch") {
       fetchEvents(context);
@@ -112,7 +112,8 @@ class _HomePageState extends State<HomePage> {
                             ),
                             onPressed: () {
                               if (!homePageController.isLoadingLogout) {
-                                _navigateAndWaitForResponse(context);
+                                _navigateAndWaitForResponse(
+                                    context, ProfileHomePage());
                               }
                             },
                           ),
@@ -208,7 +209,8 @@ class _HomePageState extends State<HomePage> {
                       return FloatingActionButton(
                           onPressed: () {
                             if (!homePageController.isLoadingLogout) {
-                              routeTo(context, NewEventPage());
+                              _navigateAndWaitForResponse(
+                                  context, NewEventPage());
                             }
                           },
                           backgroundColor: Theme.of(context).primaryColorDark,

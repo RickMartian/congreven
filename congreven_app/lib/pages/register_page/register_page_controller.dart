@@ -36,39 +36,57 @@ abstract class _RegisterPageControllerBase with Store {
   void changeConfirmPassword(String newConfirmPassword) =>
       confirmPassword = newConfirmPassword;
 
+  @observable
+  bool canValidate = false;
+
+  @action
+  void changeCanValidate(bool status) {
+    canValidate = status;
+  }
+
   String validateEmail() {
-    if (email == null || email.isEmpty) {
-      return "O campo 'email' é obrigatório!";
+    if (canValidate) {
+      if (email == null || email.isEmpty) {
+        return "O campo 'email' é obrigatório!";
+      }
     }
     return null;
   }
 
   String validatePassword() {
-    if (password == null || password.isEmpty) {
-      return "O campo 'senha' é obrigatório!";
+    if (canValidate) {
+      if (password == null || password.isEmpty) {
+        return "O campo 'senha' é obrigatório!";
+      }
     }
     return null;
   }
 
   String validateName() {
-    if (name == null || name.isEmpty) {
-      return "O campo 'nome' é obrigatório!";
+    if (canValidate) {
+      if (name == null || name.isEmpty) {
+        return "O campo 'nome' é obrigatório!";
+      }
     }
     return null;
   }
 
   String validateCpf() {
-    if (cpf == null || cpf.isEmpty) {
-      return "O campo 'cpf' é obrigatório!";
+    if (canValidate) {
+      if (cpf == null || cpf.isEmpty) {
+        return "O campo 'cpf' é obrigatório!";
+      }
     }
     return null;
   }
 
   String validateConfirmPassword() {
-    if (confirmPassword == null || confirmPassword.isEmpty) {
-      return "O campo 'confirmar senha' é obrigatório!";
-    } else if (confirmPassword != password) {
-      return "As senhas não coincidem!";
+    if (canValidate) {
+      if (confirmPassword == null || confirmPassword.isEmpty) {
+        return "O campo 'confirmar senha' é obrigatório!";
+      } else if (confirmPassword != password) {
+        return "As senhas não coincidem!";
+      }
     }
     return null;
   }
@@ -80,6 +98,7 @@ abstract class _RegisterPageControllerBase with Store {
     email = null;
     password = null;
     confirmPassword = null;
+    canValidate = false;
   }
 
   @computed
@@ -96,5 +115,6 @@ abstract class _RegisterPageControllerBase with Store {
       validateCpf() == null &&
       validatePassword() == null &&
       validateConfirmPassword() == null &&
-      validateEmail() == null;
+      validateEmail() == null &&
+      canValidate;
 }

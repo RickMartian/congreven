@@ -83,6 +83,14 @@ abstract class _NewEventFormsPageControllerBase with Store {
     isLoadingSomeAction = status;
   }
 
+  @observable
+  bool canValidate = false;
+
+  @action
+  void changeCanValidate(bool status) {
+    canValidate = status;
+  }
+
   String reverseDate(String date) {
     if (date != null) {
       return date.split('/').reversed.join("-");
@@ -96,8 +104,10 @@ abstract class _NewEventFormsPageControllerBase with Store {
   }
 
   String validateAddress() {
-    if (address == null || address.isEmpty) {
-      return "O campo 'endereço' é obrigatório!";
+    if (canValidate) {
+      if (address == null || address.isEmpty) {
+        return "O campo 'endereço' é obrigatório!";
+      }
     }
     return null;
   }
@@ -126,17 +136,19 @@ abstract class _NewEventFormsPageControllerBase with Store {
   }
 
   String validateStartDate() {
-    if (startDate == null || startDate.isEmpty) {
-      return "O campo 'data inicial' é obrigatório!";
-    } else if (startDate.length < 10) {
-      return "Insira uma data inicial válida!";
-    } else if (startDate.length == 10) {
-      if (!isValidDate(startDate)) {
+    if (canValidate) {
+      if (startDate == null || startDate.isEmpty) {
+        return "O campo 'data inicial' é obrigatório!";
+      } else if (startDate.length < 10) {
         return "Insira uma data inicial válida!";
-      }
-      if (endDate?.length == 10) {
-        if (!firstDateIsBeforeSecondDate(startDate, endDate)) {
-          return "A data inicial não pode ser maior que a data final!";
+      } else if (startDate.length == 10) {
+        if (!isValidDate(startDate)) {
+          return "Insira uma data inicial válida!";
+        }
+        if (endDate?.length == 10) {
+          if (!firstDateIsBeforeSecondDate(startDate, endDate)) {
+            return "A data inicial não pode ser maior que a data final!";
+          }
         }
       }
     }
@@ -144,24 +156,28 @@ abstract class _NewEventFormsPageControllerBase with Store {
   }
 
   String validateName() {
-    if (name == null || name.isEmpty) {
-      return "O campo 'nome' é obrigatório!";
+    if (canValidate) {
+      if (name == null || name.isEmpty) {
+        return "O campo 'nome' é obrigatório!";
+      }
     }
     return null;
   }
 
   String validateEndDate() {
-    if (endDate == null || endDate.isEmpty) {
-      return "O campo 'data final' é obrigatório!";
-    } else if (endDate.length < 10) {
-      return "Insira uma data final válida!";
-    } else if (endDate.length == 10) {
-      if (!isValidDate(endDate)) {
+    if (canValidate) {
+      if (endDate == null || endDate.isEmpty) {
+        return "O campo 'data final' é obrigatório!";
+      } else if (endDate.length < 10) {
         return "Insira uma data final válida!";
-      }
-      if (startDate?.length == 10) {
-        if (!firstDateIsBeforeSecondDate(startDate, endDate)) {
-          return "A data final não pode ser menor que a data inicial!";
+      } else if (endDate.length == 10) {
+        if (!isValidDate(endDate)) {
+          return "Insira uma data final válida!";
+        }
+        if (startDate?.length == 10) {
+          if (!firstDateIsBeforeSecondDate(startDate, endDate)) {
+            return "A data final não pode ser menor que a data inicial!";
+          }
         }
       }
     }
@@ -169,28 +185,34 @@ abstract class _NewEventFormsPageControllerBase with Store {
   }
 
   String validateDescription() {
-    if (description == null || description.isEmpty) {
-      return "O campo 'descrição do evento' é obrigatório!";
+    if (canValidate) {
+      if (description == null || description.isEmpty) {
+        return "O campo 'descrição do evento' é obrigatório!";
+      }
     }
     return null;
   }
 
   String validateOwnerDescription() {
-    if (!isOwner) {
-      return null;
-    }
-    if (ownerDescription == null || ownerDescription.isEmpty) {
-      return "O campo 'descrição do proprietário' é obrigatório!";
+    if (canValidate) {
+      if (!isOwner) {
+        return null;
+      }
+      if (ownerDescription == null || ownerDescription.isEmpty) {
+        return "O campo 'descrição do proprietário' é obrigatório!";
+      }
     }
     return null;
   }
 
   String validateSelectedOrganizer() {
-    if (isOwner) {
-      return null;
-    }
-    if (selectedOrganizers.isEmpty || selectedOrganizers == null) {
-      return "pelo menos um organizador é necessário para o evento!";
+    if (canValidate) {
+      if (isOwner) {
+        return null;
+      }
+      if (selectedOrganizers.isEmpty || selectedOrganizers == null) {
+        return "pelo menos um organizador é necessário para o evento!";
+      }
     }
     return null;
   }
@@ -204,6 +226,7 @@ abstract class _NewEventFormsPageControllerBase with Store {
     description = null;
     ownerDescription = null;
     selectedOrganizers = ObservableList<dynamic>();
+    canValidate = false;
   }
 
   @computed
@@ -226,5 +249,6 @@ abstract class _NewEventFormsPageControllerBase with Store {
       validateEndDate() == null &&
       validateDescription() == null &&
       validateSelectedOrganizer() == null &&
-      validateOwnerDescription() == null;
+      validateOwnerDescription() == null &&
+      canValidate;
 }

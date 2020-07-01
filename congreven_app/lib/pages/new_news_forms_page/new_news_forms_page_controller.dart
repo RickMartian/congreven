@@ -40,6 +40,14 @@ abstract class _NewNewsFormsPageControllerBase with Store {
     isLoadingSomeAction = status;
   }
 
+  @observable
+  bool canValidate = false;
+
+  @action
+  void changeCanValidate(bool status) {
+    canValidate = status;
+  }
+
   String reverseDate(String date) {
     if (date != null) {
       return date.split('/').reversed.join("-");
@@ -67,28 +75,34 @@ abstract class _NewNewsFormsPageControllerBase with Store {
   }
 
   String validateDate() {
-    if (date == null || date.isEmpty) {
-      return "O campo 'data' é obrigatório!";
-    } else if (date.length < 10) {
-      return "Insira uma data válida!";
-    } else if (date.length == 10) {
-      if (!isValidDate(date)) {
+    if (canValidate) {
+      if (date == null || date.isEmpty) {
+        return "O campo 'data' é obrigatório!";
+      } else if (date.length < 10) {
         return "Insira uma data válida!";
+      } else if (date.length == 10) {
+        if (!isValidDate(date)) {
+          return "Insira uma data válida!";
+        }
       }
     }
     return null;
   }
 
   String validateName() {
-    if (name == null || name.isEmpty) {
-      return "O campo 'nome' é obrigatório!";
+    if (canValidate) {
+      if (name == null || name.isEmpty) {
+        return "O campo 'nome' é obrigatório!";
+      }
     }
     return null;
   }
 
   String validateDescription() {
-    if (description == null || description.isEmpty) {
-      return "O campo 'descrição' é obrigatório!";
+    if (canValidate) {
+      if (description == null || description.isEmpty) {
+        return "O campo 'descrição' é obrigatório!";
+      }
     }
     return null;
   }
@@ -98,6 +112,7 @@ abstract class _NewNewsFormsPageControllerBase with Store {
     name = null;
     date = null;
     description = null;
+    canValidate = false;
   }
 
   @computed
@@ -111,5 +126,6 @@ abstract class _NewNewsFormsPageControllerBase with Store {
   get isValid =>
       validateName() == null &&
       validateDate() == null &&
-      validateDescription() == null;
+      validateDescription() == null &&
+      canValidate;
 }

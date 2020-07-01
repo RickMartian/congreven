@@ -149,6 +149,9 @@ class _NewActivityPageState extends State<NewActivityPage> {
         builder: (_) {
           return FloatingActionButton(
             onPressed: () {
+              if (!newActivityFormsPageController.canValidate) {
+                newActivityFormsPageController.changeCanValidate(true);
+              }
               if (!newActivityFormsPageController.isLoadingSomeAction &&
                   newActivityFormsPageController.isValid) {
                 if (newActivityFormsPageController.isEditting) {

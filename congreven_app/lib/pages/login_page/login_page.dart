@@ -29,7 +29,6 @@ class LoginPage extends StatelessWidget {
             flex: 2,
             child: Container(
               margin: EdgeInsets.symmetric(horizontal: 20.0),
-              // color: Colors.yellow,
               child: ListView(
                 children: <Widget>[
                   Observer(

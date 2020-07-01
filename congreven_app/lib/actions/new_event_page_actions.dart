@@ -132,7 +132,7 @@ createNewEvent(BuildContext context) async {
     final data =
         response.body.isNotEmpty ? convert.jsonDecode(response.body) : null;
     if (response.statusCode == 200) {
-      Navigator.pop(context);
+      Navigator.pop(context, "needToFetch");
       if (data != null) {
         toast(
           title: "Sucesso!",
@@ -142,7 +142,6 @@ createNewEvent(BuildContext context) async {
         );
       }
       cleanNewEventState(context);
-      fetchEvents(context);
     } else if (response.statusCode == 400) {
       toast(
         title: "Erro",

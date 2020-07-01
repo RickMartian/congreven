@@ -119,6 +119,38 @@ mixin _$NewGuestSpeakerFormsPageController
     });
   }
 
+  final _$guestSpeakerToEditAtom =
+      Atom(name: '_NewGuestSpeakerFormsPageControllerBase.guestSpeakerToEdit');
+
+  @override
+  dynamic get guestSpeakerToEdit {
+    _$guestSpeakerToEditAtom.reportRead();
+    return super.guestSpeakerToEdit;
+  }
+
+  @override
+  set guestSpeakerToEdit(dynamic value) {
+    _$guestSpeakerToEditAtom.reportWrite(value, super.guestSpeakerToEdit, () {
+      super.guestSpeakerToEdit = value;
+    });
+  }
+
+  final _$canValidateAtom =
+      Atom(name: '_NewGuestSpeakerFormsPageControllerBase.canValidate');
+
+  @override
+  bool get canValidate {
+    _$canValidateAtom.reportRead();
+    return super.canValidate;
+  }
+
+  @override
+  set canValidate(bool value) {
+    _$canValidateAtom.reportWrite(value, super.canValidate, () {
+      super.canValidate = value;
+    });
+  }
+
   final _$_NewGuestSpeakerFormsPageControllerBaseActionController =
       ActionController(name: '_NewGuestSpeakerFormsPageControllerBase');
 
@@ -215,6 +247,33 @@ mixin _$NewGuestSpeakerFormsPageController
   }
 
   @override
+  void changeGuestSpeakerToEdit(dynamic guestSpeaker) {
+    final _$actionInfo =
+        _$_NewGuestSpeakerFormsPageControllerBaseActionController.startAction(
+            name:
+                '_NewGuestSpeakerFormsPageControllerBase.changeGuestSpeakerToEdit');
+    try {
+      return super.changeGuestSpeakerToEdit(guestSpeaker);
+    } finally {
+      _$_NewGuestSpeakerFormsPageControllerBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void changeCanValidate(bool status) {
+    final _$actionInfo =
+        _$_NewGuestSpeakerFormsPageControllerBaseActionController.startAction(
+            name: '_NewGuestSpeakerFormsPageControllerBase.changeCanValidate');
+    try {
+      return super.changeCanValidate(status);
+    } finally {
+      _$_NewGuestSpeakerFormsPageControllerBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 isLoadingSomeAction: ${isLoadingSomeAction},
@@ -223,6 +282,8 @@ rg: ${rg},
 scholarity: ${scholarity},
 date: ${date},
 isEditting: ${isEditting},
+guestSpeakerToEdit: ${guestSpeakerToEdit},
+canValidate: ${canValidate},
 guestSpeakerToRegister: ${guestSpeakerToRegister},
 isValid: ${isValid}
     ''';

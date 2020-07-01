@@ -147,6 +147,9 @@ class _NewEventPageState extends State<NewEventPage> {
         builder: (_) {
           return FloatingActionButton(
             onPressed: () {
+              if (!newEventFormsPageController.canValidate) {
+                newEventFormsPageController.changeCanValidate(true);
+              }
               if (!newEventFormsPageController.isLoadingSomeAction &&
                   newEventFormsPageController.isValid) {
                 if (myEventsEditPageController.eventToUse != null) {

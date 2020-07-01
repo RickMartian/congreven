@@ -147,11 +147,11 @@ class _NewNewsPageState extends State<NewNewsPage> {
         builder: (_) {
           return FloatingActionButton(
             onPressed: () {
+              if (!newNewsFormsPageController.canValidate) {
+                newNewsFormsPageController.changeCanValidate(true);
+              }
               if (!newNewsFormsPageController.isLoadingSomeAction &&
                   newNewsFormsPageController.isValid) {
-                // if (myEventsEditPageController.eventToUse != null) {
-                //   updateEvent(context);
-                // } else {
                 createNewNews(
                   context,
                   myEventsEditPageController.eventToUse != null
