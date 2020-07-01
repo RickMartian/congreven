@@ -114,11 +114,7 @@ Widget _introScreen() {
     children: <Widget>[
       SplashScreen(
         seconds: 5,
-        gradientBackground: LinearGradient(
-          begin: Alignment.topRight,
-          end: Alignment.bottomLeft,
-          colors: [Color(0xffED213A), Color(0xff93291E)],
-        ),
+        backgroundColor: Colors.white,
         navigateAfterSeconds: EnterPage(),
         loaderColor: Colors.transparent,
       ),
@@ -126,7 +122,7 @@ Widget _introScreen() {
         decoration: BoxDecoration(
           image: DecorationImage(
             image: AssetImage("assets/logo.png"),
-            fit: BoxFit.fill,
+            fit: BoxFit.contain,
           ),
         ),
       ),
