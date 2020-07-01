@@ -14,6 +14,7 @@ class Pages {
   static const my_account = 0;
   static const my_events = 1;
   static const back = 2;
+  static const subscribed = 3;
 }
 
 class ProfileHomePage extends StatefulWidget {
@@ -30,14 +31,14 @@ class _ProfileHomePageState extends State<ProfileHomePage> {
     });
   }
 
-  _renderSelectedPage({bool isLoading = false, String cpfOwner}) {
+  _renderSelectedPage({bool isLoading = false}) {
     switch (_selectedPage) {
       case Pages.my_events:
-        return EventsPage(
-          cpfOwner: cpfOwner,
-        );
+        return EventsPage(type: "my_events");
       case Pages.my_account:
         return MyAccountPage();
+      case Pages.subscribed:
+        return EventsPage();
     }
   }
 
@@ -72,7 +73,6 @@ class _ProfileHomePageState extends State<ProfileHomePage> {
     double _deviceHeight = MediaQuery.of(context).size.height;
     final myAccountPageController =
         Provider.of<MyAccountPageController>(context);
-    final userModel = Provider.of<User>(context);
     return Observer(
       builder: (_) {
         return Scaffold(
@@ -105,7 +105,7 @@ class _ProfileHomePageState extends State<ProfileHomePage> {
                 },
                 child: Container(
                   alignment: Alignment.center,
-                  margin: EdgeInsets.fromLTRB(0.0, 12.0, 20.0, 12.0),
+                  margin: EdgeInsets.fromLTRB(0.0, 12.0, 10.0, 12.0),
                   child: Text(
                     "Minha conta",
                     style: TextStyle(
@@ -136,7 +136,7 @@ class _ProfileHomePageState extends State<ProfileHomePage> {
                 },
                 child: Container(
                   alignment: Alignment.center,
-                  margin: EdgeInsets.fromLTRB(0.0, 12.0, 20.0, 12.0),
+                  margin: EdgeInsets.fromLTRB(0.0, 12.0, 10.0, 12.0),
                   child: Text(
                     "Meus eventos",
                     style: TextStyle(
@@ -194,7 +194,7 @@ class _ProfileHomePageState extends State<ProfileHomePage> {
           body: Container(
             color: Theme.of(context).backgroundColor,
             child: Container(
-              child: _renderSelectedPage(cpfOwner: userModel.cpf),
+              child: _renderSelectedPage(),
             ),
           ),
           bottomNavigationBar: BottomAppBar(

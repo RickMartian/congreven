@@ -64,7 +64,10 @@ fetchEvents(BuildContext context) async {
       final data =
           response.body.isNotEmpty ? convert.jsonDecode(response.body) : null;
       if (data != null) {
-        eventsModel.updateEvents(data);
+        final newEvents =
+            data.map((element) => {...element, "isFavorited": false}).toList();
+        print("newEvents -> $newEvents");
+        eventsModel.updateEvents(newEvents);
       }
     } else {
       final respDecoded = convert.jsonDecode(response.body);
@@ -78,6 +81,46 @@ fetchEvents(BuildContext context) async {
     eventsPageController.changeIsFetchingEvents(false);
   } catch (error) {
     eventsPageController.changeIsFetchingEvents(false);
+    toast(
+      title: "Erro",
+      message:
+          "Erro desconhecido. Por favor, reinicie o aplicativo e tente novamente.",
+      duration: Duration(milliseconds: 2000),
+      context: context,
+    );
+  }
+}
+
+deleteEvent(BuildContext context, int eventId) async {
+  final userModel = Provider.of<User>(context, listen: false);
+  try {
+    final auth = "Bearer ${userModel.token}";
+    final response = await http.delete(
+      "${Config.server_url}:${Config.server_port}/events/$eventId",
+      headers: {"Accept": "application/json", "Authorization": auth},
+    );
+    if (response.statusCode == 200) {
+      final data =
+          response.body.isNotEmpty ? convert.jsonDecode(response.body) : null;
+      if (data != null) {
+        toast(
+          title: "Sucesso",
+          message: data["message"] ?? "Evento excluído com sucesso.",
+          duration: Duration(milliseconds: 2000),
+          context: context,
+        );
+        fetchEvents(context);
+      }
+    } else {
+      final respDecoded = convert.jsonDecode(response.body);
+      toast(
+        title: "Erro",
+        message: respDecoded["message"] ?? "Erro desconhecido.",
+        duration: Duration(milliseconds: 2000),
+        context: context,
+      );
+    }
+  } catch (error) {
     toast(
       title: "Erro",
       message:

@@ -3,6 +3,8 @@ import 'package:congreven_app/components/text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'new_guest_speaker_forms_page_controller.dart';
 
@@ -13,6 +15,7 @@ class NewGuestSpeakerFormsPage extends StatefulWidget {
 }
 
 class _NewGuestSpeakerFormsPageState extends State<NewGuestSpeakerFormsPage> {
+  DateFormat _dateFormat;
   final _rgController = MaskedTextController(mask: "00.000.000-0");
   final _dateController = MaskedTextController(mask: "00/00/0000");
   final _nameController = TextEditingController();
@@ -20,6 +23,8 @@ class _NewGuestSpeakerFormsPageState extends State<NewGuestSpeakerFormsPage> {
 
   void initState() {
     super.initState();
+    initializeDateFormatting();
+    _dateFormat = DateFormat("dd/MM/yyyy", 'pt_BR');
     final newGuestSpeakerFormsPageController =
         Provider.of<NewGuestSpeakerFormsPageController>(context, listen: false);
     if (newGuestSpeakerFormsPageController.isEditting &&
@@ -27,11 +32,13 @@ class _NewGuestSpeakerFormsPageState extends State<NewGuestSpeakerFormsPage> {
       final guestSpeaker =
           newGuestSpeakerFormsPageController.guestSpeakerToEdit;
       _rgController.text = guestSpeaker["rg"];
-      _dateController.text = guestSpeaker["bdate"];
+      _dateController.text =
+          _dateFormat.format(DateTime.parse(guestSpeaker["bdate"]));
       _nameController.text = guestSpeaker["name"];
       _scholarityController.text = guestSpeaker["scholarity"];
       newGuestSpeakerFormsPageController.changeName(guestSpeaker["name"]);
-      newGuestSpeakerFormsPageController.changeDate(guestSpeaker["bdate"]);
+      newGuestSpeakerFormsPageController.changeDate(
+          _dateFormat.format(DateTime.parse(guestSpeaker["bdate"])));
       newGuestSpeakerFormsPageController.changeRg(guestSpeaker["rg"]);
       newGuestSpeakerFormsPageController
           .changeScholarity(guestSpeaker["scholarity"]);

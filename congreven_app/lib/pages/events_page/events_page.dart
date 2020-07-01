@@ -1,10 +1,12 @@
 import 'package:congreven_app/actions/events_details_page_actions.dart';
 import 'package:congreven_app/actions/events_page_actions.dart';
 import 'package:congreven_app/models/events.dart';
+import 'package:congreven_app/models/user.dart';
 import 'package:congreven_app/pages/event_details_home_page/event_details_home_page.dart';
 import 'package:congreven_app/pages/events_page/events_page_controller.dart';
 import 'package:congreven_app/pages/my_events_edit_page/my_events_edit_page_controller.dart';
 import 'package:congreven_app/pages/new_event_page/new_event_page.dart';
+import 'package:congreven_app/utils/customDialog.dart';
 import 'package:congreven_app/utils/debouncer.dart';
 import 'package:congreven_app/utils/routeTo.dart';
 import 'package:congreven_app/utils/toast.dart';
@@ -15,8 +17,8 @@ import 'package:provider/provider.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 class EventsPage extends StatefulWidget {
-  final cpfOwner;
-  EventsPage({this.cpfOwner = ""});
+  final type;
+  EventsPage({this.type = ""});
 
   @override
   _EventsPageState createState() => _EventsPageState();
@@ -125,7 +127,9 @@ class _EventsPageState extends State<EventsPage> {
   }
 
   bool verifyIsCpfOwner(eventCpfOwner) {
-    if (eventCpfOwner == widget.cpfOwner) {
+    print("eventCpf -> $eventCpfOwner");
+    final userModel = Provider.of<User>(context, listen: false);
+    if (eventCpfOwner == userModel.cpf) {
       return true;
     }
     return false;
@@ -172,22 +176,70 @@ class _EventsPageState extends State<EventsPage> {
                   SizedBox(
                     height: 8.0,
                   ),
-                  Text(
-                    "${_dateFormat.format(DateTime.parse(events[index]["start_date"]))}",
-                    style: TextStyle(
-                      fontSize: 15.0,
-                      color: Colors.red[300],
-                    ),
-                  ),
-                  SizedBox(
-                    height: 8.0,
-                  ),
-                  Text(
-                    "${events[index]["name"]}",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18.0,
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              "${_dateFormat.format(DateTime.parse(events[index]["start_date"]))}",
+                              style: TextStyle(
+                                fontSize: 15.0,
+                                color: Colors.red[300],
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 8.0,
+                          ),
+                          Text(
+                            "${events[index]["name"]}",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18.0,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          IconButton(
+                            icon: Icon(
+                              Icons.favorite_border,
+                              color: Colors.red,
+                            ),
+                            onPressed: () {},
+                          ),
+                          verifyIsCpfOwner(events[index]["cpf_owner"])
+                              ? IconButton(
+                                  icon: Icon(
+                                    Icons.delete_outline,
+                                    color: Colors.red,
+                                  ),
+                                  onPressed: () {
+                                    customDialog(
+                                      context: context,
+                                      title: "Excluir evento",
+                                      message:
+                                          "Deseja realmente excluir o evento?",
+                                      onPressed: () {
+                                        deleteEvent(
+                                            context, events[index]["id"]);
+                                        Navigator.pop(context);
+                                      },
+                                    );
+                                  },
+                                )
+                              : Container(
+                                  width: 0.0,
+                                  height: 0.0,
+                                ),
+                        ],
+                      ),
+                    ],
                   ),
                   SizedBox(
                     height: 8.0,
@@ -245,17 +297,9 @@ class _EventsPageState extends State<EventsPage> {
     );
   }
 
-  List<dynamic> _filterEventByCpfOwner(List<dynamic> events) {
-    return widget.cpfOwner.isNotEmpty
-        ? events
-            .where((element) => element["cpf_owner"] == widget.cpfOwner)
-            .toList()
-        : events;
-  }
-
   List<dynamic> _filterEventByName(List<dynamic> events) {
     return events.length > 0
-        ? _filterEventByCpfOwner(events)
+        ? events
             .where((element) =>
                 element["name"].toLowerCase().startsWith(_search.toLowerCase()))
             .toList()
