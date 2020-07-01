@@ -62,15 +62,17 @@ getEventByCpfUser({BuildContext context, bool needToReturnData = false}) async {
     );
     print("response body -> ${response.body}");
     if (response.statusCode == 200) {
+      print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
       final data =
           response.body.isNotEmpty ? convert.jsonDecode(response.body) : null;
+      print("data -> $data");
       if (data != null) {
         if (needToReturnData) {
           return data;
         } else {
-          // adiciona os eventos na model de eventos quando for "meus eventos".
           final newEvents =
               data.map((element) => {...element, "isFavorited": true}).toList();
+          print("NEW EVENTSSSSSS -> $newEvents");
           eventsModel.updateEvents(newEvents);
         }
       }
@@ -123,6 +125,11 @@ fetchEvents(BuildContext context) async {
                     : {...element, "isFavorited": false})
                 .toList();
             print("newEvents -> $newEvents");
+            eventsModel.updateEvents(newEvents);
+          } else {
+            final newEvents = data
+                .map((element) => {...element, "isFavorited": false})
+                .toList();
             eventsModel.updateEvents(newEvents);
           }
           eventsPageController.changeIsFetchingEvents(false);

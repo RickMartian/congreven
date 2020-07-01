@@ -1,6 +1,5 @@
 import 'package:congreven_app/actions/events_page_actions.dart';
 import 'package:congreven_app/actions/my_account_page_actions.dart';
-import 'package:congreven_app/models/user.dart';
 import 'package:congreven_app/pages/events_page/events_page.dart';
 import 'package:congreven_app/pages/my_account_page/my_account_page.dart';
 import 'package:congreven_app/pages/my_account_page/my_account_page_controller.dart';
@@ -34,7 +33,7 @@ class _ProfileHomePageState extends State<ProfileHomePage> {
   _renderSelectedPage({bool isLoading = false}) {
     switch (_selectedPage) {
       case Pages.my_events:
-        return EventsPage(type: "my_events");
+        return EventsPage();
       case Pages.my_account:
         return MyAccountPage();
       case Pages.subscribed:
@@ -75,157 +74,164 @@ class _ProfileHomePageState extends State<ProfileHomePage> {
         Provider.of<MyAccountPageController>(context);
     return Observer(
       builder: (_) {
-        return Scaffold(
-          appBar: AppBar(
-            backgroundColor: Theme.of(context).backgroundColor,
-            elevation: 0.0,
-            leading: Builder(
-              builder: (context) {
-                return Container(
-                  margin: EdgeInsets.fromLTRB(20.0, 10.0, 0.0, 10.0),
-                  child: Center(
-                    child: Icon(
-                      Icons.person_outline,
-                      color: Colors.white,
-                    ),
-                  ),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColorDark,
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                );
-              },
-            ),
-            actions: <Widget>[
-              InkWell(
-                onTap: () {
-                  if (!myAccountPageController.isLoadingSomeAction) {
-                    _handleButtonClicked(Pages.my_account);
-                  }
-                },
-                child: Container(
-                  alignment: Alignment.center,
-                  margin: EdgeInsets.fromLTRB(0.0, 12.0, 10.0, 12.0),
-                  child: Text(
-                    "Minha conta",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: _selectedPage == Pages.my_account
-                          ? FontWeight.bold
-                          : FontWeight.normal,
-                    ),
-                  ),
-                  decoration: BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(
-                        width: _selectedPage == Pages.my_account ? 2.0 : 0.0,
-                        color: _selectedPage == Pages.my_account
-                            ? Colors.black
-                            : Colors.transparent,
+        return WillPopScope(
+          onWillPop: () async {
+            Navigator.pop(context, "needToFetch");
+            return false;
+          },
+          child: Scaffold(
+            appBar: AppBar(
+              backgroundColor: Theme.of(context).backgroundColor,
+              elevation: 0.0,
+              leading: Builder(
+                builder: (context) {
+                  return Container(
+                    margin: EdgeInsets.fromLTRB(20.0, 10.0, 0.0, 10.0),
+                    child: Center(
+                      child: Icon(
+                        Icons.person_outline,
+                        color: Colors.white,
                       ),
                     ),
-                  ),
-                ),
-              ),
-              InkWell(
-                onTap: () {
-                  if (!myAccountPageController.isLoadingSomeAction) {
-                    fetchEvents(context);
-                    _handleButtonClicked(Pages.my_events);
-                  }
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).primaryColorDark,
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                  );
                 },
-                child: Container(
-                  alignment: Alignment.center,
-                  margin: EdgeInsets.fromLTRB(0.0, 12.0, 10.0, 12.0),
-                  child: Text(
-                    "Meus eventos",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: _selectedPage == Pages.my_events
-                          ? FontWeight.bold
-                          : FontWeight.normal,
-                    ),
-                  ),
-                  decoration: BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(
-                        width: _selectedPage == Pages.my_events ? 2.0 : 0.0,
-                        color: _selectedPage == Pages.my_events
-                            ? Colors.black
-                            : Colors.transparent,
-                      ),
-                    ),
-                  ),
-                ),
               ),
-              InkWell(
-                onTap: () {
-                  if (!myAccountPageController.isLoadingSomeAction) {
-                    _handleButtonClicked(Pages.back);
-                    Navigator.pop(context);
-                  }
-                },
-                child: Container(
-                  alignment: Alignment.center,
-                  margin: EdgeInsets.fromLTRB(0.0, 12.0, 20.0, 12.0),
-                  child: Text(
-                    "Voltar",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: _selectedPage == Pages.back
-                          ? FontWeight.bold
-                          : FontWeight.normal,
-                    ),
-                  ),
-                  decoration: BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(
-                        width: _selectedPage == Pages.back ? 2.0 : 0.0,
-                        color: _selectedPage == Pages.back
-                            ? Colors.black
-                            : Colors.transparent,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          body: Container(
-            color: Theme.of(context).backgroundColor,
-            child: Container(
-              child: _renderSelectedPage(),
-            ),
-          ),
-          bottomNavigationBar: BottomAppBar(
-            color: Colors.grey[200],
-            child: Container(
-              height: _deviceHeight / 11,
-            ),
-          ),
-          floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-          floatingActionButton: Observer(
-            builder: (_) {
-              return FloatingActionButton(
-                  onPressed: () {
+              actions: <Widget>[
+                InkWell(
+                  onTap: () {
                     if (!myAccountPageController.isLoadingSomeAction) {
-                      if (_isSelectedPage(Pages.my_events)) {
-                        routeTo(context, NewEventPage());
-                      } else if (_isSelectedPage(Pages.my_account)) {
-                        if (verifyIsValidToUpdateUser(context)) {
-                          updateUser(context);
-                        }
-                      }
+                      _handleButtonClicked(Pages.my_account);
                     }
                   },
-                  backgroundColor: Theme.of(context).primaryColorDark,
-                  elevation: 0.0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.0),
+                  child: Container(
+                    alignment: Alignment.center,
+                    margin: EdgeInsets.fromLTRB(0.0, 12.0, 10.0, 12.0),
+                    child: Text(
+                      "Minha conta",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: _selectedPage == Pages.my_account
+                            ? FontWeight.bold
+                            : FontWeight.normal,
+                      ),
+                    ),
+                    decoration: BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          width: _selectedPage == Pages.my_account ? 2.0 : 0.0,
+                          color: _selectedPage == Pages.my_account
+                              ? Colors.black
+                              : Colors.transparent,
+                        ),
+                      ),
+                    ),
                   ),
-                  child: _renderIcon(
-                      isLoading: myAccountPageController.isLoadingSomeAction));
-            },
+                ),
+                InkWell(
+                  onTap: () {
+                    if (!myAccountPageController.isLoadingSomeAction) {
+                      getEventByCpfUser(context: context);
+                      _handleButtonClicked(Pages.my_events);
+                    }
+                  },
+                  child: Container(
+                    alignment: Alignment.center,
+                    margin: EdgeInsets.fromLTRB(0.0, 12.0, 10.0, 12.0),
+                    child: Text(
+                      "Meus eventos",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: _selectedPage == Pages.my_events
+                            ? FontWeight.bold
+                            : FontWeight.normal,
+                      ),
+                    ),
+                    decoration: BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          width: _selectedPage == Pages.my_events ? 2.0 : 0.0,
+                          color: _selectedPage == Pages.my_events
+                              ? Colors.black
+                              : Colors.transparent,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                InkWell(
+                  onTap: () {
+                    if (!myAccountPageController.isLoadingSomeAction) {
+                      Navigator.pop(context, "needToFetch");
+                    }
+                  },
+                  child: Container(
+                    alignment: Alignment.center,
+                    margin: EdgeInsets.fromLTRB(0.0, 12.0, 20.0, 12.0),
+                    child: Text(
+                      "Voltar",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: _selectedPage == Pages.back
+                            ? FontWeight.bold
+                            : FontWeight.normal,
+                      ),
+                    ),
+                    decoration: BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          width: _selectedPage == Pages.back ? 2.0 : 0.0,
+                          color: _selectedPage == Pages.back
+                              ? Colors.black
+                              : Colors.transparent,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            body: Container(
+              color: Theme.of(context).backgroundColor,
+              child: Container(
+                child: _renderSelectedPage(),
+              ),
+            ),
+            bottomNavigationBar: BottomAppBar(
+              color: Colors.grey[200],
+              child: Container(
+                height: _deviceHeight / 11,
+              ),
+            ),
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.endDocked,
+            floatingActionButton: Observer(
+              builder: (_) {
+                return FloatingActionButton(
+                    onPressed: () {
+                      if (!myAccountPageController.isLoadingSomeAction) {
+                        if (_isSelectedPage(Pages.my_events)) {
+                          routeTo(context, NewEventPage());
+                        } else if (_isSelectedPage(Pages.my_account)) {
+                          if (verifyIsValidToUpdateUser(context)) {
+                            updateUser(context);
+                          }
+                        }
+                      }
+                    },
+                    backgroundColor: Theme.of(context).primaryColorDark,
+                    elevation: 0.0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    child: _renderIcon(
+                        isLoading:
+                            myAccountPageController.isLoadingSomeAction));
+              },
+            ),
           ),
         );
       },

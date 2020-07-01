@@ -28,9 +28,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     changeIsLoadingApp(context, false);
-    if (_selectedPage == Pages.events) {
-      fetchEvents(context);
-    }
+    fetchEvents(context);
   }
 
   _handleButtonClicked(int pageSelected) {
@@ -61,6 +59,15 @@ class _HomePageState extends State<HomePage> {
         } else {
           return EventsPage();
         }
+    }
+  }
+
+  _navigateAndWaitForResponse(BuildContext context) async {
+    final result = await Navigator.push(
+        context, MaterialPageRoute(builder: (context) => ProfileHomePage()));
+
+    if (result == "needToFetch") {
+      fetchEvents(context);
     }
   }
 
@@ -105,7 +112,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                             onPressed: () {
                               if (!homePageController.isLoadingLogout) {
-                                routeTo(context, ProfileHomePage());
+                                _navigateAndWaitForResponse(context);
                               }
                             },
                           ),

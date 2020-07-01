@@ -17,9 +17,6 @@ import 'package:provider/provider.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 class EventsPage extends StatefulWidget {
-  final type;
-  EventsPage({this.type = ""});
-
   @override
   _EventsPageState createState() => _EventsPageState();
 }
