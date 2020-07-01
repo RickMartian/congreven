@@ -208,10 +208,15 @@ class _EventsPageState extends State<EventsPage> {
                         children: [
                           IconButton(
                             icon: Icon(
-                              Icons.favorite_border,
+                              events[index]["isFavorited"]
+                                  ? Icons.favorite
+                                  : Icons.favorite_border,
                               color: Colors.red,
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+                              changeFavoritedEvent(context, events[index],
+                                  !events[index]["isFavorited"]);
+                            },
                           ),
                           verifyIsCpfOwner(events[index]["cpf_owner"])
                               ? IconButton(
@@ -350,6 +355,7 @@ class _EventsPageState extends State<EventsPage> {
           Flexible(
             child: Observer(
               builder: (_) {
+                print("events -> ${eventsModel.events}");
                 return !eventsPageController.isFetchingEvents
                     ? _filterEventByName(eventsModel.events).length > 0
                         ? ListView.builder(

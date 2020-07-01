@@ -9,7 +9,7 @@ abstract class _EventsBase with Store {
 
   @action
   void updateEvents(List<dynamic> newEvents) {
-    ObservableList<dynamic> temp = ObservableList<dynamic>();
+    ObservableList<dynamic> temp = ObservableList<dynamic>().asObservable();
     temp.addAll(newEvents);
     events = temp;
   }
