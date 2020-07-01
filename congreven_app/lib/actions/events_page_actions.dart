@@ -60,19 +60,15 @@ getEventByCpfUser({BuildContext context, bool needToReturnData = false}) async {
       "${Config.server_url}:${Config.server_port}/events/user/${userModel.cpf}",
       headers: {"Accept": "application/json", "Authorization": auth},
     );
-    print("response body -> ${response.body}");
     if (response.statusCode == 200) {
-      print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
       final data =
           response.body.isNotEmpty ? convert.jsonDecode(response.body) : null;
-      print("data -> $data");
       if (data != null) {
         if (needToReturnData) {
           return data;
         } else {
           final newEvents =
               data.map((element) => {...element, "isFavorited": true}).toList();
-          print("NEW EVENTSSSSSS -> $newEvents");
           eventsModel.updateEvents(newEvents);
         }
       }
@@ -124,7 +120,6 @@ fetchEvents(BuildContext context) async {
                     ? {...element, "isFavorited": true}
                     : {...element, "isFavorited": false})
                 .toList();
-            print("newEvents -> $newEvents");
             eventsModel.updateEvents(newEvents);
           } else {
             final newEvents = data
@@ -198,29 +193,24 @@ deleteEvent(BuildContext context, int eventId) async {
 }
 
 void changeFavoritedEvent(BuildContext context, dynamic event, bool isAdding) {
-  print("isAdding -> $isAdding");
   final eventsModel = Provider.of<Events>(context, listen: false);
   if (isAdding) {
     createSubscribe(context, event["id"]).then((resp) {
-      print("resp creating subscribe -> $resp");
       if (resp != null) {
         event["isFavorited"] = true;
         final newEvents = eventsModel.events
             .map((element) => element["id"] == event["id"] ? event : element)
             .toList();
-        print("newEventsList isAdding-> $newEvents");
         eventsModel.updateEvents(newEvents);
       }
     });
   } else {
     deleteSubscribe(context, event["id"]).then((resp) {
-      print("resp removing subscribe -> $resp");
       if (resp != null) {
         event["isFavorited"] = false;
         final newEvents = eventsModel.events
             .map((element) => element["id"] == event["id"] ? event : element)
             .toList();
-        print("newEventsList isNotAdding -> $newEvents");
         eventsModel.updateEvents(newEvents);
       }
     });
@@ -235,7 +225,6 @@ deleteSubscribe(BuildContext context, int eventId) async {
       "${Config.server_url}:${Config.server_port}/subscribes?event_id=$eventId&cpf_user=${userModel.cpf}",
       headers: {"Accept": "application/json", "Authorization": auth},
     );
-    print("resp body DELETE SUBSCRIBE -> ${response.body}");
     if (response.statusCode == 200) {
       final data =
           response.body.isNotEmpty ? convert.jsonDecode(response.body) : null;
@@ -283,7 +272,6 @@ createSubscribe(BuildContext context, int eventId) async {
         "Content-Type": "application/json",
       },
     );
-    print("response body -> ${response.body}");
     if (response.statusCode == 200) {
       final data =
           response.body.isNotEmpty ? convert.jsonDecode(response.body) : null;

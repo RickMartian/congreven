@@ -124,7 +124,6 @@ class _EventsPageState extends State<EventsPage> {
   }
 
   bool verifyIsCpfOwner(eventCpfOwner) {
-    print("eventCpf -> $eventCpfOwner");
     final userModel = Provider.of<User>(context, listen: false);
     if (eventCpfOwner == userModel.cpf) {
       return true;
@@ -352,7 +351,6 @@ class _EventsPageState extends State<EventsPage> {
           Flexible(
             child: Observer(
               builder: (_) {
-                print("events -> ${eventsModel.events}");
                 return !eventsPageController.isFetchingEvents
                     ? _filterEventByName(eventsModel.events).length > 0
                         ? ListView.builder(

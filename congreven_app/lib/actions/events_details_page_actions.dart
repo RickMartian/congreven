@@ -88,7 +88,6 @@ getActivityByEventId(BuildContext context, int eventId) async {
     if (response.statusCode == 200) {
       final data =
           response.body.isNotEmpty ? convert.jsonDecode(response.body) : null;
-      print("data -> $data");
       if (data != null) {
         if (data is Map) {
           activitiesModel.changeFetchingActivitiesErrorMessage(

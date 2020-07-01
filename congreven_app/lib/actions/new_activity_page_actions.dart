@@ -67,7 +67,6 @@ createNewActivity(BuildContext context, int eventId) async {
     }
     newActivityFormsPageController.changeIsLoadingSomeAction(false);
   } catch (error) {
-    print("error -> $error");
     newActivityFormsPageController.changeIsLoadingSomeAction(false);
     toast(
       title: "Erro",
@@ -85,8 +84,6 @@ updateActivity(BuildContext context, int eventId) async {
       Provider.of<NewActivityFormsPageController>(context, listen: false);
   newActivityFormsPageController.changeIsLoadingSomeAction(true);
   final activity = newActivityFormsPageController.activityToRegister;
-  print(
-      "ID ACTIVITY -> ${newActivityFormsPageController.activityToEdit["id"]}");
   try {
     final auth = "Bearer ${userModel.token}";
     final response = await http.put(
