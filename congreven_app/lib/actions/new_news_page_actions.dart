@@ -22,6 +22,7 @@ createNewNews(BuildContext context, int eventId) async {
       Provider.of<NewNewsFormsPageController>(context, listen: false);
   newNewsFormsPageController.changeIsLoadingSomeAction(true);
   final news = newNewsFormsPageController.newsToRegister;
+  news["event_id"] = eventId.toString();
   try {
     final auth = "Bearer ${userModel.token}";
     final response = await http.post(

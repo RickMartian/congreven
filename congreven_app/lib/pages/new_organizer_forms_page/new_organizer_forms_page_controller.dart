@@ -48,11 +48,20 @@ abstract class _NewOrganizerFormsPageControllerBase with Store {
     organizerToEdit = organizer;
   }
 
+  @observable
+  bool canValidate = false;
+
+  @action
+  void changeCanValidate(bool status) {
+    canValidate = status;
+  }
+
   @action
   void clean() {
     name = null;
     cnpj = null;
     description = null;
+    canValidate = false;
   }
 
   @computed
@@ -63,22 +72,28 @@ abstract class _NewOrganizerFormsPageControllerBase with Store {
       };
 
   String validateDescription() {
-    if (description == null || description.isEmpty) {
-      return "O campo 'descrição' é obrigatório!";
+    if (canValidate) {
+      if (description == null || description.isEmpty) {
+        return "O campo 'descrição' é obrigatório!";
+      }
     }
     return null;
   }
 
   String validateName() {
-    if (name == null || name.isEmpty) {
-      return "O campo 'nome' é obrigatório!";
+    if (canValidate) {
+      if (name == null || name.isEmpty) {
+        return "O campo 'nome' é obrigatório!";
+      }
     }
     return null;
   }
 
   String validateCnpj() {
-    if (cnpj == null || cnpj.isEmpty) {
-      return "O campo 'cnpj' é obrigatório!";
+    if (canValidate) {
+      if (cnpj == null || cnpj.isEmpty) {
+        return "O campo 'cnpj' é obrigatório!";
+      }
     }
     return null;
   }
@@ -87,5 +102,6 @@ abstract class _NewOrganizerFormsPageControllerBase with Store {
   get isValid =>
       validateName() == null &&
       validateCnpj() == null &&
-      validateDescription() == null;
+      validateDescription() == null &&
+      canValidate;
 }

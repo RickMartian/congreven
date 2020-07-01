@@ -87,6 +87,54 @@ mixin _$NewOrganizerFormsPageController
     });
   }
 
+  final _$isEdittingAtom =
+      Atom(name: '_NewOrganizerFormsPageControllerBase.isEditting');
+
+  @override
+  bool get isEditting {
+    _$isEdittingAtom.reportRead();
+    return super.isEditting;
+  }
+
+  @override
+  set isEditting(bool value) {
+    _$isEdittingAtom.reportWrite(value, super.isEditting, () {
+      super.isEditting = value;
+    });
+  }
+
+  final _$organizerToEditAtom =
+      Atom(name: '_NewOrganizerFormsPageControllerBase.organizerToEdit');
+
+  @override
+  dynamic get organizerToEdit {
+    _$organizerToEditAtom.reportRead();
+    return super.organizerToEdit;
+  }
+
+  @override
+  set organizerToEdit(dynamic value) {
+    _$organizerToEditAtom.reportWrite(value, super.organizerToEdit, () {
+      super.organizerToEdit = value;
+    });
+  }
+
+  final _$canValidateAtom =
+      Atom(name: '_NewOrganizerFormsPageControllerBase.canValidate');
+
+  @override
+  bool get canValidate {
+    _$canValidateAtom.reportRead();
+    return super.canValidate;
+  }
+
+  @override
+  set canValidate(bool value) {
+    _$canValidateAtom.reportWrite(value, super.canValidate, () {
+      super.canValidate = value;
+    });
+  }
+
   final _$_NewOrganizerFormsPageControllerBaseActionController =
       ActionController(name: '_NewOrganizerFormsPageControllerBase');
 
@@ -142,6 +190,45 @@ mixin _$NewOrganizerFormsPageController
   }
 
   @override
+  void changeIsEditting(bool status) {
+    final _$actionInfo =
+        _$_NewOrganizerFormsPageControllerBaseActionController.startAction(
+            name: '_NewOrganizerFormsPageControllerBase.changeIsEditting');
+    try {
+      return super.changeIsEditting(status);
+    } finally {
+      _$_NewOrganizerFormsPageControllerBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void changeOrganizerToEdit(dynamic organizer) {
+    final _$actionInfo =
+        _$_NewOrganizerFormsPageControllerBaseActionController.startAction(
+            name: '_NewOrganizerFormsPageControllerBase.changeOrganizerToEdit');
+    try {
+      return super.changeOrganizerToEdit(organizer);
+    } finally {
+      _$_NewOrganizerFormsPageControllerBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void changeCanValidate(bool status) {
+    final _$actionInfo =
+        _$_NewOrganizerFormsPageControllerBaseActionController.startAction(
+            name: '_NewOrganizerFormsPageControllerBase.changeCanValidate');
+    try {
+      return super.changeCanValidate(status);
+    } finally {
+      _$_NewOrganizerFormsPageControllerBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void clean() {
     final _$actionInfo = _$_NewOrganizerFormsPageControllerBaseActionController
         .startAction(name: '_NewOrganizerFormsPageControllerBase.clean');
@@ -160,6 +247,9 @@ isLoadingSomeAction: ${isLoadingSomeAction},
 name: ${name},
 cnpj: ${cnpj},
 description: ${description},
+isEditting: ${isEditting},
+organizerToEdit: ${organizerToEdit},
+canValidate: ${canValidate},
 organizerToRegister: ${organizerToRegister},
 isValid: ${isValid}
     ''';

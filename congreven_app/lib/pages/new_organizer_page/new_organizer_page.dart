@@ -147,6 +147,9 @@ class _NewOrganizerPageState extends State<NewOrganizerPage> {
         builder: (_) {
           return FloatingActionButton(
             onPressed: () {
+              if (!newOrganizerFormsPageController.canValidate) {
+                newOrganizerFormsPageController.changeCanValidate(true);
+              }
               if (!newOrganizerFormsPageController.isLoadingSomeAction &&
                   newOrganizerFormsPageController.isValid) {
                 if (newOrganizerFormsPageController.isEditting) {

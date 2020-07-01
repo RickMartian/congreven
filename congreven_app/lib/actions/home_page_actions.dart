@@ -1,8 +1,19 @@
 import 'package:congreven_app/interfaces/local_storage_interface.dart';
+import 'package:congreven_app/models/activities.dart';
+import 'package:congreven_app/models/guest_speakers.dart';
+import 'package:congreven_app/models/news.dart';
 import 'package:congreven_app/models/user.dart';
 import 'package:congreven_app/pages/enter_page/enter_page.dart';
 import 'package:congreven_app/pages/enter_page/enter_page_controller.dart';
 import 'package:congreven_app/pages/home_page/home_page_controller.dart';
+import 'package:congreven_app/pages/login_page/login_page_controller.dart';
+import 'package:congreven_app/pages/new_activity_forms_page/new_activity_forms_page_controller.dart';
+import 'package:congreven_app/pages/new_event_forms_page/new_event_forms_page_controller.dart';
+import 'package:congreven_app/pages/new_guest_speaker_forms_page/new_guest_speaker_forms_page_controller.dart';
+import 'package:congreven_app/pages/new_news_forms_page/new_news_forms_page.dart';
+import 'package:congreven_app/pages/new_news_forms_page/new_news_forms_page_controller.dart';
+import 'package:congreven_app/pages/new_organizer_forms_page/new_organizer_forms_page_controller.dart';
+import 'package:congreven_app/pages/register_page/register_page_controller.dart';
 import 'package:congreven_app/services/shared_local_storage_service.dart';
 import 'package:congreven_app/utils/delay.dart';
 import 'package:congreven_app/utils/routeTo.dart';
@@ -19,6 +30,36 @@ changeIsLoadingApp(BuildContext context, bool status) {
   delayThings(func: () {
     enterPageController.changeIsLoadingApp(false);
   });
+}
+
+cleanAll(BuildContext context) {
+  final newsModel = Provider.of<News>(context, listen: false);
+  final activitiesModel = Provider.of<Activities>(context, listen: false);
+  final newActivityFormsPageController =
+      Provider.of<NewActivityFormsPageController>(context, listen: false);
+  final newEventFormsPageController =
+      Provider.of<NewEventFormsPageController>(context, listen: false);
+  final loginPageController =
+      Provider.of<LoginPageController>(context, listen: false);
+  final registerPageController =
+      Provider.of<RegisterPageController>(context, listen: false);
+  final newGuestSpeakerFormsPageController =
+      Provider.of<NewGuestSpeakerFormsPageController>(context, listen: false);
+  final newNewsFormsPageController =
+      Provider.of<NewNewsFormsPageController>(context, listen: false);
+  final newOrganizerFormsPageController =
+      Provider.of<NewOrganizerFormsPageController>(context, listen: false);
+  final guestSpeakersModel = Provider.of<GuestSpeakers>(context, listen: false);
+  newsModel.clean();
+  activitiesModel.clean();
+  newActivityFormsPageController.clean();
+  newEventFormsPageController.clean();
+  loginPageController.clean();
+  registerPageController.clean();
+  newGuestSpeakerFormsPageController.clean();
+  newNewsFormsPageController.clean();
+  newOrganizerFormsPageController.clean();
+  guestSpeakersModel.clean();
 }
 
 logoutUser({String token, BuildContext context}) async {
@@ -42,6 +83,7 @@ logoutUser({String token, BuildContext context}) async {
     } else {
       userModel.clean();
       storage.delete("userData");
+      cleanAll(context);
       routeTo(context, EnterPage());
     }
     homePageController.changeIsLoadingLogout(false);

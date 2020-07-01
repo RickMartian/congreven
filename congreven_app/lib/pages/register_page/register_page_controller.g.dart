@@ -100,6 +100,22 @@ mixin _$RegisterPageController on _RegisterPageControllerBase, Store {
     });
   }
 
+  final _$canValidateAtom =
+      Atom(name: '_RegisterPageControllerBase.canValidate');
+
+  @override
+  bool get canValidate {
+    _$canValidateAtom.reportRead();
+    return super.canValidate;
+  }
+
+  @override
+  set canValidate(bool value) {
+    _$canValidateAtom.reportWrite(value, super.canValidate, () {
+      super.canValidate = value;
+    });
+  }
+
   final _$_RegisterPageControllerBaseActionController =
       ActionController(name: '_RegisterPageControllerBase');
 
@@ -159,6 +175,17 @@ mixin _$RegisterPageController on _RegisterPageControllerBase, Store {
   }
 
   @override
+  void changeCanValidate(bool status) {
+    final _$actionInfo = _$_RegisterPageControllerBaseActionController
+        .startAction(name: '_RegisterPageControllerBase.changeCanValidate');
+    try {
+      return super.changeCanValidate(status);
+    } finally {
+      _$_RegisterPageControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void clean() {
     final _$actionInfo = _$_RegisterPageControllerBaseActionController
         .startAction(name: '_RegisterPageControllerBase.clean');
@@ -177,6 +204,7 @@ cpf: ${cpf},
 email: ${email},
 password: ${password},
 confirmPassword: ${confirmPassword},
+canValidate: ${canValidate},
 userToRegister: ${userToRegister},
 isValid: ${isValid}
     ''';

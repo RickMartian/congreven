@@ -146,6 +146,9 @@ class _NewGuestSpeakerPageState extends State<NewGuestSpeakerPage> {
         builder: (_) {
           return FloatingActionButton(
             onPressed: () {
+              if (!newGuestSpeakerFormsPageController.canValidate) {
+                newGuestSpeakerFormsPageController.changeCanValidate(true);
+              }
               if (!newGuestSpeakerFormsPageController.isLoadingSomeAction &&
                   newGuestSpeakerFormsPageController.isValid) {
                 if (newGuestSpeakerFormsPageController.isEditting) {

@@ -18,15 +18,23 @@ abstract class _LoginPageControllerBase with Store {
   @action
   void changePassword(String newPassword) => password = newPassword;
 
+  @observable
+  bool canValidate = false;
+
+  @action
+  void changeCanValidate(bool status) {
+    canValidate = status;
+  }
+
   String validateEmail() {
-    if (email == null || email.isEmpty) {
+    if ((email == null || email.isEmpty) && canValidate) {
       return "O campo 'email' é obrigatório!";
     }
     return null;
   }
 
   String validatePassword() {
-    if (password == null || password.isEmpty) {
+    if ((password == null || password.isEmpty) && canValidate) {
       return "O campo 'senha' é obrigatório!";
     }
     return null;
@@ -36,11 +44,13 @@ abstract class _LoginPageControllerBase with Store {
   void clean() {
     email = null;
     password = null;
+    canValidate = false;
   }
 
   @computed
   get userToLogin => {"email": email, "password": password};
 
   @computed
-  get isValid => validateEmail() == null && validatePassword() == null;
+  get isValid =>
+      validateEmail() == null && validatePassword() == null && canValidate;
 }

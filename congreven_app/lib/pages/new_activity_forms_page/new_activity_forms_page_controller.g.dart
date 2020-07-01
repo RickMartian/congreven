@@ -134,6 +134,54 @@ mixin _$NewActivityFormsPageController
     });
   }
 
+  final _$isEdittingAtom =
+      Atom(name: '_NewActivityFormsPageControllerBase.isEditting');
+
+  @override
+  bool get isEditting {
+    _$isEdittingAtom.reportRead();
+    return super.isEditting;
+  }
+
+  @override
+  set isEditting(bool value) {
+    _$isEdittingAtom.reportWrite(value, super.isEditting, () {
+      super.isEditting = value;
+    });
+  }
+
+  final _$activityToEditAtom =
+      Atom(name: '_NewActivityFormsPageControllerBase.activityToEdit');
+
+  @override
+  dynamic get activityToEdit {
+    _$activityToEditAtom.reportRead();
+    return super.activityToEdit;
+  }
+
+  @override
+  set activityToEdit(dynamic value) {
+    _$activityToEditAtom.reportWrite(value, super.activityToEdit, () {
+      super.activityToEdit = value;
+    });
+  }
+
+  final _$canValidateAtom =
+      Atom(name: '_NewActivityFormsPageControllerBase.canValidate');
+
+  @override
+  bool get canValidate {
+    _$canValidateAtom.reportRead();
+    return super.canValidate;
+  }
+
+  @override
+  set canValidate(bool value) {
+    _$canValidateAtom.reportWrite(value, super.canValidate, () {
+      super.canValidate = value;
+    });
+  }
+
   final _$_NewActivityFormsPageControllerBaseActionController =
       ActionController(name: '_NewActivityFormsPageControllerBase');
 
@@ -226,6 +274,45 @@ mixin _$NewActivityFormsPageController
   }
 
   @override
+  void changeIsEditting(bool status) {
+    final _$actionInfo =
+        _$_NewActivityFormsPageControllerBaseActionController.startAction(
+            name: '_NewActivityFormsPageControllerBase.changeIsEditting');
+    try {
+      return super.changeIsEditting(status);
+    } finally {
+      _$_NewActivityFormsPageControllerBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void changeActivityToEdit(dynamic activity) {
+    final _$actionInfo =
+        _$_NewActivityFormsPageControllerBaseActionController.startAction(
+            name: '_NewActivityFormsPageControllerBase.changeActivityToEdit');
+    try {
+      return super.changeActivityToEdit(activity);
+    } finally {
+      _$_NewActivityFormsPageControllerBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void changeCanValidate(bool status) {
+    final _$actionInfo =
+        _$_NewActivityFormsPageControllerBaseActionController.startAction(
+            name: '_NewActivityFormsPageControllerBase.changeCanValidate');
+    try {
+      return super.changeCanValidate(status);
+    } finally {
+      _$_NewActivityFormsPageControllerBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void clean() {
     final _$actionInfo = _$_NewActivityFormsPageControllerBaseActionController
         .startAction(name: '_NewActivityFormsPageControllerBase.clean');
@@ -247,6 +334,9 @@ period: ${period},
 startHour: ${startHour},
 endHour: ${endHour},
 isLoadingSomeAction: ${isLoadingSomeAction},
+isEditting: ${isEditting},
+activityToEdit: ${activityToEdit},
+canValidate: ${canValidate},
 activityToRegister: ${activityToRegister},
 isValid: ${isValid}
     ''';

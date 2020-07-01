@@ -180,6 +180,22 @@ mixin _$NewEventFormsPageController on _NewEventFormsPageControllerBase, Store {
     });
   }
 
+  final _$canValidateAtom =
+      Atom(name: '_NewEventFormsPageControllerBase.canValidate');
+
+  @override
+  bool get canValidate {
+    _$canValidateAtom.reportRead();
+    return super.canValidate;
+  }
+
+  @override
+  set canValidate(bool value) {
+    _$canValidateAtom.reportWrite(value, super.canValidate, () {
+      super.canValidate = value;
+    });
+  }
+
   final _$_NewEventFormsPageControllerBaseActionController =
       ActionController(name: '_NewEventFormsPageControllerBase');
 
@@ -322,6 +338,19 @@ mixin _$NewEventFormsPageController on _NewEventFormsPageControllerBase, Store {
   }
 
   @override
+  void changeCanValidate(bool status) {
+    final _$actionInfo =
+        _$_NewEventFormsPageControllerBaseActionController.startAction(
+            name: '_NewEventFormsPageControllerBase.changeCanValidate');
+    try {
+      return super.changeCanValidate(status);
+    } finally {
+      _$_NewEventFormsPageControllerBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void clean() {
     final _$actionInfo = _$_NewEventFormsPageControllerBaseActionController
         .startAction(name: '_NewEventFormsPageControllerBase.clean');
@@ -346,6 +375,7 @@ ownerDescription: ${ownerDescription},
 isOwner: ${isOwner},
 selectedOrganizers: ${selectedOrganizers},
 isLoadingSomeAction: ${isLoadingSomeAction},
+canValidate: ${canValidate},
 eventToRegister: ${eventToRegister},
 isValid: ${isValid}
     ''';

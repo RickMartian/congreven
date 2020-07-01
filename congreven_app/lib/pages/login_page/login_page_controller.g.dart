@@ -54,6 +54,21 @@ mixin _$LoginPageController on _LoginPageControllerBase, Store {
     });
   }
 
+  final _$canValidateAtom = Atom(name: '_LoginPageControllerBase.canValidate');
+
+  @override
+  bool get canValidate {
+    _$canValidateAtom.reportRead();
+    return super.canValidate;
+  }
+
+  @override
+  set canValidate(bool value) {
+    _$canValidateAtom.reportWrite(value, super.canValidate, () {
+      super.canValidate = value;
+    });
+  }
+
   final _$_LoginPageControllerBaseActionController =
       ActionController(name: '_LoginPageControllerBase');
 
@@ -80,6 +95,17 @@ mixin _$LoginPageController on _LoginPageControllerBase, Store {
   }
 
   @override
+  void changeCanValidate(bool status) {
+    final _$actionInfo = _$_LoginPageControllerBaseActionController.startAction(
+        name: '_LoginPageControllerBase.changeCanValidate');
+    try {
+      return super.changeCanValidate(status);
+    } finally {
+      _$_LoginPageControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void clean() {
     final _$actionInfo = _$_LoginPageControllerBaseActionController.startAction(
         name: '_LoginPageControllerBase.clean');
@@ -95,6 +121,7 @@ mixin _$LoginPageController on _LoginPageControllerBase, Store {
     return '''
 email: ${email},
 password: ${password},
+canValidate: ${canValidate},
 userToLogin: ${userToLogin},
 isValid: ${isValid}
     ''';

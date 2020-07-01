@@ -63,6 +63,14 @@ abstract class _NewGuestSpeakerFormsPageControllerBase with Store {
     guestSpeakerToEdit = guestSpeaker;
   }
 
+  @observable
+  bool canValidate = false;
+
+  @action
+  void changeCanValidate(bool status) {
+    canValidate = status;
+  }
+
   @computed
   get guestSpeakerToRegister => {
         "name": name,
@@ -98,35 +106,43 @@ abstract class _NewGuestSpeakerFormsPageControllerBase with Store {
   }
 
   String validateDate() {
-    if (date == null || date.isEmpty) {
-      return "O campo 'data' é obrigatório!";
-    } else if (date.length < 10) {
-      return "Insira uma data válida!";
-    } else if (date.length == 10) {
-      if (!isValidDate(date)) {
+    if (canValidate) {
+      if (date == null || date.isEmpty) {
+        return "O campo 'data' é obrigatório!";
+      } else if (date.length < 10) {
         return "Insira uma data válida!";
+      } else if (date.length == 10) {
+        if (!isValidDate(date)) {
+          return "Insira uma data válida!";
+        }
       }
     }
     return null;
   }
 
   String validateScholarity() {
-    if (scholarity == null || scholarity.isEmpty) {
-      return "O campo 'escolaridade' é obrigatório!";
+    if (canValidate) {
+      if (scholarity == null || scholarity.isEmpty) {
+        return "O campo 'escolaridade' é obrigatório!";
+      }
     }
     return null;
   }
 
   String validateName() {
-    if (name == null || name.isEmpty) {
-      return "O campo 'nome' é obrigatório!";
+    if (canValidate) {
+      if (name == null || name.isEmpty) {
+        return "O campo 'nome' é obrigatório!";
+      }
     }
     return null;
   }
 
   String validateRg() {
-    if (rg == null || rg.isEmpty) {
-      return "O campo 'rg' é obrigatório!";
+    if (canValidate) {
+      if (rg == null || rg.isEmpty) {
+        return "O campo 'rg' é obrigatório!";
+      }
     }
     return null;
   }
@@ -136,5 +152,6 @@ abstract class _NewGuestSpeakerFormsPageControllerBase with Store {
       validateName() == null &&
       validateRg() == null &&
       validateDate() == null &&
-      validateScholarity() == null;
+      validateScholarity() == null &&
+      canValidate;
 }
