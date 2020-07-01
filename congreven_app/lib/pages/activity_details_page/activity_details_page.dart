@@ -4,7 +4,6 @@ import 'package:congreven_app/pages/activity_details_page/activity_details_page_
 import 'package:congreven_app/pages/guest_speaker_home_page/guest_speaker_home_page.dart';
 import 'package:congreven_app/pages/my_events_edit_page/my_events_edit_page_controller.dart';
 import 'package:congreven_app/pages/new_guest_speaker_forms_page/new_guest_speaker_forms_page_controller.dart';
-import 'package:congreven_app/pages/new_guest_speaker_page/new_guest_speaker_page.dart';
 import 'package:congreven_app/utils/enter_title.dart';
 import 'package:congreven_app/utils/routeTo.dart';
 import 'package:flutter/material.dart';
@@ -169,8 +168,6 @@ class _ActivityDetailsPageState extends State<ActivityDetailsPage> {
 
   Widget _renderGuestSpeakerDetails(dynamic guestSpeakers, String errorMessage,
       bool isLoading, bool isEventOwner) {
-    final newGuestSpeakerFormsPageController =
-        Provider.of<NewGuestSpeakerFormsPageController>(context, listen: false);
     if (isLoading) {
       return _loading();
     }

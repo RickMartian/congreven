@@ -52,6 +52,22 @@ abstract class _NewActivityFormsPageControllerBase with Store {
     isLoadingSomeAction = status;
   }
 
+  @observable
+  bool isEditting = false;
+
+  @action
+  void changeIsEditting(bool status) {
+    isEditting = status;
+  }
+
+  @observable
+  dynamic activityToEdit;
+
+  @action
+  void changeActivityToEdit(dynamic activity) {
+    activityToEdit = activity;
+  }
+
   String reverseDate(String date) {
     if (date != null) {
       return date.split('/').reversed.join("-");

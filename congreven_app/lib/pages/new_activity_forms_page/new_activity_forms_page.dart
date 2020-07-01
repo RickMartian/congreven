@@ -4,6 +4,8 @@ import 'package:congreven_app/pages/new_activity_forms_page/new_activity_forms_p
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class NewActivityFormsPage extends StatefulWidget {
@@ -12,6 +14,7 @@ class NewActivityFormsPage extends StatefulWidget {
 }
 
 class _NewActivityFormsPageState extends State<NewActivityFormsPage> {
+  DateFormat _dateFormat;
   final MaskedTextController _dateController =
       MaskedTextController(mask: "00/00/0000");
   final _nameController = TextEditingController();
@@ -21,39 +24,26 @@ class _NewActivityFormsPageState extends State<NewActivityFormsPage> {
 
   void initState() {
     super.initState();
+    initializeDateFormatting();
+    _dateFormat = DateFormat("dd/MM/yyyy", 'pt_BR');
     final newActivityFormsPageController =
         Provider.of<NewActivityFormsPageController>(context, listen: false);
-    // if (myEventsEditPageController.eventToUse != null) {
-    //   if (eventToUse == null) {
-    //     _startDateController.text = newEventFormsPageController.startDate;
-    //     _endDateController.text = newEventFormsPageController.endDate;
-    //   }
-    //   if (eventToUse != null) {
-    //     _nameController.text = eventToUse["name"];
-    //     _addressController.text = eventToUse["address"];
-    //     _startDateController.text = eventToUse["start_date_formatted"];
-    //     _endDateController.text = eventToUse["end_date_formatted"];
-    //     _descriptionController.text = eventToUse["description"];
-    //     _ownerDescriptionController.text = eventToUse["owner_description"];
-    //     newEventFormsPageController.changeName(eventToUse["name"]);
-    //     newEventFormsPageController.changeAddress(eventToUse["address"]);
-    //     newEventFormsPageController
-    //         .changeDescription(eventToUse["description"]);
-    //     newEventFormsPageController
-    //         .changeOwnerDescription(eventToUse["owner_description"]);
-    //     newEventFormsPageController
-    //         .changeStartDate(eventToUse["start_date_formatted"]);
-    //     newEventFormsPageController
-    //         .changeEndDate(eventToUse["end_date_formatted"]);
-    //     if (eventToUse["owner_description"] == null || eventToUse.isEmpty) {
-    //       newEventFormsPageController.changeIsOwner(false);
-    //       if (organizersToUse.length > 0) {
-    //         organizersToUse.forEach((element) =>
-    //             newEventFormsPageController.addOrganizerToEvent(element));
-    //       }
-    //     }
-    //   }
-    // }
+    if (newActivityFormsPageController.isEditting &&
+        newActivityFormsPageController.activityToEdit != null) {
+      final activity = newActivityFormsPageController.activityToEdit;
+      _nameController.text = activity["name"];
+      _periodController.text = activity["period"];
+      _startHourController.text = activity["start_hour"];
+      _endHourController.text = activity["end_hour"];
+      _dateController.text =
+          _dateFormat.format(DateTime.parse(activity["date_activity"]));
+      newActivityFormsPageController.changeDate(
+          _dateFormat.format(DateTime.parse(activity["date_activity"])));
+      newActivityFormsPageController.changeName(activity["name"]);
+      newActivityFormsPageController.changePeriod(activity["period"]);
+      newActivityFormsPageController.changeStartHour(activity["start_hour"]);
+      newActivityFormsPageController.changeEndHour(activity["end_hour"]);
+    }
   }
 
   Future<bool> _onWillPop() async {

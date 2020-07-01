@@ -38,7 +38,7 @@ class _NewActivityPageState extends State<NewActivityPage> {
   @override
   Widget build(BuildContext context) {
     double _deviceHeight = MediaQuery.of(context).size.height;
-    final newNewsFormsPageController =
+    final newActivityFormsPageController =
         Provider.of<NewActivityFormsPageController>(context);
     final myEventsEditPageController =
         Provider.of<MyEventsEditPageController>(context);
@@ -78,7 +78,9 @@ class _NewActivityPageState extends State<NewActivityPage> {
               alignment: Alignment.center,
               margin: EdgeInsets.fromLTRB(0.0, 12.0, 20.0, 12.0),
               child: Text(
-                "Nova atividade",
+                newActivityFormsPageController.isEditting
+                    ? "Editar atividade"
+                    : "Nova atividade",
                 style: TextStyle(
                   color: Colors.black,
                   fontWeight: _selectedPage == Pages.new_activity
@@ -147,18 +149,23 @@ class _NewActivityPageState extends State<NewActivityPage> {
         builder: (_) {
           return FloatingActionButton(
             onPressed: () {
-              if (!newNewsFormsPageController.isLoadingSomeAction &&
-                  newNewsFormsPageController.isValid) {
-                // if (myEventsEditPageController.eventToUse != null) {
-                //   updateEvent(context);
-                // } else {
-                createNewActivity(
-                  context,
-                  myEventsEditPageController.eventToUse != null
-                      ? myEventsEditPageController.eventToUse["event"]["id"]
-                      : 0,
-                );
-                // }
+              if (!newActivityFormsPageController.isLoadingSomeAction &&
+                  newActivityFormsPageController.isValid) {
+                if (newActivityFormsPageController.isEditting) {
+                  updateActivity(
+                    context,
+                    myEventsEditPageController.eventToUse != null
+                        ? myEventsEditPageController.eventToUse["event"]["id"]
+                        : 0,
+                  );
+                } else {
+                  createNewActivity(
+                    context,
+                    myEventsEditPageController.eventToUse != null
+                        ? myEventsEditPageController.eventToUse["event"]["id"]
+                        : 0,
+                  );
+                }
               }
             },
             backgroundColor: Theme.of(context).primaryColorDark,
@@ -166,7 +173,7 @@ class _NewActivityPageState extends State<NewActivityPage> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8.0),
             ),
-            child: !newNewsFormsPageController.isLoadingSomeAction
+            child: !newActivityFormsPageController.isLoadingSomeAction
                 ? Icon(
                     Icons.arrow_forward,
                     color: Colors.white,

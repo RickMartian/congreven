@@ -4,7 +4,9 @@ import 'package:congreven_app/models/news.dart';
 import 'package:congreven_app/models/user.dart';
 import 'package:congreven_app/pages/activity_details_home_page/activity_details_home_page.dart';
 import 'package:congreven_app/pages/my_events_edit_page/my_events_edit_page_controller.dart';
+import 'package:congreven_app/pages/new_activity_forms_page/new_activity_forms_page_controller.dart';
 import 'package:congreven_app/pages/new_activity_page/new_activity_page.dart';
+import 'package:congreven_app/pages/new_news_forms_page/new_news_forms_page_controller.dart';
 import 'package:congreven_app/pages/new_news_page/new_news_page.dart';
 import 'package:congreven_app/utils/enter_title.dart';
 import 'package:congreven_app/utils/routeTo.dart';
@@ -169,7 +171,7 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                 child: Card(
                   color: Theme.of(context).primaryColorDark,
                   child: IconButton(
-                    splashColor: Colors.green,
+                    splashColor: Colors.white38,
                     icon: Icon(
                       Icons.add,
                       color: Colors.white,
@@ -316,30 +318,10 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(25.0),
                             ),
-                            color: Theme.of(context).primaryColorDark,
-                            child: IconButton(
-                              tooltip: "Editar",
-                              splashColor: Colors.green,
-                              icon: Icon(
-                                Icons.edit,
-                                color: Colors.white,
-                              ),
-                              onPressed: () {},
-                            ),
-                          ),
-                          isEventOwner),
-                      SizedBox(
-                        width: 5.0,
-                      ),
-                      _isEventOwnerToRenderWidget(
-                          Card(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(25.0),
-                            ),
                             color: Colors.red,
                             child: IconButton(
                               tooltip: "Remover",
-                              splashColor: Colors.green,
+                              splashColor: Colors.white38,
                               icon: Icon(
                                 Icons.delete_outline,
                                 color: Colors.white,
@@ -386,6 +368,8 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
 
   Widget _renderActivitiesDetails(dynamic activities, String errorMessage,
       bool isLoading, bool isEventOwner) {
+    final newActivityFormsPageController =
+        Provider.of<NewActivityFormsPageController>(context, listen: false);
     if (isLoading) {
       return _loading();
     }
@@ -419,12 +403,18 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                               color: Theme.of(context).primaryColorDark,
                               child: IconButton(
                                 tooltip: "Editar",
-                                splashColor: Colors.green,
+                                splashColor: Colors.white38,
                                 icon: Icon(
                                   Icons.edit,
                                   color: Colors.white,
                                 ),
-                                onPressed: () {},
+                                onPressed: () {
+                                  newActivityFormsPageController
+                                      .changeIsEditting(true);
+                                  newActivityFormsPageController
+                                      .changeActivityToEdit(element);
+                                  routeTo(context, NewActivityPage());
+                                },
                               ),
                             ),
                             isEventOwner),
@@ -438,7 +428,7 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                           color: Colors.blue,
                           child: IconButton(
                             tooltip: "Detalhes",
-                            splashColor: Colors.green,
+                            splashColor: Colors.white38,
                             icon: Icon(
                               Icons.remove_red_eye,
                               color: Colors.white,
@@ -460,7 +450,7 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                               color: Colors.red,
                               child: IconButton(
                                 tooltip: "Remover",
-                                splashColor: Colors.green,
+                                splashColor: Colors.white38,
                                 icon: Icon(
                                   Icons.delete_outline,
                                   color: Colors.white,
