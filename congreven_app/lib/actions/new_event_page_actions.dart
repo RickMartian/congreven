@@ -60,13 +60,17 @@ updateEvent(BuildContext context) async {
     final id = myEventsEditPageController.eventToUse["event"]["id"];
     final response = await http.put(
       "${Config.server_url}:${Config.server_port}/events/$id",
-      body: event,
-      headers: {"Accept": "application/json", "Authorization": auth},
+      body: convert.jsonEncode(event),
+      headers: {
+        "Accept": "application/json",
+        "Authorization": auth,
+        "Content-Type": "application/json"
+      },
     );
     final data =
         response.body.isNotEmpty ? convert.jsonDecode(response.body) : null;
     if (response.statusCode == 200) {
-      Navigator.pop(context);
+      Navigator.pop(context, "needToFetch");
       if (data != null) {
         toast(
           title: "Sucesso!",
@@ -76,7 +80,6 @@ updateEvent(BuildContext context) async {
         );
       }
       cleanNewEventState(context);
-      fetchEvents(context);
     } else if (response.statusCode == 400) {
       toast(
         title: "Erro",

@@ -42,6 +42,15 @@ class _EventsPageState extends State<EventsPage> {
     });
   }
 
+  _navigateAndWaitForResponse(BuildContext context, Widget route) async {
+    final result = await Navigator.push(
+        context, MaterialPageRoute(builder: (context) => route));
+
+    if (result == "needToFetch") {
+      fetchEvents(context);
+    }
+  }
+
   Widget _renderEditButton(eventCpfOwner, event) {
     final myEventsEditPageController =
         Provider.of<MyEventsEditPageController>(context, listen: false);
@@ -67,7 +76,7 @@ class _EventsPageState extends State<EventsPage> {
                 response["event"]["end_date_formatted"] = _dateFormat
                     .format(DateTime.parse(response["event"]["end_date"]));
                 myEventsEditPageController.changeEventToUse(response);
-                routeTo(context, NewEventPage());
+                _navigateAndWaitForResponse(context, NewEventPage());
               });
             } catch (error) {
               setState(() {

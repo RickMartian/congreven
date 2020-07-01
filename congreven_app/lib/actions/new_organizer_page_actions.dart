@@ -29,8 +29,12 @@ createNewOrganizer(BuildContext context) async {
     final auth = "Bearer ${userModel.token}";
     final response = await http.post(
       "${Config.server_url}:${Config.server_port}/organizers",
-      body: organizer,
-      headers: {"Accept": "application/json", "Authorization": auth},
+      body: convert.jsonEncode(organizer),
+      headers: {
+        "Accept": "application/json",
+        "Authorization": auth,
+        "Content-Type": "application/json",
+      },
     );
     final data =
         response.body.isNotEmpty ? convert.jsonDecode(response.body) : null;

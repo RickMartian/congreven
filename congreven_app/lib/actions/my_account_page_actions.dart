@@ -33,8 +33,12 @@ updateUser(BuildContext context) async {
     user["email"] = userModel.email;
     final response = await http.put(
       "${Config.server_url}:${Config.server_port}/users/$cpf",
-      body: user,
-      headers: {"Accept": "application/json", "Authorization": auth},
+      body: convert.jsonEncode(user),
+      headers: {
+        "Accept": "application/json",
+        "Authorization": auth,
+        "Content-Type": "application/json",
+      },
     );
     if (response.statusCode == 200) {
       final data =
