@@ -128,7 +128,7 @@ class _ActivityDetailsHomePageState extends State<ActivityDetailsHomePage> {
           ],
         ),
         body: Container(
-          color: Theme.of(context).backgroundColor,
+          color: Colors.grey[100],
           child: Container(
             child: _renderSelectedPage(),
           ),

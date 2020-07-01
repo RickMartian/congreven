@@ -36,11 +36,6 @@ class _EventDetailsHomePageState extends State<EventDetailsHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    double _deviceHeight = MediaQuery.of(context).size.height;
-    final newEventFormsPageController =
-        Provider.of<NewEventFormsPageController>(context);
-    final myEventsEditPageController =
-        Provider.of<MyEventsEditPageController>(context);
     return WillPopScope(
       onWillPop: () async {
         cleanAllRelatedToEventDetails(context);

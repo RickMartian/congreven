@@ -1,8 +1,13 @@
 import 'package:congreven_app/actions/guest_speaker_page_actions.dart';
 import 'package:congreven_app/models/guest_speakers.dart';
+import 'package:congreven_app/models/user.dart';
 import 'package:congreven_app/pages/activity_details_page/activity_details_page_controller.dart';
 import 'package:congreven_app/pages/guest_speaker_page/guest_speaker_page_controller.dart';
+import 'package:congreven_app/pages/my_events_edit_page/my_events_edit_page_controller.dart';
+import 'package:congreven_app/pages/new_guest_speaker_forms_page/new_guest_speaker_forms_page_controller.dart';
+import 'package:congreven_app/pages/new_guest_speaker_page/new_guest_speaker_page.dart';
 import 'package:congreven_app/utils/debouncer.dart';
+import 'package:congreven_app/utils/routeTo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
@@ -73,7 +78,7 @@ class _GuestSpeakerPageState extends State<GuestSpeakerPage> {
     );
   }
 
-  bool verifySelectedOrganizer(dynamic guestSpeaker, selectedGuestSpeakers) {
+  bool verifySelectedGuestSpeaker(dynamic guestSpeaker, selectedGuestSpeakers) {
     bool flag = false;
     if (selectedGuestSpeakers.length > 0) {
       selectedGuestSpeakers.forEach((element) {
@@ -85,8 +90,8 @@ class _GuestSpeakerPageState extends State<GuestSpeakerPage> {
     return flag;
   }
 
-  _renderSelectButton(dynamic organizer, selectedOrganizers) {
-    if (verifySelectedOrganizer(organizer, selectedOrganizers)) {
+  _renderSelectButton(dynamic guestSpeaker, selectedGuestSpeakers) {
+    if (verifySelectedGuestSpeaker(guestSpeaker, selectedGuestSpeakers)) {
       return Text(
         "SELECIONADO",
         textAlign: TextAlign.center,
@@ -101,12 +106,25 @@ class _GuestSpeakerPageState extends State<GuestSpeakerPage> {
     }
   }
 
-  _renderEditButton(dynamic organizer) {
+  _renderEditButton(dynamic guestSpeaker) {
     return Text(
       "EDITAR",
       textAlign: TextAlign.center,
       style: TextStyle(color: Colors.white),
     );
+  }
+
+  _isEventOwner() {
+    final userModel = Provider.of<User>(context, listen: false);
+    final myEventsEditPageController =
+        Provider.of<MyEventsEditPageController>(context, listen: false);
+    if (myEventsEditPageController.eventToUse != null) {
+      if (userModel.cpf ==
+          myEventsEditPageController.eventToUse["event"]["cpf_owner"]) {
+        return true;
+      }
+    }
+    return false;
   }
 
   Widget _itemBuilder(
@@ -116,6 +134,8 @@ class _GuestSpeakerPageState extends State<GuestSpeakerPage> {
       double deviceWidth,
       List<dynamic> guestSpeakers,
       List<dynamic> selectedGuestSpeakers) {
+    final newGuestSpeakerFormsPageController =
+        Provider.of<NewGuestSpeakerFormsPageController>(context, listen: false);
     if (guestSpeakers.length > 0) {
       return Column(
         children: <Widget>[
@@ -174,7 +194,7 @@ class _GuestSpeakerPageState extends State<GuestSpeakerPage> {
                                   side: BorderSide(color: Colors.green)),
                               borderSide: BorderSide(color: Colors.green),
                               onPressed: () {
-                                if (!verifySelectedOrganizer(
+                                if (!verifySelectedGuestSpeaker(
                                     guestSpeakers[index],
                                     selectedGuestSpeakers)) {
                                   selectGuestSpeaker(
@@ -185,7 +205,7 @@ class _GuestSpeakerPageState extends State<GuestSpeakerPage> {
                                 child: _renderSelectButton(guestSpeakers[index],
                                     selectedGuestSpeakers),
                               ),
-                              color: verifySelectedOrganizer(
+                              color: verifySelectedGuestSpeaker(
                                       guestSpeakers[index],
                                       selectedGuestSpeakers)
                                   ? Colors.green
@@ -198,7 +218,7 @@ class _GuestSpeakerPageState extends State<GuestSpeakerPage> {
                         ),
                         Observer(
                           builder: (_) {
-                            return verifySelectedOrganizer(
+                            return verifySelectedGuestSpeaker(
                                     guestSpeakers[index], selectedGuestSpeakers)
                                 ? Expanded(
                                     child: FlatButton(
@@ -207,7 +227,7 @@ class _GuestSpeakerPageState extends State<GuestSpeakerPage> {
                                             BorderRadius.circular(18.0),
                                       ),
                                       onPressed: () {
-                                        if (verifySelectedOrganizer(
+                                        if (verifySelectedGuestSpeaker(
                                             guestSpeakers[index],
                                             selectedGuestSpeakers)) {
                                           removeSelectedGuestSpeaker(
@@ -234,22 +254,39 @@ class _GuestSpeakerPageState extends State<GuestSpeakerPage> {
                           width: 10.0,
                         ),
                         Observer(builder: (_) {
-                          return Expanded(
-                            child: FlatButton(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(18.0),
-                              ),
-                              onPressed: () {},
-                              child: Container(
-                                child: _renderEditButton(guestSpeakers[index]),
-                              ),
-                              color: verifySelectedOrganizer(
-                                      guestSpeakers[index],
-                                      selectedGuestSpeakers)
-                                  ? Colors.grey
-                                  : Colors.green[600],
-                            ),
-                          );
+                          return _isEventOwner()
+                              ? Expanded(
+                                  child: FlatButton(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(18.0),
+                                    ),
+                                    onPressed: () {
+                                      if (!verifySelectedGuestSpeaker(
+                                          guestSpeakers[index],
+                                          selectedGuestSpeakers)) {
+                                        newGuestSpeakerFormsPageController
+                                            .changeIsEditting(true);
+                                        newGuestSpeakerFormsPageController
+                                            .changeGuestSpeakerToEdit(
+                                                guestSpeakers[index]);
+                                        routeTo(context, NewGuestSpeakerPage());
+                                      }
+                                    },
+                                    child: Container(
+                                      child: _renderEditButton(
+                                          guestSpeakers[index]),
+                                    ),
+                                    color: verifySelectedGuestSpeaker(
+                                            guestSpeakers[index],
+                                            selectedGuestSpeakers)
+                                        ? Colors.grey
+                                        : Colors.green[600],
+                                  ),
+                                )
+                              : Container(
+                                  width: 0.0,
+                                  height: 0.0,
+                                );
                         }),
                       ],
                     ),
@@ -271,13 +308,13 @@ class _GuestSpeakerPageState extends State<GuestSpeakerPage> {
       return Container(width: 0.0, height: 0.0);
   }
 
-  _filterOrganizerByName(List<dynamic> organizer) {
-    return organizer.length > 0
-        ? organizer
+  _filterOrganizerByName(List<dynamic> guestSpeaker) {
+    return guestSpeaker.length > 0
+        ? guestSpeaker
             .where((element) =>
                 element["name"].toLowerCase().startsWith(_search.toLowerCase()))
             .toList()
-        : organizer;
+        : guestSpeaker;
   }
 
   @override
@@ -285,8 +322,6 @@ class _GuestSpeakerPageState extends State<GuestSpeakerPage> {
     final guestSpeakerModel = Provider.of<GuestSpeakers>(context);
     final guestSpeakerPageController =
         Provider.of<GuestSpeakerPageController>(context);
-    final activityDetailsPageController =
-        Provider.of<ActivityDetailsPageController>(context);
     final deviceHeight = MediaQuery.of(context).size.height;
     final deviceWidth = MediaQuery.of(context).size.width;
     return Container(

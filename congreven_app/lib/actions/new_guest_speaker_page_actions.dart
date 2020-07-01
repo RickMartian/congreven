@@ -14,6 +14,8 @@ cleanNewGuestSpeakerState(BuildContext context) {
       Provider.of<NewGuestSpeakerFormsPageController>(context, listen: false);
   newGuestSpeakerFormsPageController.clean();
   newGuestSpeakerFormsPageController.changeIsLoadingSomeAction(false);
+  newGuestSpeakerFormsPageController.changeIsEditting(false);
+  newGuestSpeakerFormsPageController.changeGuestSpeakerToEdit(null);
 }
 
 fetchGuestSpeakers(BuildContext context) async {
@@ -82,6 +84,71 @@ createNewGuestSpeaker(BuildContext context) async {
         toast(
           title: "Sucesso!",
           message: data["message"] ?? "Palestrante criado com sucesso!",
+          duration: Duration(milliseconds: 2000),
+          context: context,
+        );
+      }
+      cleanNewGuestSpeakerState(context);
+      fetchGuestSpeakers(context);
+    } else if (response.statusCode == 400) {
+      toast(
+        title: "Erro",
+        message: data["message"] ?? "Erro desconhecido.",
+        duration: Duration(milliseconds: 2000),
+        context: context,
+      );
+    } else {
+      toast(
+        title: "Erro",
+        message: data["message"] ?? "Erro desconhecido.",
+        duration: Duration(milliseconds: 2000),
+        context: context,
+      );
+    }
+    newGuestSpeakerFormsPageController.changeIsLoadingSomeAction(false);
+  } catch (error) {
+    newGuestSpeakerFormsPageController.changeIsLoadingSomeAction(false);
+    toast(
+      title: "Erro",
+      message:
+          "Erro desconhecido. Por favor, reinicie o aplicativo e tente novamente.",
+      duration: Duration(milliseconds: 2000),
+      context: context,
+    );
+  }
+}
+
+updateGuestSpeaker(BuildContext context) async {
+  final userModel = Provider.of<User>(context, listen: false);
+  final newGuestSpeakerFormsPageController =
+      Provider.of<NewGuestSpeakerFormsPageController>(context, listen: false);
+  newGuestSpeakerFormsPageController.changeIsLoadingSomeAction(true);
+  final guestSpeaker =
+      newGuestSpeakerFormsPageController.guestSpeakerToRegister;
+  final guestSpeakerToUpdate = {
+    "name": guestSpeaker["name"],
+    "scholarity": guestSpeaker["scholarity"],
+    "bdate": guestSpeaker["bdate"],
+  };
+  try {
+    final auth = "Bearer ${userModel.token}";
+    final response = await http.put(
+      "${Config.server_url}:${Config.server_port}/guestspeakers/${guestSpeaker["rg"]}",
+      body: convert.jsonEncode(guestSpeakerToUpdate),
+      headers: {
+        "Accept": "application/json",
+        "Authorization": auth,
+        "Content-Type": "application/json",
+      },
+    );
+    final data =
+        response.body.isNotEmpty ? convert.jsonDecode(response.body) : null;
+    if (response.statusCode == 200) {
+      Navigator.pop(context);
+      if (data != null) {
+        toast(
+          title: "Sucesso!",
+          message: data["message"] ?? "Palestrante atualizado com sucesso!",
           duration: Duration(milliseconds: 2000),
           context: context,
         );

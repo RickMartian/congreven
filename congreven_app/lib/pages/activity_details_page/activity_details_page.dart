@@ -3,6 +3,8 @@ import 'package:congreven_app/models/user.dart';
 import 'package:congreven_app/pages/activity_details_page/activity_details_page_controller.dart';
 import 'package:congreven_app/pages/guest_speaker_home_page/guest_speaker_home_page.dart';
 import 'package:congreven_app/pages/my_events_edit_page/my_events_edit_page_controller.dart';
+import 'package:congreven_app/pages/new_guest_speaker_forms_page/new_guest_speaker_forms_page_controller.dart';
+import 'package:congreven_app/pages/new_guest_speaker_page/new_guest_speaker_page.dart';
 import 'package:congreven_app/utils/enter_title.dart';
 import 'package:congreven_app/utils/routeTo.dart';
 import 'package:flutter/material.dart';
@@ -71,15 +73,7 @@ class _ActivityDetailsPageState extends State<ActivityDetailsPage> {
           child: Container(
             margin: EdgeInsets.only(right: needButton ? 20.0 : 0.0),
             child: renderEnterTitle(
-                firstLine: title, secondLine: "", firstLineSize: 26.0),
-            decoration: BoxDecoration(
-              border: Border(
-                bottom: BorderSide(
-                  width: 2.0,
-                  color: Colors.black,
-                ),
-              ),
-            ),
+                firstLine: title, secondLine: "", firstLineSize: 18.0),
           ),
         ),
         needButton
@@ -136,23 +130,33 @@ class _ActivityDetailsPageState extends State<ActivityDetailsPage> {
     }
 
     if (activity != null) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          _renderTextLine(firstLine: "Nome", secondLine: activity["name"]),
-          _renderTextLine(firstLine: "Período", secondLine: activity["period"]),
-          _renderTextLine(
-              firstLine: "Data",
-              secondLine: _dateFormat
-                  .format(DateTime.parse(activity["date_activity"]))),
-          _renderTextLine(
-              firstLine: "Hora inicial", secondLine: activity["start_hour"]),
-          _renderTextLine(
-              firstLine: "Hora final", secondLine: activity["end_hour"]),
-          SizedBox(
-            height: 10.0,
-          ),
-        ],
+      return Container(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Divider(
+              color: Colors.black,
+              height: 15,
+              thickness: 0.15,
+              indent: 0,
+              endIndent: 0,
+            ),
+            _renderTextLine(firstLine: "Nome", secondLine: activity["name"]),
+            _renderTextLine(
+                firstLine: "Período", secondLine: activity["period"]),
+            _renderTextLine(
+                firstLine: "Data",
+                secondLine: _dateFormat
+                    .format(DateTime.parse(activity["date_activity"]))),
+            _renderTextLine(
+                firstLine: "Hora inicial", secondLine: activity["start_hour"]),
+            _renderTextLine(
+                firstLine: "Hora final", secondLine: activity["end_hour"]),
+            SizedBox(
+              height: 10.0,
+            ),
+          ],
+        ),
       );
     } else if (errorMessage.isNotEmpty) {
       return _renderTextLine(secondLine: errorMessage, firstLineSize: 0.0);
@@ -165,6 +169,8 @@ class _ActivityDetailsPageState extends State<ActivityDetailsPage> {
 
   Widget _renderGuestSpeakerDetails(dynamic guestSpeakers, String errorMessage,
       bool isLoading, bool isEventOwner) {
+    final newGuestSpeakerFormsPageController =
+        Provider.of<NewGuestSpeakerFormsPageController>(context, listen: false);
     if (isLoading) {
       return _loading();
     }
@@ -175,6 +181,13 @@ class _ActivityDetailsPageState extends State<ActivityDetailsPage> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
+              Divider(
+                color: Colors.black,
+                height: 15,
+                thickness: 0.15,
+                indent: 0,
+                endIndent: 0,
+              ),
               _renderTextLine(firstLine: "Nome", secondLine: element["name"]),
               _renderTextLine(firstLine: "RG", secondLine: element["rg"]),
               _renderTextLine(
@@ -244,29 +257,95 @@ class _ActivityDetailsPageState extends State<ActivityDetailsPage> {
     final activityDetailsPageController =
         Provider.of<ActivityDetailsPageController>(context);
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 20.0),
       child: ListView(
         children: <Widget>[
-          Observer(
-            builder: (_) {
-              return _renderTitleLine(
-                title: "Atividade",
-                needButton: false,
-                context: context,
-              );
-            },
+          Container(
+            padding: EdgeInsets.all(10.0),
+            color: Colors.white,
+            child: Observer(
+              builder: (_) {
+                return _renderTitleLine(
+                  title: "Atividade",
+                  needButton: false,
+                  context: context,
+                );
+              },
+            ),
           ),
-          SizedBox(
+          Container(
+            color: Colors.white,
             height: 10.0,
           ),
-          Observer(
-            builder: (_) {
-              return _renderActivityDetails(
-                  _verifyExistisActivity(
+          Container(
+            padding: EdgeInsets.fromLTRB(10.0, 0, 0, 0),
+            color: Colors.white,
+            child: Observer(
+              builder: (_) {
+                return _renderActivityDetails(
+                    _verifyExistisActivity(
+                            activityDetailsPageController.activityToUse)
+                        ? activityDetailsPageController
+                            .activityToUse["activity"]
+                        : null,
+                    activityDetailsPageController.errorMessage,
+                    activityDetailsPageController.isFetchingActivityToUse,
+                    _verifyIsEventOwner(
+                      userCpf: userModel.cpf,
+                      eventCpfOwner:
+                          myEventsEditPageController.eventToUse != null
+                              ? myEventsEditPageController.eventToUse["event"]
+                                  ["cpf_owner"]
+                              : "",
+                    ));
+              },
+            ),
+          ),
+          SizedBox(
+            height: 15.0,
+          ),
+          Container(
+            padding: EdgeInsets.all(10.0),
+            color: Colors.white,
+            child: Observer(
+              builder: (_) {
+                return _renderTitleLine(
+                  title: "Palestrantes",
+                  context: context,
+                  needButton: _verifyIsEventOwner(
+                    userCpf: userModel.cpf,
+                    eventCpfOwner: myEventsEditPageController.eventToUse != null
+                        ? myEventsEditPageController.eventToUse["event"]
+                            ["cpf_owner"]
+                        : "",
+                  ),
+                  buttonIcon: Icons.add,
+                  onPressed: () {
+                    fetchGuestSpeakers(context);
+                    routeTo(context, GuestSpeakerHomePage());
+                  },
+                );
+              },
+            ),
+          ),
+          Container(
+            color: Colors.white,
+            height: 10.0,
+          ),
+          Container(
+            padding: EdgeInsets.all(10.0),
+            color: Colors.white,
+            child: Observer(
+              builder: (_) {
+                return _renderGuestSpeakerDetails(
+                  _verifyExistsGuestSpeakers(
                           activityDetailsPageController.activityToUse)
-                      ? activityDetailsPageController.activityToUse["activity"]
-                      : null,
-                  activityDetailsPageController.errorMessage,
+                      ? activityDetailsPageController
+                          .activityToUse["guestSpeakers"]
+                      : [],
+                  _verifyExistsGuestSpeakers(
+                          activityDetailsPageController.activityToUse)
+                      ? ""
+                      : "Não há palestrantes para esta atividade ainda.",
                   activityDetailsPageController.isFetchingActivityToUse,
                   _verifyIsEventOwner(
                     userCpf: userModel.cpf,
@@ -274,57 +353,10 @@ class _ActivityDetailsPageState extends State<ActivityDetailsPage> {
                         ? myEventsEditPageController.eventToUse["event"]
                             ["cpf_owner"]
                         : "",
-                  ));
-            },
-          ),
-          SizedBox(
-            height: 15.0,
-          ),
-          Observer(
-            builder: (_) {
-              return _renderTitleLine(
-                title: "Palestrantes",
-                context: context,
-                needButton: _verifyIsEventOwner(
-                  userCpf: userModel.cpf,
-                  eventCpfOwner: myEventsEditPageController.eventToUse != null
-                      ? myEventsEditPageController.eventToUse["event"]
-                          ["cpf_owner"]
-                      : "",
-                ),
-                buttonIcon: Icons.add,
-                onPressed: () {
-                  fetchGuestSpeakers(context);
-                  routeTo(context, GuestSpeakerHomePage());
-                },
-              );
-            },
-          ),
-          SizedBox(
-            height: 10.0,
-          ),
-          Observer(
-            builder: (_) {
-              return _renderGuestSpeakerDetails(
-                _verifyExistsGuestSpeakers(
-                        activityDetailsPageController.activityToUse)
-                    ? activityDetailsPageController
-                        .activityToUse["guestSpeakers"]
-                    : [],
-                _verifyExistsGuestSpeakers(
-                        activityDetailsPageController.activityToUse)
-                    ? ""
-                    : "Não há palestrantes para esta atividade ainda.",
-                activityDetailsPageController.isFetchingActivityToUse,
-                _verifyIsEventOwner(
-                  userCpf: userModel.cpf,
-                  eventCpfOwner: myEventsEditPageController.eventToUse != null
-                      ? myEventsEditPageController.eventToUse["event"]
-                          ["cpf_owner"]
-                      : "",
-                ),
-              );
-            },
+                  ),
+                );
+              },
+            ),
           ),
           SizedBox(
             height: 15.0,

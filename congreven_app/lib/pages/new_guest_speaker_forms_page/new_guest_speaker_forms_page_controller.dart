@@ -55,6 +55,14 @@ abstract class _NewGuestSpeakerFormsPageControllerBase with Store {
     isEditting = status;
   }
 
+  @observable
+  dynamic guestSpeakerToEdit;
+
+  @action
+  void changeGuestSpeakerToEdit(dynamic guestSpeaker) {
+    guestSpeakerToEdit = guestSpeaker;
+  }
+
   @computed
   get guestSpeakerToRegister => {
         "name": name,

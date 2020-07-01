@@ -75,7 +75,9 @@ class _NewGuestSpeakerPageState extends State<NewGuestSpeakerPage> {
               alignment: Alignment.center,
               margin: EdgeInsets.fromLTRB(0.0, 12.0, 20.0, 12.0),
               child: Text(
-                "Novo palestrante",
+                newGuestSpeakerFormsPageController.isEditting
+                    ? "Editar palestrante"
+                    : "Novo palestrante",
                 style: TextStyle(
                   color: Colors.black,
                   fontWeight: _selectedPage == Pages.new_guest_speaker
@@ -146,7 +148,11 @@ class _NewGuestSpeakerPageState extends State<NewGuestSpeakerPage> {
             onPressed: () {
               if (!newGuestSpeakerFormsPageController.isLoadingSomeAction &&
                   newGuestSpeakerFormsPageController.isValid) {
-                createNewGuestSpeaker(context);
+                if (newGuestSpeakerFormsPageController.isEditting) {
+                  updateGuestSpeaker(context);
+                } else {
+                  createNewGuestSpeaker(context);
+                }
               }
             },
             backgroundColor: Theme.of(context).primaryColorDark,

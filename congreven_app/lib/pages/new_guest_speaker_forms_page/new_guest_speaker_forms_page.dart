@@ -22,8 +22,19 @@ class _NewGuestSpeakerFormsPageState extends State<NewGuestSpeakerFormsPage> {
     super.initState();
     final newGuestSpeakerFormsPageController =
         Provider.of<NewGuestSpeakerFormsPageController>(context, listen: false);
-    if (newGuestSpeakerFormsPageController.isEditting) {
-      _rgController.text = "";
+    if (newGuestSpeakerFormsPageController.isEditting &&
+        newGuestSpeakerFormsPageController.guestSpeakerToEdit != null) {
+      final guestSpeaker =
+          newGuestSpeakerFormsPageController.guestSpeakerToEdit;
+      _rgController.text = guestSpeaker["rg"];
+      _dateController.text = guestSpeaker["bdate"];
+      _nameController.text = guestSpeaker["name"];
+      _scholarityController.text = guestSpeaker["scholarity"];
+      newGuestSpeakerFormsPageController.changeName(guestSpeaker["name"]);
+      newGuestSpeakerFormsPageController.changeDate(guestSpeaker["bdate"]);
+      newGuestSpeakerFormsPageController.changeRg(guestSpeaker["rg"]);
+      newGuestSpeakerFormsPageController
+          .changeScholarity(guestSpeaker["scholarity"]);
     } else {
       _rgController.text = newGuestSpeakerFormsPageController.rg;
       _dateController.text = newGuestSpeakerFormsPageController.date;
@@ -62,11 +73,11 @@ class _NewGuestSpeakerFormsPageState extends State<NewGuestSpeakerFormsPage> {
             Observer(
               builder: (_) {
                 return renderTextField(
-                  labelText: "Rg",
-                  onChanged: newGuestSpeakerFormsPageController.changeRg,
-                  errorText: newGuestSpeakerFormsPageController.validateRg,
-                  controller: _rgController,
-                );
+                    labelText: "Rg",
+                    onChanged: newGuestSpeakerFormsPageController.changeRg,
+                    errorText: newGuestSpeakerFormsPageController.validateRg,
+                    controller: _rgController,
+                    enabled: !newGuestSpeakerFormsPageController.isEditting);
               },
             ),
             SizedBox(
