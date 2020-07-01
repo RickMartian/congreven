@@ -22,6 +22,7 @@ import 'package:congreven_app/pages/organizer_page/organizer_page_controller.dar
 import 'package:congreven_app/pages/register_page/register_page_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:splashscreen/splashscreen.dart';
 
 void main() {
   runApp(MyApp());
@@ -102,8 +103,33 @@ class MyApp extends StatelessWidget {
             primarySwatch: Colors.green,
             visualDensity: VisualDensity.adaptivePlatformDensity,
             backgroundColor: Colors.white),
-        home: EnterPage(),
+        home: _introScreen(),
       ),
     );
   }
+}
+
+Widget _introScreen() {
+  return Stack(
+    children: <Widget>[
+      SplashScreen(
+        seconds: 5,
+        gradientBackground: LinearGradient(
+          begin: Alignment.topRight,
+          end: Alignment.bottomLeft,
+          colors: [Color(0xffED213A), Color(0xff93291E)],
+        ),
+        navigateAfterSeconds: EnterPage(),
+        loaderColor: Colors.transparent,
+      ),
+      Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/logo.png"),
+            fit: BoxFit.fill,
+          ),
+        ),
+      ),
+    ],
+  );
 }
