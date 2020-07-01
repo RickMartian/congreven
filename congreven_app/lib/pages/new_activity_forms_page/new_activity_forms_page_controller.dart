@@ -36,13 +36,15 @@ abstract class _NewActivityFormsPageControllerBase with Store {
   String startHour;
 
   @action
-  void changeStartHour(String newStartHour) => startHour = newStartHour;
+  void changeStartHour(String newStartHour) => startHour =
+      newStartHour.length >= 5 ? newStartHour.substring(0, 5) : newStartHour;
 
   @observable
   String endHour;
 
   @action
-  void changeEndHour(String newEndHour) => endHour = newEndHour;
+  void changeEndHour(String newEndHour) => endHour =
+      newEndHour.length >= 5 ? newEndHour.substring(0, 5) : newEndHour;
 
   @observable
   bool isLoadingSomeAction = false;

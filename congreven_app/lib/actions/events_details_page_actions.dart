@@ -2,6 +2,7 @@ import 'package:congreven_app/models/activities.dart';
 import 'package:congreven_app/models/news.dart';
 import 'package:congreven_app/pages/activity_details_page/activity_details_page_controller.dart';
 import 'package:congreven_app/pages/my_events_edit_page/my_events_edit_page_controller.dart';
+import 'package:congreven_app/utils/delay.dart';
 import 'package:flutter/material.dart';
 import 'package:congreven_app/models/user.dart';
 import 'package:provider/provider.dart';
@@ -86,10 +87,12 @@ getActivityByEventId(BuildContext context, int eventId) async {
     if (response.statusCode == 200) {
       final data =
           response.body.isNotEmpty ? convert.jsonDecode(response.body) : null;
+      print("data -> $data");
       if (data != null) {
         if (data is Map) {
           activitiesModel.changeFetchingActivitiesErrorMessage(
               data["message"] ?? "Não há atividades ainda.");
+          activitiesModel.updateActivities([]);
         } else {
           activitiesModel.updateActivities(data);
         }
@@ -155,6 +158,46 @@ getActivityById(BuildContext context, int activityId) async {
   } catch (error) {
     activityDetailsPageController.changeIsFetchingActitityToUse(false);
 
+    toast(
+      title: "Erro",
+      message:
+          "Erro desconhecido. Por favor, reinicie o aplicativo e tente novamente.",
+      duration: Duration(milliseconds: 2000),
+      context: context,
+    );
+  }
+}
+
+deleteActivity(BuildContext context, int eventId, int activityId) async {
+  final userModel = Provider.of<User>(context, listen: false);
+  try {
+    final auth = "Bearer ${userModel.token}";
+    final response = await http.delete(
+      "${Config.server_url}:${Config.server_port}/activities/$activityId",
+      headers: {"Accept": "application/json", "Authorization": auth},
+    );
+    if (response.statusCode == 200) {
+      final data =
+          response.body.isNotEmpty ? convert.jsonDecode(response.body) : null;
+      if (data != null) {
+        toast(
+          title: "Sucesso",
+          message: data["message"] ?? "Atividade excluída com sucesso.",
+          duration: Duration(milliseconds: 2000),
+          context: context,
+        );
+        getActivityByEventId(context, eventId);
+      }
+    } else {
+      final respDecoded = convert.jsonDecode(response.body);
+      toast(
+        title: "Erro",
+        message: respDecoded["message"] ?? "Erro desconhecido.",
+        duration: Duration(milliseconds: 2000),
+        context: context,
+      );
+    }
+  } catch (error) {
     toast(
       title: "Erro",
       message:

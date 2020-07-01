@@ -24,6 +24,7 @@ createNewActivity(BuildContext context, int eventId) async {
       Provider.of<NewActivityFormsPageController>(context, listen: false);
   newActivityFormsPageController.changeIsLoadingSomeAction(true);
   final activity = newActivityFormsPageController.activityToRegister;
+  activity["event_id"] = eventId.toString();
   try {
     final auth = "Bearer ${userModel.token}";
     final response = await http.post(
@@ -66,6 +67,7 @@ createNewActivity(BuildContext context, int eventId) async {
     }
     newActivityFormsPageController.changeIsLoadingSomeAction(false);
   } catch (error) {
+    print("error -> $error");
     newActivityFormsPageController.changeIsLoadingSomeAction(false);
     toast(
       title: "Erro",

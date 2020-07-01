@@ -8,6 +8,7 @@ import 'package:congreven_app/pages/new_activity_forms_page/new_activity_forms_p
 import 'package:congreven_app/pages/new_activity_page/new_activity_page.dart';
 import 'package:congreven_app/pages/new_news_forms_page/new_news_forms_page_controller.dart';
 import 'package:congreven_app/pages/new_news_page/new_news_page.dart';
+import 'package:congreven_app/utils/customDialog.dart';
 import 'package:congreven_app/utils/enter_title.dart';
 import 'package:congreven_app/utils/routeTo.dart';
 import 'package:flutter/material.dart';
@@ -370,6 +371,8 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
       bool isLoading, bool isEventOwner) {
     final newActivityFormsPageController =
         Provider.of<NewActivityFormsPageController>(context, listen: false);
+    final myEventsEditPageController =
+        Provider.of<MyEventsEditPageController>(context, listen: false);
     if (isLoading) {
       return _loading();
     }
@@ -455,7 +458,25 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                                   Icons.delete_outline,
                                   color: Colors.white,
                                 ),
-                                onPressed: () {},
+                                onPressed: () {
+                                  customDialog(
+                                      context: context,
+                                      title: "Excluir atividade",
+                                      message:
+                                          "Deseja realmente excluir a atividade?",
+                                      onPressed: () {
+                                        deleteActivity(
+                                            context,
+                                            myEventsEditPageController
+                                                        .eventToUse !=
+                                                    null
+                                                ? myEventsEditPageController
+                                                    .eventToUse["event"]["id"]
+                                                : 0,
+                                            element["id"]);
+                                        Navigator.pop(context);
+                                      });
+                                },
                               ),
                             ),
                             isEventOwner),
