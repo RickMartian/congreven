@@ -48,74 +48,74 @@ class _EventsPageState extends State<EventsPage> {
     final eventsPageController =
         Provider.of<EventsPageController>(context, listen: false);
     if (verifyIsCpfOwner(eventCpfOwner)) {
-      return FlatButton(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(18.0),
-        ),
-        onPressed: () {
-          setState(() {
-            _eventIdClicked = event["id"];
-          });
-          try {
-            getEventById(context, event["id"]).then((response) {
+      return Expanded(
+        child: FlatButton(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(18.0),
+          ),
+          onPressed: () {
+            setState(() {
+              _eventIdClicked = event["id"];
+            });
+            try {
+              getEventById(context, event["id"]).then((response) {
+                setState(() {
+                  _eventIdClicked = null;
+                });
+                response["event"]["start_date_formatted"] = _dateFormat
+                    .format(DateTime.parse(response["event"]["start_date"]));
+                response["event"]["end_date_formatted"] = _dateFormat
+                    .format(DateTime.parse(response["event"]["end_date"]));
+                myEventsEditPageController.changeEventToUse(response);
+                routeTo(context, NewEventPage());
+              });
+            } catch (error) {
               setState(() {
                 _eventIdClicked = null;
               });
-              response["event"]["start_date_formatted"] = _dateFormat
-                  .format(DateTime.parse(response["event"]["start_date"]));
-              response["event"]["end_date_formatted"] = _dateFormat
-                  .format(DateTime.parse(response["event"]["end_date"]));
-              myEventsEditPageController.changeEventToUse(response);
-              routeTo(context, NewEventPage());
-            });
-          } catch (error) {
-            setState(() {
-              _eventIdClicked = null;
-            });
-            toast(
-              title: "Erro",
-              message:
-                  "Não foi possível selecionar o evento a ser editado. Por favor, reinicie o aplicativo e tente novamente.",
-              duration: Duration(milliseconds: 3000),
-              context: context,
-            );
-          }
-        },
-        child: eventsPageController.isFetchingEventById &&
-                _eventIdClicked == event["id"]
-            ? Container(
-                padding: EdgeInsets.all(4.0),
-                child: Flexible(
+              toast(
+                title: "Erro",
+                message:
+                    "Não foi possível selecionar o evento a ser editado. Por favor, reinicie o aplicativo e tente novamente.",
+                duration: Duration(milliseconds: 3000),
+                context: context,
+              );
+            }
+          },
+          child: eventsPageController.isFetchingEventById &&
+                  _eventIdClicked == event["id"]
+              ? Container(
+                  padding: EdgeInsets.all(4.0),
                   child: Center(
                     child: CircularProgressIndicator(
                       valueColor: AlwaysStoppedAnimation<Color>(
-                        Theme.of(context).primaryColorDark,
+                        Colors.white,
                       ),
                     ),
                   ),
-                ),
-              )
-            : Container(
-                padding: EdgeInsets.all(4.0),
-                child: RichText(
-                  text: TextSpan(
-                    children: [
-                      WidgetSpan(
-                        child:
-                            Icon(Icons.create, size: 18.0, color: Colors.white),
-                      ),
-                      TextSpan(
-                          text: " EDITAR",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16.0,
-                              letterSpacing: 0.5,
-                              fontWeight: FontWeight.bold)),
-                    ],
+                )
+              : Container(
+                  padding: EdgeInsets.all(4.0),
+                  child: RichText(
+                    text: TextSpan(
+                      children: [
+                        WidgetSpan(
+                          child: Icon(Icons.create,
+                              size: 18.0, color: Colors.white),
+                        ),
+                        TextSpan(
+                            text: " EDITAR",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16.0,
+                                letterSpacing: 0.5,
+                                fontWeight: FontWeight.bold)),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-        color: Colors.green,
+          color: Colors.green,
+        ),
       );
     }
     return SizedBox(
@@ -276,9 +276,8 @@ class _EventsPageState extends State<EventsPage> {
                   Observer(builder: (_) {
                     return Row(
                       children: <Widget>[
-                        Expanded(
-                            child: _renderEditButton(
-                                events[index]["cpf_owner"], events[index])),
+                        _renderEditButton(
+                            events[index]["cpf_owner"], events[index]),
                       ],
                     );
                   }),

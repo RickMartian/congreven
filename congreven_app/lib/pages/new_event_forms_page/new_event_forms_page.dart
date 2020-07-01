@@ -89,7 +89,12 @@ class _NewEventFormsPageState extends State<NewEventFormsPage> {
               routeTo(context, OrganizerHomePage());
             },
             child: Container(
-              child: Text("Selecionar o(s) organizador(es)"),
+              child: Text(
+                "Selecionar o(s) organizador(es)",
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
             ),
           ),
           SizedBox(

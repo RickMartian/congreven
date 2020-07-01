@@ -83,7 +83,7 @@ class _ActivityDetailsPageState extends State<ActivityDetailsPage> {
                   child: IconButton(
                     splashColor: Colors.green,
                     icon: Icon(
-                      Icons.add,
+                      buttonIcon,
                       color: Colors.white,
                     ),
                     onPressed: onPressed,
@@ -315,7 +315,7 @@ class _ActivityDetailsPageState extends State<ActivityDetailsPage> {
                             ["cpf_owner"]
                         : "",
                   ),
-                  buttonIcon: Icons.add,
+                  buttonIcon: Icons.edit,
                   onPressed: () {
                     fetchGuestSpeakers(context);
                     routeTo(context, GuestSpeakerHomePage());

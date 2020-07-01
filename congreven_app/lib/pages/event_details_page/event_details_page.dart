@@ -401,122 +401,126 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
       for (var element in activities) {
         listWidget.add(
           Container(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Divider(
-                  color: Colors.black,
-                  height: 15,
-                  thickness: 0.15,
-                  indent: 0,
-                  endIndent: 0,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
+                    Divider(
+                      color: Colors.black,
+                      height: 15,
+                      thickness: 0.15,
+                      indent: 0,
+                      endIndent: 0,
+                    ),
                     _renderTextLine(
                         firstLine: "Nome", secondLine: element["name"]),
-                    Row(
-                      children: <Widget>[
-                        _isEventOwnerToRenderWidget(
-                            Card(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(25.0),
-                              ),
-                              color: Theme.of(context).primaryColorDark,
-                              child: IconButton(
-                                tooltip: "Editar",
-                                splashColor: Colors.white38,
-                                icon: Icon(
-                                  Icons.edit,
-                                  color: Colors.white,
-                                ),
-                                onPressed: () {
-                                  newActivityFormsPageController
-                                      .changeIsEditting(true);
-                                  newActivityFormsPageController
-                                      .changeActivityToEdit(element);
-                                  routeTo(context, NewActivityPage());
-                                },
-                              ),
-                            ),
-                            isEventOwner),
-                        SizedBox(
-                          width: 5.0,
-                        ),
-                        Card(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(25.0),
-                          ),
-                          color: Colors.blue,
-                          child: IconButton(
-                            tooltip: "Detalhes",
-                            splashColor: Colors.white38,
-                            icon: Icon(
-                              Icons.remove_red_eye,
-                              color: Colors.white,
-                            ),
-                            onPressed: () {
-                              getActivityById(context, element["id"]);
-                              routeTo(context, ActivityDetailsHomePage());
-                            },
-                          ),
-                        ),
-                        SizedBox(
-                          width: 5.0,
-                        ),
-                        _isEventOwnerToRenderWidget(
-                            Card(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(25.0),
-                              ),
-                              color: Colors.red,
-                              child: IconButton(
-                                tooltip: "Remover",
-                                splashColor: Colors.white38,
-                                icon: Icon(
-                                  Icons.delete_outline,
-                                  color: Colors.white,
-                                ),
-                                onPressed: () {
-                                  customDialog(
-                                      context: context,
-                                      title: "Excluir atividade",
-                                      message:
-                                          "Deseja realmente excluir a atividade?",
-                                      onPressed: () {
-                                        deleteActivity(
-                                            context,
-                                            myEventsEditPageController
-                                                        .eventToUse !=
-                                                    null
-                                                ? myEventsEditPageController
-                                                    .eventToUse["event"]["id"]
-                                                : 0,
-                                            element["id"]);
-                                        Navigator.pop(context);
-                                      });
-                                },
-                              ),
-                            ),
-                            isEventOwner),
-                      ],
+                    _renderTextLine(
+                        firstLine: "Período", secondLine: element["period"]),
+                    _renderTextLine(
+                        firstLine: "Data",
+                        secondLine: _dateFormat
+                            .format(DateTime.parse(element["date_activity"]))),
+                    _renderTextLine(
+                        firstLine: "Hora inicial",
+                        secondLine: element["start_hour"]),
+                    _renderTextLine(
+                        firstLine: "Hora final",
+                        secondLine: element["end_hour"]),
+                    SizedBox(
+                      height: 10.0,
                     ),
                   ],
                 ),
-                _renderTextLine(
-                    firstLine: "Período", secondLine: element["period"]),
-                _renderTextLine(
-                    firstLine: "Data",
-                    secondLine: _dateFormat
-                        .format(DateTime.parse(element["date_activity"]))),
-                _renderTextLine(
-                    firstLine: "Hora inicial",
-                    secondLine: element["start_hour"]),
-                _renderTextLine(
-                    firstLine: "Hora final", secondLine: element["end_hour"]),
-                SizedBox(
-                  height: 10.0,
+                Container(
+                  alignment: Alignment.topCenter,
+                  child: Column(
+                    children: <Widget>[
+                      _isEventOwnerToRenderWidget(
+                          Card(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(25.0),
+                            ),
+                            color: Theme.of(context).primaryColorDark,
+                            child: IconButton(
+                              tooltip: "Editar",
+                              splashColor: Colors.white38,
+                              icon: Icon(
+                                Icons.edit,
+                                color: Colors.white,
+                              ),
+                              onPressed: () {
+                                newActivityFormsPageController
+                                    .changeIsEditting(true);
+                                newActivityFormsPageController
+                                    .changeActivityToEdit(element);
+                                routeTo(context, NewActivityPage());
+                              },
+                            ),
+                          ),
+                          isEventOwner),
+                      SizedBox(
+                        width: 5.0,
+                      ),
+                      Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(25.0),
+                        ),
+                        color: Colors.blue,
+                        child: IconButton(
+                          tooltip: "Detalhes",
+                          splashColor: Colors.white38,
+                          icon: Icon(
+                            Icons.remove_red_eye,
+                            color: Colors.white,
+                          ),
+                          onPressed: () {
+                            getActivityById(context, element["id"]);
+                            routeTo(context, ActivityDetailsHomePage());
+                          },
+                        ),
+                      ),
+                      SizedBox(
+                        width: 5.0,
+                      ),
+                      _isEventOwnerToRenderWidget(
+                          Card(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(25.0),
+                            ),
+                            color: Colors.red,
+                            child: IconButton(
+                              tooltip: "Remover",
+                              splashColor: Colors.white38,
+                              icon: Icon(
+                                Icons.delete_outline,
+                                color: Colors.white,
+                              ),
+                              onPressed: () {
+                                customDialog(
+                                    context: context,
+                                    title: "Excluir atividade",
+                                    message:
+                                        "Deseja realmente excluir a atividade?",
+                                    onPressed: () {
+                                      deleteActivity(
+                                          context,
+                                          myEventsEditPageController
+                                                      .eventToUse !=
+                                                  null
+                                              ? myEventsEditPageController
+                                                  .eventToUse["event"]["id"]
+                                              : 0,
+                                          element["id"]);
+                                      Navigator.pop(context);
+                                    });
+                              },
+                            ),
+                          ),
+                          isEventOwner),
+                    ],
+                  ),
                 ),
               ],
             ),
