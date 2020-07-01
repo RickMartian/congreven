@@ -10,6 +10,7 @@ import 'package:congreven_app/pages/new_news_forms_page/new_news_forms_page_cont
 import 'package:congreven_app/pages/new_news_page/new_news_page.dart';
 import 'package:congreven_app/utils/customDialog.dart';
 import 'package:congreven_app/utils/enter_title.dart';
+import 'package:congreven_app/utils/formatCnpj.dart';
 import 'package:congreven_app/utils/routeTo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -235,7 +236,7 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                       height: 4.0,
                     ),
                     Text(
-                      element["cnpj"],
+                      formatCnpj(element["cnpj"]),
                       style: TextStyle(
                         fontSize: 16,
                       ),

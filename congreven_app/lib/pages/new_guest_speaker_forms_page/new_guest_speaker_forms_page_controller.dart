@@ -24,7 +24,7 @@ abstract class _NewGuestSpeakerFormsPageControllerBase with Store {
 
   @action
   void changeRg(String newRg) =>
-      rg = newRg.length >= 10 ? newRg.substring(0, 12) : newRg;
+      rg = newRg.length >= 12 ? newRg.substring(0, 12) : newRg;
 
   @observable
   String scholarity;
