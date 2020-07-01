@@ -290,6 +290,8 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
 
   Widget _renderNewsDetails(
       dynamic news, String errorMessage, bool isLoading, bool isEventOwner) {
+    final myEventsEditPageController =
+        Provider.of<MyEventsEditPageController>(context, listen: false);
     if (isLoading) {
       return _loading();
     }
@@ -327,7 +329,25 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                                 Icons.delete_outline,
                                 color: Colors.white,
                               ),
-                              onPressed: () {},
+                              onPressed: () {
+                                customDialog(
+                                    context: context,
+                                    title: "Excluir notícia",
+                                    message:
+                                        "Deseja realmente excluir a notícia?",
+                                    onPressed: () {
+                                      deleteNews(
+                                        context,
+                                        element,
+                                        myEventsEditPageController.eventToUse !=
+                                                null
+                                            ? myEventsEditPageController
+                                                .eventToUse["event"]["id"]
+                                            : 0,
+                                      );
+                                      Navigator.pop(context);
+                                    });
+                              },
                             ),
                           ),
                           isEventOwner),

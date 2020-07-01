@@ -44,6 +44,7 @@ getNewsByEventId(BuildContext context, int eventId) async {
         if (data is Map) {
           newsModel.changeFetchingNewsErrorMessage(
               data["message"] ?? "Não há notícias ainda.");
+          newsModel.updateNews([]);
         } else {
           newsModel.updateNews(data);
         }
@@ -187,6 +188,46 @@ deleteActivity(BuildContext context, int eventId, int activityId) async {
           context: context,
         );
         getActivityByEventId(context, eventId);
+      }
+    } else {
+      final respDecoded = convert.jsonDecode(response.body);
+      toast(
+        title: "Erro",
+        message: respDecoded["message"] ?? "Erro desconhecido.",
+        duration: Duration(milliseconds: 2000),
+        context: context,
+      );
+    }
+  } catch (error) {
+    toast(
+      title: "Erro",
+      message:
+          "Erro desconhecido. Por favor, reinicie o aplicativo e tente novamente.",
+      duration: Duration(milliseconds: 2000),
+      context: context,
+    );
+  }
+}
+
+deleteNews(BuildContext context, dynamic news, int eventId) async {
+  final userModel = Provider.of<User>(context, listen: false);
+  try {
+    final auth = "Bearer ${userModel.token}";
+    final response = await http.delete(
+      "${Config.server_url}:${Config.server_port}/news?name=${news["name"]}&description=${news["description"]}&ndate=${news["ndate"]}&event_id=$eventId",
+      headers: {"Accept": "application/json", "Authorization": auth},
+    );
+    if (response.statusCode == 200) {
+      final data =
+          response.body.isNotEmpty ? convert.jsonDecode(response.body) : null;
+      if (data != null) {
+        toast(
+          title: "Sucesso",
+          message: data["message"] ?? "Notícia excluída com sucesso.",
+          duration: Duration(milliseconds: 2000),
+          context: context,
+        );
+        getNewsByEventId(context, eventId);
       }
     } else {
       final respDecoded = convert.jsonDecode(response.body);
