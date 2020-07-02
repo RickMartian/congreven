@@ -148,6 +148,37 @@ mixin _$NewEventFormsPageController on _NewEventFormsPageControllerBase, Store {
     });
   }
 
+  final _$startHourAtom =
+      Atom(name: '_NewEventFormsPageControllerBase.startHour');
+
+  @override
+  String get startHour {
+    _$startHourAtom.reportRead();
+    return super.startHour;
+  }
+
+  @override
+  set startHour(String value) {
+    _$startHourAtom.reportWrite(value, super.startHour, () {
+      super.startHour = value;
+    });
+  }
+
+  final _$endHourAtom = Atom(name: '_NewEventFormsPageControllerBase.endHour');
+
+  @override
+  String get endHour {
+    _$endHourAtom.reportRead();
+    return super.endHour;
+  }
+
+  @override
+  set endHour(String value) {
+    _$endHourAtom.reportWrite(value, super.endHour, () {
+      super.endHour = value;
+    });
+  }
+
   final _$selectedOrganizersAtom =
       Atom(name: '_NewEventFormsPageControllerBase.selectedOrganizers');
 
@@ -299,6 +330,30 @@ mixin _$NewEventFormsPageController on _NewEventFormsPageControllerBase, Store {
   }
 
   @override
+  void changeStartHour(String newStartHour) {
+    final _$actionInfo = _$_NewEventFormsPageControllerBaseActionController
+        .startAction(name: '_NewEventFormsPageControllerBase.changeStartHour');
+    try {
+      return super.changeStartHour(newStartHour);
+    } finally {
+      _$_NewEventFormsPageControllerBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void changeEndHour(String newEndHour) {
+    final _$actionInfo = _$_NewEventFormsPageControllerBaseActionController
+        .startAction(name: '_NewEventFormsPageControllerBase.changeEndHour');
+    try {
+      return super.changeEndHour(newEndHour);
+    } finally {
+      _$_NewEventFormsPageControllerBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void addOrganizerToEvent(dynamic newOrganizer) {
     final _$actionInfo =
         _$_NewEventFormsPageControllerBaseActionController.startAction(
@@ -373,6 +428,8 @@ endDate: ${endDate},
 description: ${description},
 ownerDescription: ${ownerDescription},
 isOwner: ${isOwner},
+startHour: ${startHour},
+endHour: ${endHour},
 selectedOrganizers: ${selectedOrganizers},
 isLoadingSomeAction: ${isLoadingSomeAction},
 canValidate: ${canValidate},

@@ -61,6 +61,20 @@ abstract class _NewEventFormsPageControllerBase with Store {
   }
 
   @observable
+  String startHour;
+
+  @action
+  void changeStartHour(String newStartHour) => startHour =
+      newStartHour.length >= 5 ? newStartHour.substring(0, 5) : newStartHour;
+
+  @observable
+  String endHour;
+
+  @action
+  void changeEndHour(String newEndHour) => endHour =
+      newEndHour.length >= 5 ? newEndHour.substring(0, 5) : newEndHour;
+
+  @observable
   ObservableList<dynamic> selectedOrganizers =
       ObservableList<dynamic>().asObservable();
 
@@ -89,6 +103,34 @@ abstract class _NewEventFormsPageControllerBase with Store {
   @action
   void changeCanValidate(bool status) {
     canValidate = status;
+  }
+
+  bool validateHhMm(String hour) {
+    final isValid =
+        RegExp(r'^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$').hasMatch(hour);
+    return isValid;
+  }
+
+  String validateStartHour() {
+    if (canValidate) {
+      if (startHour == null || startHour.isEmpty) {
+        return "O campo 'hora inicial' é obrigatório!";
+      } else if (startHour.length < 5 || !validateHhMm(startHour)) {
+        return "Insira uma data valida!";
+      }
+    }
+    return null;
+  }
+
+  String validateEndHour() {
+    if (canValidate) {
+      if (endHour == null || endHour.isEmpty) {
+        return "O campo 'hora final' é obrigatório!";
+      } else if (endHour.length < 5 || !validateHhMm(endHour)) {
+        return "Insira uma data valida!";
+      }
+    }
+    return null;
   }
 
   String reverseDate(String date) {
@@ -227,14 +269,16 @@ abstract class _NewEventFormsPageControllerBase with Store {
     ownerDescription = null;
     selectedOrganizers = ObservableList<dynamic>();
     canValidate = false;
+    startHour = null;
+    endHour = null;
   }
 
   @computed
   get eventToRegister => {
         "name": name,
         "address": address,
-        "start_date": reverseDate(startDate),
-        "end_date": reverseDate(endDate),
+        "start_date": "${reverseDate(startDate)} $startHour",
+        "end_date": "${reverseDate(endDate)} $endHour",
         "description": description,
         "owner_description": ownerDescription,
         "organizers":
@@ -250,5 +294,7 @@ abstract class _NewEventFormsPageControllerBase with Store {
       validateDescription() == null &&
       validateSelectedOrganizer() == null &&
       validateOwnerDescription() == null &&
+      validateStartHour() == null &&
+      validateEndHour() == null &&
       canValidate;
 }

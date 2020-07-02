@@ -8,6 +8,8 @@ import 'package:congreven_app/utils/routeTo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class NewEventFormsPage extends StatefulWidget {
@@ -16,6 +18,7 @@ class NewEventFormsPage extends StatefulWidget {
 }
 
 class _NewEventFormsPageState extends State<NewEventFormsPage> {
+  DateFormat _hourFormat;
   final MaskedTextController _startDateController =
       MaskedTextController(mask: "00/00/0000");
   final MaskedTextController _endDateController =
@@ -24,9 +27,13 @@ class _NewEventFormsPageState extends State<NewEventFormsPage> {
   final _addressController = TextEditingController();
   final _descriptionController = TextEditingController();
   final _ownerDescriptionController = TextEditingController();
+  final _startHourController = MaskedTextController(mask: "00:00");
+  final _endHourController = MaskedTextController(mask: "00:00");
 
   void initState() {
     super.initState();
+    initializeDateFormatting();
+    _hourFormat = DateFormat("HH mm", "pt_BR");
     final newEventFormsPageController =
         Provider.of<NewEventFormsPageController>(context, listen: false);
     final myEventsEditPageController =
@@ -46,6 +53,12 @@ class _NewEventFormsPageState extends State<NewEventFormsPage> {
         _endDateController.text = eventToUse["end_date_formatted"];
         _descriptionController.text = eventToUse["description"];
         _ownerDescriptionController.text = eventToUse["owner_description"];
+        final startHour = _hourFormat
+            .format(DateTime.parse(eventToUse["start_date"]).toLocal());
+        final endHour = _hourFormat
+            .format(DateTime.parse(eventToUse["end_date"]).toLocal());
+        _startHourController.text = startHour;
+        _endHourController.text = endHour;
         newEventFormsPageController.changeName(eventToUse["name"]);
         newEventFormsPageController.changeAddress(eventToUse["address"]);
         newEventFormsPageController
@@ -56,6 +69,8 @@ class _NewEventFormsPageState extends State<NewEventFormsPage> {
             .changeStartDate(eventToUse["start_date_formatted"]);
         newEventFormsPageController
             .changeEndDate(eventToUse["end_date_formatted"]);
+        newEventFormsPageController.changeStartHour(startHour);
+        newEventFormsPageController.changeEndHour(endHour);
         if (eventToUse["owner_description"] == null || eventToUse.isEmpty) {
           newEventFormsPageController.changeIsOwner(false);
           if (organizersToUse.length > 0) {
@@ -248,6 +263,32 @@ class _NewEventFormsPageState extends State<NewEventFormsPage> {
                   onChanged: newEventFormsPageController.changeEndDate,
                   errorText: newEventFormsPageController.validateEndDate,
                   controller: _endDateController,
+                );
+              },
+            ),
+            SizedBox(
+              height: 15.0,
+            ),
+            Observer(
+              builder: (_) {
+                return renderTextField(
+                  labelText: "Hora inicial",
+                  onChanged: newEventFormsPageController.changeStartHour,
+                  errorText: newEventFormsPageController.validateStartHour,
+                  controller: _startHourController,
+                );
+              },
+            ),
+            SizedBox(
+              height: 15.0,
+            ),
+            Observer(
+              builder: (_) {
+                return renderTextField(
+                  labelText: "Hora final",
+                  onChanged: newEventFormsPageController.changeEndHour,
+                  errorText: newEventFormsPageController.validateEndHour,
+                  controller: _endHourController,
                 );
               },
             ),

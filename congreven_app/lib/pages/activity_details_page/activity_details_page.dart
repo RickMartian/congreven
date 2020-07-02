@@ -3,7 +3,6 @@ import 'package:congreven_app/models/user.dart';
 import 'package:congreven_app/pages/activity_details_page/activity_details_page_controller.dart';
 import 'package:congreven_app/pages/guest_speaker_home_page/guest_speaker_home_page.dart';
 import 'package:congreven_app/pages/my_events_edit_page/my_events_edit_page_controller.dart';
-import 'package:congreven_app/pages/new_guest_speaker_forms_page/new_guest_speaker_forms_page_controller.dart';
 import 'package:congreven_app/utils/enter_title.dart';
 import 'package:congreven_app/utils/routeTo.dart';
 import 'package:flutter/material.dart';

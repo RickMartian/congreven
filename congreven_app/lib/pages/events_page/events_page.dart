@@ -31,7 +31,7 @@ class _EventsPageState extends State<EventsPage> {
   void initState() {
     super.initState();
     initializeDateFormatting();
-    _dateFormat = DateFormat("dd/MM/yyyy", 'pt_BR');
+    _dateFormat = DateFormat("dd/MM/yyyy HH:mm", "pt_BR");
   }
 
   void _onChanged(String value) {
@@ -155,9 +155,10 @@ class _EventsPageState extends State<EventsPage> {
               try {
                 getEventById(context, events[index]["id"]).then((response) {
                   response["event"]["start_date_formatted"] = _dateFormat
-                      .format(DateTime.parse(response["event"]["start_date"]));
-                  response["event"]["end_date_formatted"] = _dateFormat
-                      .format(DateTime.parse(response["event"]["end_date"]));
+                      .format(DateTime.parse(response["event"]["start_date"])
+                          .toLocal());
+                  response["event"]["end_date_formatted"] = _dateFormat.format(
+                      DateTime.parse(response["event"]["end_date"]).toLocal());
                   myEventsEditPageController.changeEventToUse(response);
                   getNewsByEventId(context, response["event"]["id"]);
                   getActivityByEventId(context, response["event"]["id"]);
@@ -190,7 +191,7 @@ class _EventsPageState extends State<EventsPage> {
                           Container(
                             alignment: Alignment.centerLeft,
                             child: Text(
-                              "${_dateFormat.format(DateTime.parse(events[index]["start_date"]))}",
+                              "${_dateFormat.format(DateTime.parse(events[index]["start_date"]).toLocal())}",
                               style: TextStyle(
                                 fontSize: 15.0,
                                 color: Colors.red[300],

@@ -6,7 +6,6 @@ import 'package:congreven_app/pages/activity_details_home_page/activity_details_
 import 'package:congreven_app/pages/my_events_edit_page/my_events_edit_page_controller.dart';
 import 'package:congreven_app/pages/new_activity_forms_page/new_activity_forms_page_controller.dart';
 import 'package:congreven_app/pages/new_activity_page/new_activity_page.dart';
-import 'package:congreven_app/pages/new_news_forms_page/new_news_forms_page_controller.dart';
 import 'package:congreven_app/pages/new_news_page/new_news_page.dart';
 import 'package:congreven_app/utils/customDialog.dart';
 import 'package:congreven_app/utils/enter_title.dart';
@@ -30,7 +29,7 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
   void initState() {
     super.initState();
     initializeDateFormatting();
-    _dateFormat = DateFormat("dd/MM/yyyy", 'pt_BR');
+    _dateFormat = DateFormat("dd/MM/yyyy HH:mm", 'pt_BR');
   }
 
   _renderTextLine({

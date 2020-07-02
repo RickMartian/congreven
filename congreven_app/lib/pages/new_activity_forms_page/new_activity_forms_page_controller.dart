@@ -158,10 +158,18 @@ abstract class _NewActivityFormsPageControllerBase with Store {
     return null;
   }
 
+  bool validateHhMm(String hour) {
+    final isValid =
+        RegExp(r'^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$').hasMatch(hour);
+    return isValid;
+  }
+
   String validateStartHour() {
     if (canValidate) {
       if (startHour == null || startHour.isEmpty) {
         return "O campo 'hora inicial' é obrigatório!";
+      } else if (startHour.length < 5 || !validateHhMm(startHour)) {
+        return "Insira uma data valida!";
       }
     }
     return null;
@@ -171,6 +179,8 @@ abstract class _NewActivityFormsPageControllerBase with Store {
     if (canValidate) {
       if (endHour == null || endHour.isEmpty) {
         return "O campo 'hora final' é obrigatório!";
+      } else if (endHour.length < 5 || !validateHhMm(endHour)) {
+        return "Insira uma data valida!";
       }
     }
     return null;
