@@ -119,6 +119,7 @@ Widget _introScreen() {
         loaderColor: Colors.transparent,
       ),
       Container(
+        margin: EdgeInsets.symmetric(horizontal: 10.0),
         decoration: BoxDecoration(
           image: DecorationImage(
             image: AssetImage("assets/logo.png"),
