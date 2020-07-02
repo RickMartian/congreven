@@ -108,11 +108,13 @@ abstract class _NewActivityFormsPageControllerBase with Store {
   }
 
   bool firstDateIsBeforeSecondDate(String firstDate, String secondDate) {
-    if (firstDate == secondDate) {
+    if (firstDate.substring(0, 10) == secondDate.substring(0, 10)) {
       return true;
     }
-    final DateTime firstDateFormatted = formatDate(reverseDate(firstDate));
-    final DateTime secondDateFormatted = formatDate(reverseDate(secondDate));
+    final DateTime firstDateFormatted =
+        formatDate(reverseDate(firstDate.substring(0, 10)));
+    final DateTime secondDateFormatted =
+        formatDate(reverseDate(secondDate.substring(0, 10)));
     return firstDateFormatted.isBefore(secondDateFormatted);
   }
 
