@@ -33,7 +33,7 @@ class _NewEventFormsPageState extends State<NewEventFormsPage> {
   void initState() {
     super.initState();
     initializeDateFormatting();
-    _hourFormat = DateFormat("HH mm", "pt_BR");
+    _hourFormat = DateFormat("HH:mm", "pt_BR");
     final newEventFormsPageController =
         Provider.of<NewEventFormsPageController>(context, listen: false);
     final myEventsEditPageController =

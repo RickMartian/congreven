@@ -115,8 +115,8 @@ abstract class _NewEventFormsPageControllerBase with Store {
     if (canValidate) {
       if (startHour == null || startHour.isEmpty) {
         return "O campo 'hora inicial' é obrigatório!";
-      } else if (startHour.length < 5 || !validateHhMm(startHour)) {
-        return "Insira uma data valida!";
+      } else if (!validateHhMm(startHour)) {
+        return "Insira uma hora valida!";
       }
     }
     return null;
@@ -126,8 +126,8 @@ abstract class _NewEventFormsPageControllerBase with Store {
     if (canValidate) {
       if (endHour == null || endHour.isEmpty) {
         return "O campo 'hora final' é obrigatório!";
-      } else if (endHour.length < 5 || !validateHhMm(endHour)) {
-        return "Insira uma data valida!";
+      } else if (!validateHhMm(endHour)) {
+        return "Insira uma hora valida!";
       }
     }
     return null;
