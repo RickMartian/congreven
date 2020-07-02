@@ -29,7 +29,7 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
   void initState() {
     super.initState();
     initializeDateFormatting();
-    _dateFormat = DateFormat("dd/MM/yyyy HH:mm", 'pt_BR');
+    _dateFormat = DateFormat("dd/MM/yyyy", 'pt_BR');
   }
 
   _renderTextLine({
