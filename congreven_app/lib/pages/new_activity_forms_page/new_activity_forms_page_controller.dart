@@ -1,4 +1,7 @@
+import 'package:congreven_app/pages/my_events_edit_page/my_events_edit_page_controller.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:mobx/mobx.dart';
+import 'package:provider/provider.dart';
 part 'new_activity_forms_page_controller.g.dart';
 
 class NewActivityFormsPageController = _NewActivityFormsPageControllerBase
@@ -104,7 +107,18 @@ abstract class _NewActivityFormsPageControllerBase with Store {
     return inputFormatted == originalFormatString;
   }
 
-  String validateDate() {
+  bool firstDateIsBeforeSecondDate(String firstDate, String secondDate) {
+    if (firstDate == secondDate) {
+      return true;
+    }
+    final DateTime firstDateFormatted = formatDate(reverseDate(firstDate));
+    final DateTime secondDateFormatted = formatDate(reverseDate(secondDate));
+    return firstDateFormatted.isBefore(secondDateFormatted);
+  }
+
+  String validateDate(BuildContext context) {
+    final selectedEvent =
+        Provider.of<MyEventsEditPageController>(context, listen: false);
     if (canValidate) {
       if (date == null || date.isEmpty) {
         return "O campo 'data' é obrigatório!";
@@ -113,6 +127,13 @@ abstract class _NewActivityFormsPageControllerBase with Store {
       } else if (date.length == 10) {
         if (!isValidDate(date)) {
           return "Insira uma data válida!";
+        } else if (selectedEvent.eventToUse != null) {
+          final event = selectedEvent.eventToUse["event"];
+          if (!firstDateIsBeforeSecondDate(
+                  event["start_date_formatted"], date) ||
+              !firstDateIsBeforeSecondDate(date, event["end_date_formatted"])) {
+            return "Insira uma data dentro do intervalo do evento!";
+          }
         }
       }
     }
@@ -177,7 +198,6 @@ abstract class _NewActivityFormsPageControllerBase with Store {
   @computed
   get isValid =>
       validateName() == null &&
-      validateDate() == null &&
       validateStartHour() == null &&
       validateEndHour() == null &&
       validatePeriod() == null &&

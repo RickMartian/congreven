@@ -153,7 +153,9 @@ class _NewActivityPageState extends State<NewActivityPage> {
                 newActivityFormsPageController.changeCanValidate(true);
               }
               if (!newActivityFormsPageController.isLoadingSomeAction &&
-                  newActivityFormsPageController.isValid) {
+                  newActivityFormsPageController.isValid &&
+                  newActivityFormsPageController.validateDate(context) ==
+                      null) {
                 if (newActivityFormsPageController.isEditting) {
                   updateActivity(
                     context,

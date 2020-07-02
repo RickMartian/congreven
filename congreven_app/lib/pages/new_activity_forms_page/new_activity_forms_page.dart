@@ -93,7 +93,8 @@ class _NewActivityFormsPageState extends State<NewActivityFormsPage> {
                 return renderTextField(
                   labelText: "Data",
                   onChanged: newActivityFormsPageController.changeDate,
-                  errorText: newActivityFormsPageController.validateDate,
+                  errorText: () =>
+                      newActivityFormsPageController.validateDate(context),
                   controller: _dateController,
                 );
               },
